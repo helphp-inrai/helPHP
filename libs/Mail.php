@@ -72,9 +72,9 @@ class Mail
     public function __construct()
     {
         global $CONFIG,$CONFIG_EMAIL;
-        require $CONFIG::HELPHP_FOLDER.'libs/externals/PHP_Mailer/Exception.php';
-        require $CONFIG::HELPHP_FOLDER.'libs/externals/PHP_Mailer/PHPMailer.php';
-        require $CONFIG::HELPHP_FOLDER.'libs/externals/PHP_Mailer/SMTP.php';
+        require_once $CONFIG::HELPHP_FOLDER.'libs/externals/PHP_Mailer/Exception.php';
+        require_once $CONFIG::HELPHP_FOLDER.'libs/externals/PHP_Mailer/PHPMailer.php';
+        require_once $CONFIG::HELPHP_FOLDER.'libs/externals/PHP_Mailer/SMTP.php';
         $this->mail = new PHPMailer\PHPMailer(true);
         $this->mail->setLanguage('fr', 'PHP_Mailer/language/');
         

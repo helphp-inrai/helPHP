@@ -124,11 +124,11 @@ class Document extends HelPHP_module {
 
             include_once($path_document);
             // must check if we can include a script that update the social instead of double query
-            // if ($_SESSION['module_param']!=$post[$this->ifld_data_id]){
-            //     $social_scripts = H::script('update_socials("'.self::module_name.'", "'.$post[$this->ifld_data_id].'");',['autoremove'=>true]);
-            //     $document_cache['content'].=$social_scripts);
-            //     $_SESSION['module_param']=$post[$this->ifld_data_id];
-            // }
+            if ($_SESSION['module_param']!=$post[$this->ifld_data_id]){
+                $social_scripts = H::script('update_socials("'.self::module_name.'", "'.$post[$this->ifld_data_id].'");',['autoremove'=>true]);
+                $document_cache['content'].=$social_scripts;
+                $_SESSION['module_param']=$post[$this->ifld_data_id];
+            }
             return $document_cache['content'];
 
         } else {
