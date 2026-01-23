@@ -1,0 +1,81 @@
+{
+    "tables": [
+        {
+            "name": "block_blockbackground",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "type",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "content",
+                    "type": "text",
+                    "null": true
+                },
+                {
+                    "name": "creadate",
+                    "type": "datetime",
+                    "null": false,
+                    "default": "CURRENT_TIMESTAMP"
+                }
+            ]
+        }
+    ],
+    "entries": [
+        {
+            "table": "block_data",
+            "fields": [
+                {
+                    "name": "name",
+                    "type": "s",
+                    "value": "blockbackground"
+                },
+                {
+                    "name": "json",
+                    "type": "s",
+                    "value": "[{\\\"type\\\":\\\"multiple_radios\\\",\\\"name\\\":\\\"type\\\",\\\"values\\\":[\\\"css\\\",\\\"image\\\",\\\"video\\\",\\\"shadertoy\\\"],\\\"index\\\":\\\"\\\",\\\"sort_order\\\":\\\"2\\\"},{\\\"type\\\":\\\"long_text\\\",\\\"name\\\":\\\"content\\\",\\\"index\\\":\\\"\\\",\\\"sort_order\\\":\\\"3\\\"}]"
+                },
+                {
+                    "name": "js",
+                    "type": "s",
+                    "value": ""
+                },
+                {
+                    "name": "jspublic",
+                    "type": "s",
+                    "value": ""
+                }
+            ],
+            "languages": {
+                "short": {
+                    "label": {
+                        "en": "Background",
+                        "fr": "Arrière plan"
+                    }
+                }
+            },
+            "categories": {
+                "block": [
+                    {
+                        "series": "",
+                        "name": "basic"
+                    },
+                    {
+                        "series": "block",
+                        "name": "block"
+                    }
+                ]
+            }
+        }
+    ]
+}

@@ -1,0 +1,118 @@
+{
+    "name": "complex",
+    "json":
+    [
+        {
+            "type": "short_text",
+            "name": "short_text",
+            "limit": "",
+            "index": "",
+            "sort_order": "1"
+        },
+        {
+            "type": "long_text",
+            "name": "long_text",
+            "index": "",
+            "sort_order": "2"
+        },
+        {
+            "type": "short_multilangue",
+            "name": "short_multi",
+            "index": "",
+            "sort_order": "3"
+        },
+        {
+            "type": "long_multilangue",
+            "name": "long_multi",
+            "index": "",
+            "sort_order": "4"
+        },
+        {
+            "type": "phone",
+            "name": "tel",
+            "index": "",
+            "sort_order": "5"
+        },
+        {
+            "type": "email",
+            "name": "mail",
+            "index": "",
+            "sort_order": "6"
+        },
+        {
+            "type": "price",
+            "name": "prices",
+            "index": "",
+            "sort_order": "7"
+        },
+        {
+            "type": "boolean",
+            "name": "bool",
+            "index": "",
+            "sort_order": "8"
+        },
+        {
+            "type": "multiple_radios",
+            "name": "multi_radio",
+            "values": ["", "", "", ""],
+            "index": "",
+            "sort_order": "9"
+        },
+        {
+            "type": "integer",
+            "name": "int",
+            "limit": "",
+            "index": "",
+            "sort_order": "10"
+        },
+        {
+            "type": "float",
+            "name": "float",
+            "index": "",
+            "sort_order": "11"
+        },
+        {
+            "type": "date",
+            "name": "date",
+            "index": "",
+            "sort_order": "12"
+        },
+        {
+            "type": "datetime",
+            "name": "datetime",
+            "index": "",
+            "sort_order": "13"
+        },
+        {
+            "type": "time",
+            "name": "time",
+            "index": "",
+            "sort_order": "14"
+        },
+        {
+            "type": "image",
+            "name": "image",
+            "index": "",
+            "sort_order": "15"
+        },
+        {
+            "type": "video",
+            "name": "video",
+            "index": "",
+            "sort_order": "16"
+        },
+        {
+            "type": "file",
+            "name": "file",
+            "index": "",
+            "sort_order": "17"
+        },
+        {
+            "type": "hcode",
+            "name": "hcode",
+            "sort_order": "18",
+            "hcodeadmin": "deco | id=1",
+            "hcodepublic": "deco | id=1"
+        }
+    ]
+}

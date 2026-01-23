@@ -1,0 +1,2 @@
+.connection_info.banned ~ .hlp_validator_parent, .connection_info.banned ~ label, .connection_info.banned ~ button:first-of-type {pointer-events: none;opacity: 0.7;}
+.connection_form_resend_activation {text-align: center;}

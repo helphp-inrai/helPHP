@@ -1,0 +1,4 @@
+#formation li a {display: block;margin: var(--spacing-medium);text-decoration: none;color: var(--color-detail-alt);}
+#formation li a:hover {color: var(--color-warning);}
+#formation li a:visited {color: var(--color-detail);}
+#formation {margin: unset;padding-left: var(--spacing-large);}

@@ -1,0 +1,99 @@
+[
+    {
+        "type": "short_text",
+        "name": "name",
+        "limit": "10",
+        "index": ""
+    },
+    {
+        "type": "long_text",
+        "name": "descr",
+        "index": ""
+    },
+    {
+        "type": "short_multilangue",
+        "name": "multi_short",
+        "index": ""
+    },
+    {
+        "type": "long_multilangue",
+        "name": "multi_long",
+        "index": ""
+    },
+    {
+        "type": "phone",
+        "name": "tel",
+        "index": ""
+    },
+    {
+        "type": "email",
+        "name": "mail",
+        "index": ""
+    },
+    {
+        "type": "price",
+        "name": "price",
+        "index": ""
+    },
+    {
+        "type": "boolean",
+        "name": "bool",
+        "index": ""
+    },
+    {
+        "type": "multiple_radios",
+        "name": "multi_rad",
+        "values": {
+            "0": "choix1",
+            "6": "choix2",
+            "7": "choix3"
+        },
+        "index": ""
+    },
+    {
+        "type": "order",
+        "name": "sort_order",
+        "index": ""
+    },
+    {
+        "type": "integer",
+        "name": "integer",
+        "limit": "5",
+        "index": ""
+    },
+    {
+        "type": "float",
+        "name": "float",
+        "index": ""
+    },
+    {
+        "type": "date",
+        "name": "date",
+        "index": ""
+    },
+    {
+        "type": "datetime",
+        "name": "datetime",
+        "index": ""
+    },
+    {
+        "type": "association",
+        "id_object": "3",
+        "index": ""
+    },
+    {
+        "type": "video",
+        "name": "video",
+        "index": ""
+    },
+    {
+        "type": "image",
+        "name": "img",
+        "index": ""
+    },
+    {
+        "type": "file",
+        "name": "file",
+        "index": ""
+    }
+]

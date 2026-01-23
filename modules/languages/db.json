@@ -1,0 +1,1882 @@
+{
+    "tables": [
+        {
+            "name": "languages_allowed",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 10,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "id_data",
+                    "type": "int",
+                    "limit": 10,
+                    "null": false,
+                    "unique": true
+                }
+            ]
+        },
+        {
+            "name": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 10,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "iso",
+                    "type": "varchar",
+                    "limit": 8,
+                    "null": false,
+                    "unique": true,
+                    "default": ""
+                },
+                {
+                    "name": "own_language",
+                    "type": "varchar",
+                    "limit": 100,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "fr",
+                    "type": "varchar",
+                    "limit": 100,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "en",
+                    "type": "varchar",
+                    "limit": 100,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": ""
+                }
+            ]
+        },
+        {
+            "name": "languages_long",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "limit": 20,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "id_data",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0",
+                    "index": "index"
+                },
+                {
+                    "name": "id_item",
+                    "type": "bigint",
+                    "limit": 20,
+                    "null": false,
+                    "default": "0",
+                    "index": "index"
+                },
+                {
+                    "name": "field_identifier",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "value",
+                    "type": "mediumtext",
+                    "null": true,
+                    "index": "fulltext"
+                }
+            ]
+        },
+        {
+            "name": "languages_short",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "bigint",
+                    "limit": 20,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "id_data",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0",
+                    "index": "index"
+                },
+                {
+                    "name": "id_item",
+                    "type": "bigint",
+                    "limit": 20,
+                    "null": false,
+                    "default": "0",
+                    "index": "index"
+                },
+                {
+                    "name": "field_identifier",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "value",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": "",
+                    "index": "fulltext"
+                }
+            ]
+        }
+    ],
+    "entries": [
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "1"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "ar"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "اَلْعَرَبِيَّةُ"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Arabe"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Arabic"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "ar"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "2"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "az"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "آذربایجانجا"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Azerbaijani"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Azéri"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "az"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "3"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "bg"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "български"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Bulgare"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Bulgarian"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "bg"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "4"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "bn"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "বাংলা"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Bengali"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Bengali"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "bn"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "5"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "ca"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "català"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Catalan"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Catalan"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "ca"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "6"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "cs"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Čeština"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Tchèque"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Czech"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "cs"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "7"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "da"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Dansk"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Danish"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Danois"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "da"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "8"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "de"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Deutsch"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Allemand"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "German"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "de"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "9"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "el"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Νέα Ελληνικά"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Grec"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Greek"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "el"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "10"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "en"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "English"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Anglais"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "English"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "en"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "11"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "eo"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Esperanto"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Espéranto"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Esperanto"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "eo"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "12"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "es"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Español"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Espagnol"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Spanish"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "es"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "13"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "et"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Eesti keel"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Estonien"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Estonian"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "et"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "14"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "eu"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Euskara"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Basque"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Basque"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "eu"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "15"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "fa"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "فارسی"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Persan"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Persian"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "fa"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "16"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "fi"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Suomi"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Finnois"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Finnish"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "fi"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "17"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "fr"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Français"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Français"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "French"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "fr"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "18"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "ga"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Gaeilge"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Irlandais"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Irish"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "ga"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "19"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "gl"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Galego"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Galicien"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Galician"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "gl"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "20"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "he"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "עברית‎"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Hébreu"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Hebrew"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "he"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "21"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "hi"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "हिन्दी"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Hindi"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Hindi"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "hi"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "22"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "hu"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Magyar nyelv"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Hongrois"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Hungarian"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "hu"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "23"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "id"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "bahasa Indonesia"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Indonésien"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Indonesian"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "id"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "24"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "it"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Italiano"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Italien"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Italian"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "it"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "25"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "ja"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "日本語"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Japonais"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Japanese"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "ja"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "26"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "ko"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "한국어"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Korean"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Coréen"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "ko"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "27"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "ky"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Кыргыз"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Kirghiz"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Kirghiz"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "ky"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "28"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "lt"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Lietuvių"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Lithuanian"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Lituanien"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "lt"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "29"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "lv"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Latviski"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Letton"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Latvian"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "lv"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "30"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "ms"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "بهاس ملايو"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Malais"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Malay"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "ms"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "31"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "nb"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Norsk Bokmål"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Norvégien bokmål"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Norwegian Bokmål"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "nb"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "32"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "nl"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Nederlands"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Dutch"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Néerlandais"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "nl"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "33"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "pt"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Português"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Portugais"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Portuguese"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "pt"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "34"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "pl"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Polski"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Polonais"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Polish"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "pl"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "35"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "ro"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Română"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Roumain"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Romanian"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "ro"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "36"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "ru"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Русский язык"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Russe"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Russian"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "ru"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "37"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "sk"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Slovenčina"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Slovaque"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Slovak"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "sk"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "38"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "sl"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Slovenščina"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Slovène"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Slovenian"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "sl"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "39"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "sq"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Shqip"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Albanais"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Albanian"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "sq"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "40"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "sr"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Српски"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Serbe"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Serbian"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "sr"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "41"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "sv"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Svenska"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Suédois"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Swedish"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "sv"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "42"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "th"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "ภาษาไทย"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Thaï"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Thai"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "th"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "43"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "tl"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Wikang Tagalog"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Tagalog"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Tagalog"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "tl"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "44"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "tr"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Türkçe"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Turc"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Turkish"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "tr"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "45"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "uk"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "Українська"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Ukrainien"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Ukrainian"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "uk"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "46"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "ur"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "اُردُو"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Ourdou"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Urdu"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "ur"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "47"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "vi"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "tiếng Việt"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Vietnamien"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Vietnamese"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "vi"
+                }
+            ]
+        },
+        {
+            "table": "languages_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "48"
+                },
+                {
+                    "name": "iso",
+                    "type": "s",
+                    "value": "zh"
+                },
+                {
+                    "name": "own_language",
+                    "type": "s",
+                    "value": "汉语"
+                },
+                {
+                    "name": "fr",
+                    "type": "s",
+                    "value": "Chinois"
+                },
+                {
+                    "name": "en",
+                    "type": "s",
+                    "value": "Chinese"
+                },
+                {
+                    "name": "libretranslate",
+                    "type": "s",
+                    "value": "zh-Hans"
+                }
+            ]
+        },
+        {
+            "table": "languages_allowed",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "1"
+                },
+                {
+                    "name": "id_data",
+                    "type": "i",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "table": "core_submodules",
+            "fields": [
+                {
+                    "name": "id_disposition",
+                    "type": "i",
+                    "value": "1"
+                },
+                {
+                    "name": "module_subcontainer",
+                    "type": "s",
+                    "value": "banner_top"
+                },
+                {
+                    "name": "module_name",
+                    "type": "s",
+                    "value": "languages"
+                },
+                {
+                    "name": "module_param",
+                    "type": "s",
+                    "value": "languages_action=languages_display"
+                },
+                {
+                    "name": "sort_order",
+                    "type": "i",
+                    "value": "3"
+                }
+            ]
+        }
+    ]
+}

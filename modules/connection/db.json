@@ -1,0 +1,91 @@
+{
+    "tables": [
+        {
+            "name": "connection_try_logs",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "ip",
+                    "type": "varchar",
+                    "limit": 100,
+                    "null": false,
+                    "default": "",
+                    "index": "index"
+                },
+                {
+                    "name": "time",
+                    "type": "timestamp",
+                    "null": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                {
+                    "name": "locked",
+                    "type": "smallint",
+                    "limit": 1,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "user_agent",
+                    "type": "varchar",
+                    "limit": 500,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "user_agent_hash",
+                    "type": "char",
+                    "limit": 32,
+                    "null": false,
+                    "default": "",
+                    "index": "index"
+                },
+                {
+                    "name": "login",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": ""
+                }
+            ]
+        }
+    ],
+    "entries": [
+        {
+            "table": "core_submodules",
+            "fields": [
+                {
+                    "name": "id_disposition",
+                    "type": "i",
+                    "value": "1"
+                },
+                {
+                    "name": "module_subcontainer",
+                    "type": "s",
+                    "value": "banner_top"
+                },
+                {
+                    "name": "module_name",
+                    "type": "s",
+                    "value": "connection"
+                },
+                {
+                    "name": "module_param",
+                    "type": "s",
+                    "value": ""
+                },
+                {
+                    "name": "sort_order",
+                    "type": "i",
+                    "value": "4"
+                }
+            ]
+        }
+    ]
+}

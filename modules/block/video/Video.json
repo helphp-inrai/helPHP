@@ -1,0 +1,103 @@
+{
+    "tables": [
+        {
+            "name": "block_video",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "autoplay",
+                    "type": "tinyint",
+                    "limit": 1,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "control",
+                    "type": "tinyint",
+                    "limit": 1,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "vloop",
+                    "type": "tinyint",
+                    "limit": 1,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "nodonwload",
+                    "type": "tinyint",
+                    "limit": 1,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "youtubesrc",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "creadate",
+                    "type": "datetime",
+                    "null": false,
+                    "default": "CURRENT_TIMESTAMP"
+                }
+            ]
+        }
+    ],
+    "entries": [
+        {
+            "table": "block_data",
+            "fields": [
+                {
+                    "name": "name",
+                    "type": "s",
+                    "value": "video"
+                },
+                {
+                    "name": "json",
+                    "type": "s",
+                    "value": "[{\\\"type\\\":\\\"boolean\\\",\\\"name\\\":\\\"autoplay\\\",\\\"index\\\":\\\"\\\",\\\"sort_order\\\":\\\"1\\\"},{\\\"type\\\":\\\"boolean\\\",\\\"name\\\":\\\"control\\\",\\\"index\\\":\\\"\\\",\\\"sort_order\\\":\\\"2\\\"},{\\\"type\\\":\\\"boolean\\\",\\\"name\\\":\\\"vloop\\\",\\\"index\\\":\\\"\\\",\\\"sort_order\\\":\\\"3\\\"},{\\\"type\\\":\\\"boolean\\\",\\\"name\\\":\\\"nodonwload\\\",\\\"index\\\":\\\"\\\",\\\"sort_order\\\":\\\"4\\\"},{\\\"type\\\":\\\"video\\\",\\\"name\\\":\\\"video\\\",\\\"index\\\":\\\"\\\",\\\"sort_order\\\":\\\"5\\\"},{\\\"type\\\":\\\"short_text\\\",\\\"name\\\":\\\"youtubesrc\\\",\\\"limit\\\":\\\"255\\\",\\\"index\\\":\\\"\\\",\\\"sort_order\\\":\\\"7\\\"}]"
+                },
+                {
+                    "name": "js",
+                    "type": "s",
+                    "value": ""
+                },
+                {
+                    "name": "jspublic",
+                    "type": "s",
+                    "value": ""
+                }
+            ],
+            "languages": {
+                "short": {
+                    "label": {
+                        "fr": "Vidéo"
+                    }
+                }
+            },
+            "categories": {
+                "block": [
+                    {
+                        "series": "",
+                        "name": "basic"
+                    },
+                    {
+                        "series": "block",
+                        "name": "block"
+                    }
+                ]
+            }
+        }
+    ]
+}

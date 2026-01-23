@@ -1,0 +1,199 @@
+{
+    "tables": [
+        {
+            "name": "hierarchy_item",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "module",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "params",
+                    "type": "varchar",
+                    "limit": 1000,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "target",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": "lemain"
+                }
+            ]
+        },
+        {
+            "name": "hierarchy_structure",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "id_parent",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "sort_order",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "order_tree",
+                    "type": "mediumint",
+                    "limit": 8,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "active",
+                    "type": "tinyint",
+                    "limit": 4,
+                    "null": false,
+                    "default": "1"
+                },
+                {
+                    "name": "active_tree",
+                    "type": "tinyint",
+                    "limit": 4,
+                    "null": false,
+                    "default": "1"
+                },
+                {
+                    "name": "name",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "create_result",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0"
+                }
+            ]
+        },
+        {
+            "name": "hierarchy_modular_association",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "id_structure",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false
+                },
+                {
+                    "name": "id_item",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false
+                }
+            ]
+        }
+    ],
+    "entries": [
+        {
+            "table": "core_submodules",
+            "fields": [
+                {
+                    "name": "id_disposition",
+                    "type": "i",
+                    "value": "1"
+                },
+                {
+                    "name": "module_subcontainer",
+                    "type": "s",
+                    "value": ""
+                },
+                {
+                    "name": "module_name",
+                    "type": "s",
+                    "value": "hierarchy"
+                },
+                {
+                    "name": "module_param",
+                    "type": "s",
+                    "value": "hierarchy_action=hierarchy_display_menu&id=1"
+                },
+                {
+                    "name": "sort_order",
+                    "type": "s",
+                    "value": "5"
+                }
+            ]
+        },
+        {
+            "table": "hierarchy_structure",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "1"
+                },
+                {
+                    "name": "id_parent",
+                    "type": "i",
+                    "value": "0"
+                },
+                {
+                    "name": "sort_order",
+                    "type": "i",
+                    "value": "1"
+                },
+                {
+                    "name": "order_tree",
+                    "type": "i",
+                    "value": "0"
+                },
+                {
+                    "name": "active",
+                    "type": "i",
+                    "value": "1"
+                },
+                {
+                    "name": "active_tree",
+                    "type": "i",
+                    "value": "1"
+                },
+                {
+                    "name": "name",
+                    "type": "s",
+                    "value": "menu_admin"
+                },
+                {
+                    "name": "create_result",
+                    "type": "i",
+                    "value": "0"
+                }
+            ]
+        }
+    ]
+}

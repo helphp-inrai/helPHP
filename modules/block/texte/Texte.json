@@ -1,0 +1,69 @@
+{
+    "tables": [
+        {
+            "name": "block_texte",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "creadate",
+                    "type": "datetime",
+                    "null": false,
+                    "default": "CURRENT_TIMESTAMP"
+                }
+            ]
+        }
+    ],
+    "entries": [
+        {
+            "table": "block_data",
+            "fields": [
+                {
+                    "name": "name",
+                    "type": "s",
+                    "value": "texte"
+                },
+                {
+                    "name": "json",
+                    "type": "s",
+                    "value": "[{\\\"type\\\":\\\"long_multilangue\\\",\\\"name\\\":\\\"contenu\\\",\\\"index\\\":\\\"\\\",\\\"sort_order\\\":\\\"2\\\"}]"
+                },
+                {
+                    "name": "js",
+                    "type": "s",
+                    "value": ""
+                },
+                {
+                    "name": "jspublic",
+                    "type": "s",
+                    "value": ""
+                }
+            ],
+            "languages": {
+                "short": {
+                    "label": {
+                        "en": "Simple text",
+                        "fr": "Texte simple"
+                    }
+                }
+            },
+            "categories": {
+                "block": [
+                    {
+                        "series": "",
+                        "name": "basic"
+                    },
+                    {
+                        "series": "block",
+                        "name": "block"
+                    }
+                ]
+            }
+        }
+    ]
+}

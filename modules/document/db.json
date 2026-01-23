@@ -1,0 +1,137 @@
+{
+    "tables": [
+        {
+            "name": "document_data",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "name",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "route",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "creation_date",
+                    "type": "datetime",
+                    "null": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                {
+                    "name": "publication_date",
+                    "type": "datetime",
+                    "null": true
+                },
+                {
+                    "name": "active",
+                    "type": "tinyint",
+                    "limit": 1,
+                    "null": false,
+                    "default": "1"
+                },
+                {
+                    "name": "modele",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "id_user_data",
+                    "type": "int",
+                    "limit": 9,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "ismodele",
+                    "type": "tinyint",
+                    "limit": 1,
+                    "null": false,
+                    "default": "0"
+                }
+            ]
+        },
+        {
+            "name": "document_categories",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "id_document_data",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "id_category_data",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0"
+                }
+            ]
+        },
+        {
+            "name": "document_blocks",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "id_document_data",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0",
+                    "index": "index"
+                },
+                {
+                    "name": "blockname",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "sort_order",
+                    "type": "int",
+                    "limit": 4,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "id_block",
+                    "type": "int",
+                    "limit": 9,
+                    "null": false,
+                    "default": "0",
+                    "index": "index"
+                }
+            ]
+        }
+    ]
+}

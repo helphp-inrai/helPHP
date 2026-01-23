@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="32.991417mm"
+   height="31.130194mm"
+   viewBox="0 0 116.89872 110.30383"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="burger.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.8437612"
+     inkscape:cx="36.809151"
+     inkscape:cy="44.090131"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:window-width="1920"
+     inkscape:window-height="1051"
+     inkscape:window-x="1920"
+     inkscape:window-y="264"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(55.696587,-496.58698)">
+    <g
+       id="g3347"
+       transform="matrix(0.53596127,0.71157482,-0.54279951,0.70261034,14.294323,-160.17898)"
+       inkscape:export-filename="/home/seb/Documents/millepates/croixblck2.png"
+       inkscape:export-xdpi="95.966965"
+       inkscape:export-ydpi="95.966965"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-opacity:1;stroke-width:2.2899213;stroke-miterlimit:4;stroke-dasharray:none">
+      <path
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path3490"
+         d="m 444.0091,550.24694 c 80.93047,-81.58552 21.1355,-21.37517 90.74647,-91.92178 9.56432,-9.4062 23.47176,4.15327 14.15539,13.58226 -57.9136,58.40714 -25.49633,25.78339 -90.84848,92.03435 -9.47807,9.57849 -23.80619,-3.85234 -14.05338,-13.69483 z"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2.2899213;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         inkscape:export-filename="/home/seb/Documents/millepates/burg.png"
+         inkscape:export-xdpi="94.558693"
+         inkscape:export-ydpi="94.558693" />
+      <path
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2.2899213;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 412.5246,519.48476 c 80.93047,-81.58552 21.1355,-21.37517 90.74647,-91.92178 9.56432,-9.4062 23.47176,4.15327 14.15539,13.58226 -57.9136,58.40714 -25.49633,25.78339 -90.84848,92.03435 -9.47807,9.57849 -23.80619,-3.85234 -14.05338,-13.69483 z"
+         id="path3492"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccc"
+         inkscape:export-filename="/home/seb/Documents/millepates/burg.png"
+         inkscape:export-xdpi="94.558693"
+         inkscape:export-ydpi="94.558693" />
+      <path
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path3494"
+         d="m 474.53899,580.7179 c 80.93047,-81.58552 21.1355,-21.37517 90.74647,-91.92178 9.56432,-9.4062 23.47176,4.15327 14.15539,13.58226 -57.9136,58.40714 -25.49633,25.78339 -90.84848,92.03435 -9.47807,9.57849 -23.80619,-3.85234 -14.05338,-13.69483 z"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2.2899213;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         inkscape:export-filename="/home/seb/Documents/millepates/burg.png"
+         inkscape:export-xdpi="94.558693"
+         inkscape:export-ydpi="94.558693" />
+    </g>
+  </g>
+</svg>

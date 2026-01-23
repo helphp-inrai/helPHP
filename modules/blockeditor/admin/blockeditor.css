@@ -1,0 +1,18 @@
+.blockeditor_admin_field_to_add {padding: var(--spacing-small) var(--spacing-medium);border: var(--border);border-radius: var(--border-radius-small);background: var(--background4);cursor: pointer;}
+.blockeditor_admin_js_ace_editor {height: 70vh;display: block;}
+.blockeditor_admin_fieldset.lst_field {width: 950px;}
+.blockeditor_admin_form_edit .category_admin_widget_title.widget_title {display: none;}
+.blockeditor_admin_subcontainer_tab {display: flex;flex-flow: column;}
+.form_edit.blockeditor_admin_form_edit {width: unset;}
+.form_edit.blockeditor_admin_form_edit > label, .form_edit.blockeditor_admin_form_edit > .hlp_validator_parent, .form_edit.blockeditor_admin_form_edit > .hlp_translate_block, .form_edit.blockeditor_admin_form_edit > .edit_buttons, .form_edit.blockeditor_admin_form_edit > .module_widget {width: var(--main-content-size);justify-self: center;}
+.form_edit .blockeditor_admin_fieldset.lst_field {grid-column: 1 / 2;grid-template-columns: auto 1fr auto auto auto auto;align-content: flex-start;}
+.form_edit .blockeditor_admin_fieldset {display: grid;grid-gap: var(--spacing-medium);align-items: center;}
+.form_edit .blockeditor_admin_fieldset.add_field {grid-column: 2/3;grid-template-columns: auto auto;align-self: self-start;}
+.blockeditor_admin_subcontainer_tab > .hlp_tabs_list_label,.form_edit.blockeditor_admin_form_edit > label,.form_edit.blockeditor_admin_form_edit > .hlp_validator_parent,.form_edit.blockeditor_admin_form_edit > .hlp_translate_block,.form_edit.blockeditor_admin_form_edit > .edit_buttons,.form_edit.blockeditor_admin_form_edit > .module_widget {width: var(--main-content-size);justify-self: center;}
+.blockeditor_admin_subcontainer_tab > .hlp_tabs_list_label {width: var(--main-content-size);align-self: center;}
+.form_edit.blockeditor_admin_form_edit > .module_widget {margin: 0;}
+.blockeditor_admin_empty_cell {display: inline-block;}
+.blockeditor_admin_oversize_content {width: calc(100vw - (var(--spacing-medium) * 2));display: flex;justify-content: center;}
+.blockeditor_admin_field_to_add:hover {border-color: var(--color-detail);color: var(--color-detail);background: var(--background1);}
+.blockeditor_admin_form_js {width: var(--main-content-size);margin: auto;}
+.blockeditor_admin_btn_extract_zip {width: 100%;}

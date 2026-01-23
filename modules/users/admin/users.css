@@ -1,0 +1,5 @@
+.users_admin_login_display_label {grid-column: 1/3;}
+.users_admin_login_display {margin-top: var(--spacing-small);margin-bottom: var(--spacing-large);padding-left: var(--spacing-medium);}
+.users_admin_address_part {display: grid;grid-template-columns: 1fr;align-items: center;}
+.users_admin_address_part > .hlp_validator_parent {margin-bottom: var(--spacing-medium);}
+.users_admin_group_ttl {font-size: var(--font-size-large);color: var(--font-color-alt);font-weight: bold;border-bottom: var(--border);padding-bottom: var(--spacing-medium);}

@@ -1,0 +1,20 @@
+.maintenance_admin_block_action {display: flex;align-items: center;gap: var(--spacing-medium);}
+.maintenance_admin_container {display: grid;gap: var(--spacing-medium);}
+.maintenance_admin_css_list {display: grid;grid-gap: var(--spacing-medium);margin: var(--spacing-large);}
+.maintenance_admin_css_line.header {font-weight: bold;}
+.maintenance_admin_css_date {flex-basis: 15%;min-width: calc(150px * var(--fhd-hr));}
+.maintenance_admin_css_type {flex-basis: 15%;min-width: calc(150px * var(--fhd-hr));}
+.maintenance_admin_css_name {flex-grow: 1;}
+.maintenance_admin_css_line:nth-child(2n) {background: var(--background2);}
+.maintenance_admin_css_line {display: flex;padding: var(--spacing-small);}
+.maintenance_admin_btn_css {margin-left: var(--spacing-large);margin-bottom: var(--spacing-large);}
+.maintenance_admin_css_msg {margin: var(--spacing-large);}
+.maintenance_admin_subtitle {font-size: var(--font-size-large);text-align: center;}
+.maintenance_admin_css_rules_table {margin: auto;display: grid;grid-template-columns: repeat(2, auto);justify-content: center;margin-bottom: var(--spacing-large);}
+.maintenance_admin_css_rules_col.header {justify-self: center;}
+.maintenance_admin_css_rules_col.selector {grid-column: 1/3;font-weight: bold;background: var(--background2);margin-top: var(--spacing-large);}
+.maintenance_admin_css_rules_col.new, .maintenance_admin_css_rules_col.modified {display: flex;flex-flow: column;min-width: calc(300px * var(--fhd-hr));}
+.maintenance_admin_col_properties {padding: var(--spacing-medium);}
+.maintenance_admin_btn_keep_rule {margin: 0 var(--spacing-medium);}
+.maintenance_admin_css_edited_info {padding: var(--spacing-medium);}
+.maintenance_admin_modules_list {display: grid;grid-template-columns: auto auto;justify-content: left;}

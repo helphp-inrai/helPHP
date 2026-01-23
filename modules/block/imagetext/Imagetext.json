@@ -1,0 +1,76 @@
+{
+    "tables": [
+        {
+            "name": "block_imagetext",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "alignement",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "creadate",
+                    "type": "datetime",
+                    "null": false,
+                    "default": "CURRENT_TIMESTAMP"
+                }
+            ]
+        }
+    ],
+    "entries": [
+        {
+            "table": "block_data",
+            "fields": [
+                {
+                    "name": "name",
+                    "type": "s",
+                    "value": "imagetext"
+                },
+                {
+                    "name": "json",
+                    "type": "s",
+                    "value": "[{\\\"type\\\":\\\"long_multilangue\\\",\\\"name\\\":\\\"contenu\\\",\\\"index\\\":\\\"\\\",\\\"sort_order\\\":\\\"1\\\"},{\\\"type\\\":\\\"multiple_radios\\\",\\\"name\\\":\\\"alignement\\\",\\\"values\\\":[\\\"floatleft\\\",\\\"floatright\\\"],\\\"index\\\":\\\"\\\",\\\"sort_order\\\":\\\"2\\\"},{\\\"type\\\":\\\"image\\\",\\\"name\\\":\\\"image\\\",\\\"index\\\":\\\"\\\",\\\"sort_order\\\":\\\"3\\\"}]"
+                },
+                {
+                    "name": "js",
+                    "type": "s",
+                    "value": ""
+                },
+                {
+                    "name": "jspublic",
+                    "type": "s",
+                    "value": ""
+                }
+            ],
+            "languages": {
+                "short": {
+                    "label": {
+                        "en": "Text with 1 image",
+                        "fr": "Texte avec 1 image"
+                    }
+                }
+            },
+            "categories": {
+                "block": [
+                    {
+                        "series": "",
+                        "name": "basic"
+                    },
+                    {
+                        "series": "block",
+                        "name": "block"
+                    }
+                ]
+            }
+        }
+    ]
+}

@@ -1,0 +1,4 @@
+#block_imagetext-contenu {width: 80%;}
+.imagetext_a .block_admin_form_edit .tox.tox-tinymce {width: 50%;display: inline-flex;vertical-align: top;}
+.imagetext_a .block_admin_form_edit .inp_radio {width: fit-content;display: contents;}
+.block_admin_form_edit .media_admin_uploader {width:fit-content;display:inline-block;}

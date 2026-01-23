@@ -1,0 +1,11 @@
+.socials_icon {width: 30px;height: 30px;display: inline-block;background-repeat: no-repeat;background-image: url(../../images/icons/socials/map.svg);background-size: auto 100%;transition: 0.3s;}
+.socials_icon.facebook {background-position: -30px 0px;}
+.socials_icon.pinterest {background-position: -120px 0px;}
+.socials_icon.linkedin {background-position: -60px 0px;}
+.socials_icon.mail {background-position: -90px 0px;}
+.socials_container::before {content: ' ';background-position: 2px 0px;border-bottom: 2px solid var(--color-detail);margin-bottom: 4px;width: 30px;height: 30px;padding-bottom: 4px;display: inline-block;background-repeat: no-repeat;background-image: url(../../images/icons/socials/map.svg);background-size: auto 30px;left: -3px;position: relative;}
+.socials_share {display:none;}
+.socials_container:hover {opacity: 1;transform: scale(1.5, 1.5);}
+.socials_icon:hover {transform: scale(1.2, 1.2);}
+.socials_container {position: fixed;display: block;top: calc(100vh - 250px);left: 0;background: var(--background3);padding: 10px;border-radius: 0px 50% 50% 0px / 0px 15% 15% 0px;border: var(--border);opacity: 0.5;transition: all 0.3s cubic-bezier(.77,.01,.5,1);}
+.socials_container a {display: block;}

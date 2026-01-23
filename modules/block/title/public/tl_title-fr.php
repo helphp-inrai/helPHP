@@ -1,0 +1,8 @@
+<?php
+
+$tl_data = array(
+    'fr' => array(
+        'module_name' => 'Titre',
+        'title' => 'Titre'
+    )
+);

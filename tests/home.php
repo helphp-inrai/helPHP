@@ -1,0 +1,91 @@
+<?php
+namespace helPHP\tests;
+
+use PSpell\Config;
+
+// $baseroot = dirname($_SERVER['DOCUMENT_ROOT']);
+// $siteroot = explode(dirname($_SERVER['SCRIPT_NAME']), $_SERVER['SCRIPT_FILENAME'])[0];
+include_once('../config/main.php');
+include_once(\Config::HELPHP_FOLDER.'autoload.php');
+
+use helPHP\libs\HelPHP_module;
+use helPHP\libs\H;
+use helPHP\libs\Utils;
+
+class Test extends helPHP_Module
+{
+
+    //----------------------------------------------------------------------------------------------
+    // variables indispensables à tous les modules
+    //----------------------------------------------------------------------------------------------
+
+    const module_name = 'test';
+
+    protected $module_name = self::module_name;
+    protected $SCRIPT_PATH = __DIR__;
+
+    protected $admin = false;
+
+    // nom du champ d'action intégré au formulaire (ici c'est soit un bouton submit soit un select)
+    protected $input_action_identifier = self::module_name.'_action';
+
+    //----------------------------------------------------------------------------------------------
+    // variables spécifiques à ce module
+    //----------------------------------------------------------------------------------------------
+
+    private $css_class = self::module_name.'_admin_';
+    
+    private $groups = [];
+    
+    // nom du div conteneur dom où afficher le retour html
+    protected $dom_container = '';
+    // protected $dom_container = self::module_name.'_container';
+
+    public function __construct($dom_container = null, $comments = false)
+    {
+        // global $DB;
+        // execution de la classe parent qui initialise la langue et les données de traduction
+
+        parent::__construct($dom_container);
+        
+    }
+
+    public function process_data(&$post)
+    {
+        if (parent::process_data($post) == false) {
+            //utilisateur non autorisé sur ce module
+           return null;
+        }
+        // Utils::error_log($post);
+        $this->display=H::new_document('BASE_URL test HelPHP', '', '', false, true);
+        switch ($post[$this->input_action_identifier]) {
+
+            // -------------------------------------------------------------------------------------------
+            // -------------------------------------------------------------------------------------------
+            default:
+                $this->display->add_child($this->testing($post));
+            break;
+        }
+
+    }
+
+    public function testing($post){
+        global $CONFIG;
+        $testurl=$CONFIG::BASE_URL;
+        $test = Utils::check_url($testurl);
+        if ($test){
+            return H::div(['id'=>'test','style'=>'color:#000000;'],$testurl.' is reachable');
+        }else{
+            return H::div(['id'=>'test','style'=>'color:#000000;'],$testurl.' can\'t be reach... ');
+        }
+    }
+
+}
+
+$module_test = new Test();
+
+$module_test->process_data($_POST);
+
+$module_test->echo_output();
+
+?>

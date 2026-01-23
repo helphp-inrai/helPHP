@@ -1,0 +1,390 @@
+{
+    "tables": [
+        {
+            "name": "csseditor_theme",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "id_source",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0",
+                    "index": "index"
+                },
+                {
+                    "name": "name",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "admin",
+                    "type": "tinyint",
+                    "limit": 1,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "variable",
+                    "type": "text",
+                    "null": true
+                },
+                {
+                    "name": "options",
+                    "type": "text",
+                    "null": true
+                }
+            ]
+        },
+        {
+            "name": "csseditor_fonts",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "id_source",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0",
+                    "index": "index"
+                },
+                {
+                    "name": "name",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "active",
+                    "type": "tinyint",
+                    "limit": 1,
+                    "null": false,
+                    "default": "1"
+                },
+                {
+                    "name": "initial",
+                    "type": "tinyint",
+                    "limit": 1,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "id_initial",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0",
+                    "index": "index"
+                }
+            ]
+        },
+        {
+            "name": "csseditor_keyframes",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "id_source",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0",
+                    "index": "index"
+                },
+                {
+                    "name": "name",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "value",
+                    "type": "text",
+                    "null": true
+                },
+                {
+                    "name": "active",
+                    "type": "tinyint",
+                    "limit": 1,
+                    "null": false,
+                    "default": "1"
+                },
+                {
+                    "name": "initial",
+                    "type": "tinyint",
+                    "limit": 1,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "id_initial",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0",
+                    "index": "index"
+                }
+            ]
+        },
+        {
+            "name": "csseditor_media",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 10,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "name",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "value",
+                    "type": "text",
+                    "null": true
+                },
+                {
+                    "name": "sort_order",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "active",
+                    "type": "tinyint",
+                    "limit": 1,
+                    "null": false,
+                    "default": "1"
+                },
+                {
+                    "name": "initial",
+                    "type": "tinyint",
+                    "limit": 1,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "id_initial",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0"
+                }
+            ]
+        },
+        {
+            "name": "csseditor_rules",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "id_source",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0",
+                    "index": "index"
+                },
+                {
+                    "name": "id_media",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0",
+                    "index": "index"
+                },
+                {
+                    "name": "admin",
+                    "type": "tinyint",
+                    "limit": 1,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "selector",
+                    "type": "varchar",
+                    "limit": 1000,
+                    "null": false,
+                    "default": "",
+                    "index": "fulltext"
+                },
+                {
+                    "name": "properties",
+                    "type": "text",
+                    "null": true
+                },
+                {
+                    "name": "sort_order",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "active",
+                    "type": "tinyint",
+                    "limit": 1,
+                    "null": false,
+                    "default": "1"
+                },
+                {
+                    "name": "initial",
+                    "type": "tinyint",
+                    "limit": 1,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "id_initial",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0",
+                    "index": "index"
+                }
+            ]
+        },
+        {
+            "name": "csseditor_source",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "type",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "admin",
+                    "type": "tinyint",
+                    "limit": 1,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "path",
+                    "type": "varchar",
+                    "limit": 500,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "date",
+                    "type": "datetime",
+                    "null": false,
+                    "default": "CURRENT_TIMESTAMP"
+                },
+                {
+                    "name": "md5",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": ""
+                }
+            ]
+        },
+        {
+            "name": "csseditor_variables",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "id_source",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0",
+                    "index": "index"
+                },
+                {
+                    "name": "id_media",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0",
+                    "index": "index"
+                },
+                {
+                    "name": "name",
+                    "type": "varchar",
+                    "limit": 500,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "properties",
+                    "type": "varchar",
+                    "limit": 1000,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "active",
+                    "type": "tinyint",
+                    "limit": 1,
+                    "null": false,
+                    "default": "1"
+                },
+                {
+                    "name": "initial",
+                    "type": "tinyint",
+                    "limit": 1,
+                    "null": false,
+                    "default": "0"
+                },
+                {
+                    "name": "id_initial",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "default": "0",
+                    "index": "index"
+                }
+            ]
+        }
+    ]
+}

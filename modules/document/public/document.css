@@ -1,0 +1,2 @@
+.document_container {min-height: 100%;margin: var(--spacing-large);}
+.subtitle {display: block;width: 100%;background: var(--color-success);padding: var(--spacing-medium);color: var(--color-primary);}

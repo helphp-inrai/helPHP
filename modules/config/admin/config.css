@@ -1,0 +1,12 @@
+.config_admin_inp_suffixed {display: flex;gap: var(--spacing-medium);align-items: center;}
+.config_admin_inp_suffixed .hlp_validator_parent {flex-grow: 1;}
+.config_admin_fiedset.main {display: grid;grid-template-columns: repeat(4, 1fr);grid-gap: var(--spacing-medium);align-items: center;}
+.config_admin_block_content {display: grid;grid-template-columns: 1fr 1fr;grid-gap: var(--spacing-medium);}
+.config_admin_sub_block {display: grid;grid-template-columns: auto auto;grid-gap: var(--spacing-medium);align-items: center;}
+.config_admin_sub_block.main.general {grid-row: 1 / 3;}
+.config_admin_sub_block.main.folder_domain {grid-row: 3 / 5;}
+.config_admin_sub_block.main.security {grid-row: 3 / 5;}
+.config_admin_block_btns {grid-column: 1/3;}
+.config_admin_container {display: grid;grid-gap: var(--spacing-medium);}
+.config_admin_form {margin-top: var(--spacing-medium);}
+.config_admin_sub_block .hlp_multiradio_block {justify-self: left;}

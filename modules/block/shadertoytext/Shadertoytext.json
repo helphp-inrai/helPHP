@@ -1,0 +1,81 @@
+{
+    "tables": [
+        {
+            "name": "block_shadertoytext",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "int",
+                    "limit": 11,
+                    "null": false,
+                    "primary": true
+                },
+                {
+                    "name": "shadertoyid",
+                    "type": "varchar",
+                    "limit": 255,
+                    "null": false,
+                    "default": ""
+                },
+                {
+                    "name": "code",
+                    "type": "text",
+                    "null": true
+                },
+                {
+                    "name": "creadate",
+                    "type": "datetime",
+                    "null": false,
+                    "default": "CURRENT_TIMESTAMP"
+                }
+            ]
+        }
+    ],
+    "entries": [
+        {
+            "table": "block_data",
+            "fields": [
+                {
+                    "name": "name",
+                    "type": "s",
+                    "value": "shadertoytext"
+                },
+                {
+                    "name": "json",
+                    "type": "s",
+                    "value": "[{\\\"type\\\":\\\"long_text\\\",\\\"name\\\":\\\"code\\\",\\\"index\\\":\\\"\\\",\\\"sort_order\\\":\\\"2\\\"},{\\\"type\\\":\\\"long_multilangue\\\",\\\"name\\\":\\\"content\\\",\\\"index\\\":\\\"\\\",\\\"sort_order\\\":\\\"4\\\"}]"
+                },
+                {
+                    "name": "js",
+                    "type": "s",
+                    "value": ""
+                },
+                {
+                    "name": "jspublic",
+                    "type": "s",
+                    "value": "window.h.block = window.h.block || {};\nclass Block_shadertoytext extends H_module {\n\n    constructor(dom_id){\n\n        super(dom_id);\n\n        let inpshader=document.getElementById(\\'shadercode_\\'+dom_id);\n        if (inpshader !=undefined && inpshader !=\\'\\'){\n            this.shadercode=inpshader.value;\n            h.libs.dom.remove_element(inpshader);\n            this.toy = new ShaderToyLite(\\'canvastoy_\\'+dom_id);\n            this.toy.setCommon(\\'\\');\n            \/\/ toy.setBufferA({source: a});\n            this.toy.setImage({source: this.shadercode, iChannel0: \\'A\\'});\n            this.toy.play();\n        }\n\n    }\n    clean(){\n        delete(this.toy);\n    }\n    static instances = {};\n    static create_instance(dom_id){\n        if (Block_shadertoytext.instances[dom_id]){\n            Block_shadertoytext.instances[dom_id].clean();\n            delete(Block_shadertoytext.instances[dom_id]);\n        }\n        Block_shadertoytext.clean_instances();\n        Block_shadertoytext.instances[dom_id] = new Block_shadertoytext(dom_id);\n        return Block_shadertoytext.instances[dom_id];\n    }\n    static clean_instances(current){\n        let toClean = [];\n        for (var key in Block_shadertoytext.instances) {\n            if (!Block_shadertoytext.instances[key].exist()){\n                Block_shadertoytext.instances[key].clean();\n                toClean.push(key);\n            }\n        }\n        toClean.forEach((key)=>{\n            delete(Block_shadertoytext.instances[key]);\n        });\n    }\n    \n    stopmouse(evt){\n        h.e.stop_event(evt);\n    }\n}\nwindow.h.block.Block_shadertoytext = Block_shadertoytext;"
+                }
+            ],
+            "languages": {
+                "short": {
+                    "label": {
+                        "en": "Shader and text",
+                        "fr": "Shader et texte"
+                    }
+                }
+            },
+            "categories": {
+                "block": [
+                    {
+                        "series": "",
+                        "name": "advanced"
+                    },
+                    {
+                        "series": "block",
+                        "name": "block"
+                    }
+                ]
+            }
+        }
+    ]
+}

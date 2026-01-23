@@ -1,0 +1,34 @@
+{
+    "entries": [
+        {
+            "table": "core_submodules",
+            "fields": [
+                {
+                    "name": "id_disposition",
+                    "type": "i",
+                    "value": "1"
+                },
+                {
+                    "name": "module_subcontainer",
+                    "type": "s",
+                    "value": "banner_top"
+                },
+                {
+                    "name": "module_name",
+                    "type": "s",
+                    "value": "burger"
+                },
+                {
+                    "name": "module_param",
+                    "type": "s",
+                    "value": "menu_id=menu_admin&closed=1"
+                },
+                {
+                    "name": "sort_order",
+                    "type": "i",
+                    "value": "1"
+                }
+            ]
+        }
+    ]
+}

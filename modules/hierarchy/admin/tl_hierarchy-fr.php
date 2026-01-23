@@ -1,0 +1,43 @@
+<?php
+
+$tl_data = array(
+    'fr' => array(
+        'module_name' => 'Hiérarchie',
+        'title' => 'Editer les hierarchies',
+        'root_name' => 'Nom hiérarchie',
+        'result' => 'Créer un conteneur result :',
+        'confirm_delete' => 'Êtes vous sur?',
+        'info_tree' => 'Ajouter des éléments, déplacer les dans d\'autres, ordonner votre hiérarchie',
+        'add_structure_element' => 'Ajouter un élément',
+        'title_item' => 'Editer lien',
+        'select_module' => 'Origine du lien:',
+        'display_item' => 'Afficher cet élément :',
+        'check_img' => 'Images ou icone en plus du nom',
+        'item_icon' => 'Nom de l\'icône',
+        'inp_target' => 'Div cible :',
+        'open_ong' => 'Ouverture dans un nouvel onglet',
+        'open_fen' => 'Ouverture dans une nouvelle fenetre',
+        'selec_ouv' => 'Type d\'ouverture :',
+        'lien' => 'Lien :',
+        'select_params' => 'Module ou lien :',
+        'module_params' => 'Paramètres',
+        'root_select' => 'Charger',
+        'root_exist' => 'Nom déjà employé',
+        'sur_del' => 'Attention ! Cette action entraine la suppression totale de la hiérarchie. Aucun retour en arrière ne sera possible, etes vous sur de vouloir continuer ?',
+        'group' => 'Groupe',
+        'selec_gr' => 'Groupe',
+        'sur_delete' => 'ATTENTION! Vous allez supprimer toute la hiérarchie, êtes vous sur ?',
+        '-item-name' => 'nom:',
+        'update_item' => 'Modifier',
+        'valid' => 'Valider',
+        'name_struc' => 'Nom de la hiérarchie',
+        'order_struc' => 'Ordre d\'affichage',
+        'add_hierarchie' => 'Créer une nouvelle hiérarchie',
+        'add_struc_success' => 'Hiérarchie ajouté avec succès.',
+        'select_struc' => 'Charger',
+        'selec_item' => 'Choix d\'un nouvel item',
+        'add_root_exist' => 'Ce nom de hiérarchie existe déjà, ',
+        'title_group' => 'Gérer les groupes :',
+        'hierarchy_item-name' => 'Texte affiché'
+    )
+);

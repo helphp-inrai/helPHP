@@ -1,0 +1,3 @@
+div.core_admin_submodules {width: var(--main-content-size);margin: auto;margin-top: var(--spacing-large);}
+.core_admin_btn_add_submodule {margin: var(--spacing-medium) 0;}
+form.core_admin_submodules table {width: 100%;margin-bottom: var(--spacing-medium);border-spacing: 0px var(--spacing-medium);}

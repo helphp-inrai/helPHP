@@ -1,0 +1,43 @@
+<?php
+
+$tl_data = array(
+    'en' => array(
+        'module_name' => 'Hierarchy',
+        'title' => 'Tree editor',
+        'root_name' => 'Name',
+        'result' => 'Create a container to be the target of the link',
+        'confirm_delete' => 'Are your sure?',
+        'info_tree' => 'Add links, move them into others, ordone how you want',
+        'add_structure_element' => 'Add a link',
+        'title_item' => 'Edit link',
+        'select_module' => 'Link to',
+        'display_item' => 'View this link',
+        'check_img' => 'With image or icon',
+        'item_icon' => 'Icon name',
+        'inp_target' => 'The HTML target<br>(ignore this field if you don\'t know what it is)',
+        'open_ong' => 'Opening in a new tab ',
+        'open_fen' => 'Opening in a new window ',
+        'selec_ouv' => 'Opening type',
+        'lien' => 'Url',
+        'select_params' => 'Module or link:',
+        'module_params' => 'parameters',
+        'root_select' => 'Tree',
+        'root_exist' => 'This name is already taken.',
+        'sur_del' => 'Warning! You are going to delete ALL the hierarchy. Do you want to continue ?',
+        'group' => 'Group',
+        'selec_gr' => 'Group',
+        'sur_delete' => 'Warning! You are going to delete ALL the hierarchy. Do you want to continue?',
+        '-item-name' => 'Name',
+        'update_item' => 'Edit',
+        'valid' => 'Valid',
+        'name_struc' => 'Name of the tree',
+        'order_struc' => ' Display order',
+        'add_hierarchie' => 'New tree',
+        'add_struc_success' => 'Successfully added',
+        'select_struc' => 'Select:',
+        'selec_item' => 'Select a new item',
+        'add_root_exist' => 'This tree name already exists, ',
+        'title_group' => 'Manage groups:',
+        'hierarchy_item-name' => 'Displayed text'
+    )
+);

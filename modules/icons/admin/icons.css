@@ -1,0 +1,7 @@
+.icons_admin_list {display: grid;grid-template-columns: repeat(9, 1fr);gap: var(--spacing-medium);margin: var(--spacing-medium) 0;height: 100%;overflow: scroll;}
+.icons_admin_card_icon {display: flex;flex-flow: column;cursor: pointer;border-radius: var(--border-radius);padding: var(--spacing-medium);border: var(--border);border-color: transparent;height: 16vh;align-items: center;justify-content: center;gap: var(--spacing-medium);}
+.icons_admin_card_icon:hover {border-color: var(--back-color4);}
+.icons_admin_card_icon > .ui_icon,.icons_admin_card_icon > .icons_admin_icon_name {pointer-events: none;}
+.icons_admin_copy_name {width: 1em;height: 1em;vertical-align: middle;margin-left: var(--spacing-small);pointer-events: auto;}
+.icons_admin_container {height: 100%;}
+.input_text.icons_admin_inp_search {flex-grow: 1;}
