@@ -172,6 +172,9 @@ function minify($target){
 
     // doing the same for the css, first the public
     $css_str = Csseditor::get_css($CONFIG::THEME_ID);
+    if (str_contains($css_str, 'url(../')){
+        $css_str = str_replace('url(../', 'url(../../', $css_str);
+    }
     // $css_str = Utils::get_css_as_str($CONFIG::THEME_ID);
     writeUTF8File($target."css/gz/all.css", $css_str);
     unlink($target."/css/gz/all.css.gz");
@@ -184,6 +187,9 @@ function minify($target){
     // now the admin
     // $css_str = Utils::get_css_as_str($CONFIG::THEME_ID_ADMIN);
     $css_str = Csseditor::get_css($CONFIG::THEME_ID_ADMIN);
+    if (str_contains($css_str, 'url(../')){
+        $css_str = str_replace('url(../', 'url(../../', $css_str);
+    }
     writeUTF8File($target."css/gz/alladm.css", $css_str);
     unlink($target."css/gz/alladm.css.gz");
     exec("gzip ".$target."css/gz/alladm.css");
