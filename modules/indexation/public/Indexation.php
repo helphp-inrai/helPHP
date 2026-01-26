@@ -64,7 +64,7 @@ class Indexation extends HelPHP_module
             // user not authorized
             return null;
         }
-        global $DB;
+        global $DB,$MEDIA;
         
         switch ($post[$this->input_action_identifier]) {
             default:
@@ -74,28 +74,17 @@ class Indexation extends HelPHP_module
                 if (!isset($post[$this->ifld_data_module_param])) {
                     $post[$this->ifld_data_module_param]=$_SESSION['module_param'];
                 }
-                if (!isset($post[$this->ifld_data_module_name]) || !isset($post[$this->ifld_data_module_param])) {
-                    //~ UTILS_Class::error_log('INDEXATION ERROR');
-                    //~ UTILS_Class::error_log($post);
-                    //~ UTILS_Class::error_log($_SESSION);                    
+                if (!isset($post[$this->ifld_data_module_name]) || !isset($post[$this->ifld_data_module_param])) {            
                     echo 'Error : No module_name or module_param provided';
                     exit();
                 } else {
-                    // ugly fix !
-                    if ($post[$this->ifld_data_module_name] =='webstore') {
-                        $tt=explode(':', $post[$this->ifld_data_module_param]);
-                        if ($tt[0]=='produit') {
-                            $post[$this->ifld_data_module_name]=$tt[0];
-                            $post[$this->ifld_data_module_param]=$tt[1];
-                            $post[$this->ifld_data_module_Full_param] = $tt[1];
-                        }
-                    }
-                    //end of ugly fix
-                    $q = 'select id,image from '.$this->bddt_data.' where module_name= ? and module_param= ?';
-                    $result = $DB->prepared_query_line($q, 'ss', array($post[$this->ifld_data_module_name],$post[$this->ifld_data_module_param]));
-                    if ($result) {
-                        $post[$this->ifld_data_id]=$result['id'];
-                        $post[$this->ifld_data_image]=$result['image'];
+
+                    $q = 'select id from '.$this->bddt_data.' where module_name= ? and module_param= ?';
+                    $post[$this->ifld_data_id] = $DB->prepared_query_value($q, 'ss', array($post[$this->ifld_data_module_name],$post[$this->ifld_data_module_param]));
+                    if ($post[$this->ifld_data_id]!=false && $post[$this->ifld_data_id] != '') {
+                        // $post[$this->ifld_data_id]=$post[$this->ifld_data_module_param];
+                        $image = $MEDIA->get_media($this->ifld_data_image, $post[$this->ifld_data_id]);
+                        $post[$this->ifld_data_image]=($image!=false && $image['path']!=false)?$image['path']:'images/logo.svg';
                         $this->GetHeaders($post);
                     } else {
                         $this->HEADERS['title']=Config::SITE_NAME;
@@ -120,7 +109,7 @@ class Indexation extends HelPHP_module
         $this->HEADERS['keywords']=Language::load_short_translation_value($this->ifld_data_keywords, $post[$this->ifld_data_id], $LANG->current_id_data);
         $this->HEADERS['description']=Language::load_long_translation_value($this->ifld_data_description, $post[$this->ifld_data_id], $LANG->current_id_data);
         $metas=[];
-        $image=Config::BASE_URL.$post[$this->ifld_data_image];
+        $image=Config::BASE_URL.'files/'.$post[$this->ifld_data_image];
         if (isset($post['indexation-data-mode']) && $post['indexation-data-mode']=='start') {
             $url= Config::BASE_URL;
         } else {
@@ -128,21 +117,16 @@ class Indexation extends HelPHP_module
             $url=Config::BASE_URL.'?'.$post[$this->ifld_data_module_name].'='.$paramT;
         }
         $this->HEADERS['canonical']=$url;
-        array_push($metas, array('name'=>'author', 'content'=>'M666'));
+        array_push($metas, array('name'=>'author', 'content'=>'helPHP'));
         array_push($metas, array('property'=>'og:locale', 'content'=>$LANG->current_language));
-        array_push($metas, array('property'=>'twitter:card', 'content'=>'article'));
         array_push($metas, array('property'=>'og:type', 'content'=>'article'));
         array_push($metas, array('property'=>'og:title', 'content'=>$this->HEADERS['title']));
-        array_push($metas, array('property'=>'twitter:title', 'content'=>$this->HEADERS['title']));
         array_push($metas, array('property'=>'name', 'content'=>$this->HEADERS['title']));
         array_push($metas, array('property'=>'og:description', 'content'=>$this->HEADERS['description']));
-        array_push($metas, array('property'=>'twitter:description', 'content'=>$this->HEADERS['description']));
         array_push($metas, array('property'=>'og:url', 'content'=>$url));
         array_push($metas, array('property'=>'og:site_name', 'content'=>Config::SITE_NAME));
         array_push($metas, array('property'=>'article:author', 'content'=>Config::BASE_URL));
-        array_push($metas, array('property'=>'twitter:creator', 'content'=>Config::BASE_URL));
         array_push($metas, array('property'=>'og:image', 'content'=>$image));
-        array_push($metas, array('property'=>'twitter:image', 'content'=>$image));
         $this->HEADERS['metas']=$metas;
     }
 }
