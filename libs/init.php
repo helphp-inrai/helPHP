@@ -85,8 +85,8 @@ if (isset($_REQUEST) && sizeof($_REQUEST) > 0) {
 }
 
 // -----------------------------------------------
-//will create $LANG global, note if a global $ADMIN_SWITCH is true, it will create a new class context
-helPHP\libs\Language::create_instance();// -----------------------------------------------
+//will create $LANG global
+helPHP\libs\Language::create_instance();
 // user account management
 // will create $USER global
 helPHP\libs\User::create_instance();

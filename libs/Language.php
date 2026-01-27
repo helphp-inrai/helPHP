@@ -117,7 +117,7 @@ class Language {
         $identifier = Language::session_language_identifier;
 
         // retrieves the language stored in session
-        $this->current_language = (isset($_SESSION[$identifier]))?$_SESSION[$identifier]:'';
+        $this->current_language = (isset($_SESSION[$identifier.Language::$context]))?$_SESSION[$identifier.Language::$context]:'';
 
         // attribute the specified language in the posted data
         if (isset($_REQUEST[$identifier]) && $this->validate_language($_REQUEST[$identifier])) {
@@ -137,7 +137,7 @@ class Language {
         $_GLOBAL[$identifier]=$this->current_language;
 
         // storing the value of the current language in a session variable
-        $_SESSION[$identifier]=$this->current_language;
+        $_SESSION[$identifier.Language::$context]=$this->current_language;
     }
     
     /**
@@ -146,10 +146,10 @@ class Language {
      * @return global $LANG
      * 
      */
-    public static function create_instance() {
-        global $LANG,$ADMIN_SWITCH;
+    public static function create_instance($context='') {
+        global $LANG;
         if (!$LANG) {
-            $LANG = new Language($ADMIN_SWITCH);
+            $LANG = new Language($context);
         }
         return $LANG;
     }
@@ -179,7 +179,7 @@ class Language {
         $identifier =  Language::session_language_identifier;
 
         // retrieves the language stored in session
-        $this->current_language = $_SESSION[$identifier];
+        $this->current_language = $_SESSION[$identifier.Language::$context];
 
         // validation of the language so that it corresponds to an authorized language
         $this->current_language = $this->set_language_iso($this->current_language);
@@ -188,7 +188,7 @@ class Language {
         $_GLOBAL[$identifier]=$this->current_language;
 
         // storing the value of the current language in a session variable
-        $_SESSION[$identifier]=$this->current_language;
+        $_SESSION[$identifier.Language::$context]=$this->current_language;
     }
 
     /**

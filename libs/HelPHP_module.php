@@ -193,7 +193,7 @@ class HelPHP_module
         }else{
         
             global $LANG; // instance of the Language class, initialized in init.php
-            $LANG->set_context($this->admin?'admin':'');
+            // $LANG->set_context($this->admin?'admin':'');
             $this->lang = $LANG->current_language;
             // recover translation files :
             $this->load_translation_files($module_path);

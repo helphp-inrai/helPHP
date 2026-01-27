@@ -973,7 +973,7 @@ class Document extends HelPHP_module {
         $langs = $LANG->get_languages_data();
         foreach ($langs as $key => $lang) {
             $LANG->set_language_iso($lang['iso']);
-
+            
             $output = H::group('show_document');
 
             $q = 'SELECT dblocks.* , block.id as block_id FROM '.$DB->table('document_blocks').' as dblocks, '.$DB->table('block_data').' as block WHERE dblocks.id_document_data=? and dblocks.blockname = block.name order by sort_order';
@@ -981,6 +981,7 @@ class Document extends HelPHP_module {
             if ($list) {
                 $script_loaded = [];
                 $css_loaded = [];
+                
                 foreach ($list as $key => $line) {
                     $path = $CONFIG::HELPHP_FOLDER.'/modules/block/'.$line['blockname'].'/public/';
                     $path.= ucfirst($line['blockname']).'.php';
@@ -1069,7 +1070,7 @@ class Document extends HelPHP_module {
             $_POST['indexation_data-module_name'] = 'document';
             $_POST['indexation_data-module_param'] = $post[$this->ifld_data_id];
             $_POST['indexation_data-mode'] = 'module';
-            
+            $LANG->set_language_iso($lang['iso']);
             $module_index = new Indexation();
             $module_index->process_data($_POST);
 
