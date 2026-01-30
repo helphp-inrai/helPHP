@@ -256,7 +256,7 @@ class Notification extends HelPHP_module{
         global $USER,$DB,$CONFIG;
         $output = H::group('notification_wid');
 
-        $scriptContent='setTimeout(function(){Notif.create_instance("'.$this->dom_id.'");';
+        $scriptContent='helphp_timeout(\'Notif.create_instance("'.$this->dom_id.'");\');';
 
         
         

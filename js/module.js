@@ -148,3 +148,4 @@ class H_module {
 }
 
 h.libs.module = H_module;
+window.H_module = H_module;

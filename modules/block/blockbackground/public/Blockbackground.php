@@ -69,7 +69,7 @@ class Blockbackground extends HelPHP_module {
                 $data_display->add_child($content);
                 $shadercode=H::input_hidden(['id'=>'shadercode_'.$this->dom_id,'value'=>$post[$this->ifld_blockbackground_content]]);
                 $data_display->add_child([$shadercode]); 
-                $data_display->add_child(H::script('window.h.block.Block_blockbackground.create_instance("'.$this->dom_id.'");',['autoremove'=>true,'defer'=>true]));
+                $data_display->add_child(H::script('helphp_timeout(\'window.h.block.Block_blockbackground.create_instance("'.$this->dom_id.'");\');',['autoremove'=>true,'defer'=>true]));
             break;
         }
 

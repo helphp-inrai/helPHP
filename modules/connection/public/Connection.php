@@ -82,7 +82,7 @@ class Connection extends HelPHP_module {
                 // open the modal connection
                 global $USER;
                 $state_open = $USER->connection_state != User::state_logged;
-                $master_output->add_child( H::script('Connection.create_instance("'.$this->dom_id.'", '.json_encode(['open'=>$state_open]).');', ['autoremove'=>1]) );
+                $master_output->add_child( H::script('helphp_timeout(\'Connection.create_instance("'.$this->dom_id.'", '.addslashes(json_encode(['open'=>$state_open])).');\');', ['autoremove'=>1]) );
             break;
             case $this->ACTION_DISCONNECT:
                 $master_output->add_child($this->disconnect($post));
@@ -136,7 +136,7 @@ class Connection extends HelPHP_module {
                     $master_output->add_child($this->display_form_connection(true));
                 }
 
-                $master_output->add_child( H::script('Connection.create_instance("'.$this->dom_id.'");') );
+                $master_output->add_child( H::script('helphp_timeout(\'Connection.create_instance("'.$this->dom_id.'");\');') );
             break;
         }
 

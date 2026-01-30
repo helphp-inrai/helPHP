@@ -157,7 +157,7 @@ class Preview extends HelPHP_module {
                 'add_rule_info' => $this->get_tl('add_rule_info')
             ];
 
-            $js = 'Preview_a.create_instance("'.$this->dom_id.'", '.json_encode($params).', '.json_encode($translate).');';
+            $js = 'helphp_timeout(\'Preview_a.create_instance("'.$this->dom_id.'", '.addslashes(json_encode($params)).', '.\addslashes(json_encode($translate)).');\');';
             if (isset($post['tab'])){
                 $name = $this->get_tl('module_name');
                 $js.= 'helphp_timeout("h.main_tab.add_name_to_tab('.$post['tab'].',\"'.htmlentities($name).'\")", 100);';

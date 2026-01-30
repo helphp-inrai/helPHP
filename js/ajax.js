@@ -546,7 +546,6 @@ class H_ajax {
         return this._speed;
     }
 }
-h.libs.ajax = H_ajax;
 
 // these two variables have to be update by PHP script to reflect server the configuration
 H_ajax.max_upload_size = h_storage.max_upload_size; // max file upload size
@@ -558,6 +557,9 @@ H_ajax.json_list_identifier = H_constants.json_list_identifier; //'_AJAX_json_de
 H_ajax.JSON_OFF = 0; // json data stay as strings
 H_ajax.JSON_ON = 1; // json data are converted to objetcs and arrays
 H_ajax.JSON_ARRAY = 2; // json data are converted, and objects are converted to associative arrays
+
+h.libs.ajax = H_ajax;
+window.H_ajax = H_ajax;
 
 //****************************************************************************************
 /**
@@ -1393,11 +1395,12 @@ class H_ajax_sender {
     }
 
 }
-h.libs.ajax_sender = H_ajax_sender;
 H_ajax_sender.STATE_NOTHING = 0;
 H_ajax_sender.STATE_QUEUED = 1;
 H_ajax_sender.STATE_UPLOADING = 2;
 H_ajax_sender.STATE_DOWNLOADING = 3;
+h.libs.ajax_sender = H_ajax_sender;
+window.H_ajax_sender = H_ajax_sender;
 /**
  * @class H_ajax_file
  * @classdesc
@@ -1872,3 +1875,4 @@ class H_ajax_file{
  * create link to global h.libs object
  */
 h.libs.ajax_file = H_ajax_file;
+window.H_ajax_file = H_ajax_file;

@@ -108,7 +108,7 @@ class Deco extends HelPHP_module {
         $js = '';
         if ($data['id_animation']){
             $id_anim = array_search($data['id_animation'], array_column($this->prepared_anim, "id"));
-            $js.= 'new H_anim({elements: "#block_'.$data['block_name'].'_'.$data['id_block'].'", '.$this->prepared_anim[$id_anim]['opts'].'});';
+            $js.= 'helphp_timeout(\'new H_anim({elements: "#block_'.$data['block_name'].'_'.$data['id_block'].'", '.$this->prepared_anim[$id_anim]['opts'].'});\');';
         }
         if ($this->scroll){
             $js.= 'H_ui.scroll_toggle_class("'.$this->dom_container.'", '.$this->scroll.', "fixed");';

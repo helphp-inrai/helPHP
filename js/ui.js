@@ -818,7 +818,7 @@ class H_ui {
                 h.a.send(settings);
             }
         }
-    }
+    };
     /**
      * Detects screen info and sets CSS variables.<br>
      * window screen logarythmique ratio calculator is used to create some CSS vars that can reduce issues with some screens.<br>
@@ -963,6 +963,7 @@ class H_ui {
     }
 }
 h.libs.ui = H_ui;
+window.H_ui = H_ui;
 
 /**
  * @class H_ui_window
@@ -1362,6 +1363,7 @@ class H_ui_window {
     }
 }
 h.libs.ui_window = H_ui_window;
+window.H_ui_window = H_ui_window;
 
 /**
  * @class H_ui_quick_edit
@@ -1552,6 +1554,7 @@ class H_ui_quick_edit{
     }
 }
 h.libs.quick_edit = H_ui_quick_edit;
+window.H_ui_quick_edit = H_ui_quick_edit;
 
 /**
  * @class H_ui_button
@@ -1661,6 +1664,7 @@ class H_ui_button {
     }
 }
 h.libs.ui_button = H_ui_button;
+window.H_ui_button = H_ui_button;
 
 /**
  * @class H_ui_prompt
@@ -1790,6 +1794,7 @@ class H_ui_prompt extends H_ui_window {
     }
 }
 h.libs.ui_prompt = H_ui_prompt;
+window.H_ui_prompt = H_ui_prompt;
 
 /**
  * @class H_search
@@ -1984,6 +1989,7 @@ class H_search {
     }
 }
 h.libs.search = H_search;
+window.H_search = H_search;
 
 /**
  * @class H_ui_autocomplete
@@ -2302,6 +2308,7 @@ class H_ui_autocomplete {
     }
 }
 h.libs.ui_autocomplete = H_ui_autocomplete;
+window.H_ui_autocomplete = H_ui_autocomplete;
 
 /**
  * @class H_ui_multi_state
@@ -2592,6 +2599,7 @@ class H_ui_multi_state {
     }
 }
 h.libs.ui_multi_state = H_ui_multi_state;
+window.H_ui_multi_state = H_ui_multi_state;
 
 /**
  * Creates an instance of H_ui_context_menu.<br>
@@ -2782,6 +2790,7 @@ class H_ui_context_menu {
     }
 }
 h.libs.ui_context_menu = H_ui_context_menu;
+window.H_ui_context_menu = H_ui_context_menu;
 
 /**
  * Displays and manages the UI for tracking upload progress.<br>
@@ -3270,6 +3279,7 @@ class H_ui_precomplete {
     }
 }
 h.libs.ui_precomplete = H_ui_precomplete;
+window.H_ui_precomplete = H_ui_precomplete;
 
 /**
  * Represents a dynamic UI layout with draggable resizable containers.<br>
@@ -3766,6 +3776,7 @@ class H_ui_disposition {
     }
 }
 h.libs.ui_disposition = H_ui_disposition;
+window.H_ui_disposition = H_ui_disposition;
 
 /**
  * Represents a tabbed UI component with switchable views.<br>
@@ -3859,6 +3870,7 @@ class H_ui_tabs {
 }
 
 h.libs.ui_tabs = H_ui_tabs;
+window.H_ui_tabs = H_ui_tabs;
 
 /**
  * Constructs a new input order field.
@@ -4440,6 +4452,7 @@ class H_ui_input_order {
     }
 }
 h.libs.ui_input_order = H_ui_input_order;
+window.H_ui_input_order = H_ui_input_order;
 
 /**
  * @class H_ui_inputs_order_manager
@@ -4550,3 +4563,4 @@ class H_ui_inputs_order_manager {
     }
 }
 h.libs.ui_inputs_order_manager = H_ui_inputs_order_manager;
+window.H_ui_inputs_order_manager = H_ui_inputs_order_manager;

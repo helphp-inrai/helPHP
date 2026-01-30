@@ -133,11 +133,9 @@ class H_animation{
         }
     }           
 }
-h.libs.animation = H_animation;
 H_animation._animate = [];
-
-
-
+h.libs.animation = H_animation;
+window.H_animation = H_animation;
 
 /**
  * @class H_bezier
@@ -242,6 +240,7 @@ H_bezier.kSampleStepSize = 1.0 / (H_bezier.kSplineTableSize - 1.0);
 H_bezier.float32ArraySupported = typeof Float32Array === 'function';
 
 h.libs.bezier = H_bezier;
+window.H_bezier = H_bezier;
 /**
  * @class H_anim
  * @classdesc
@@ -867,6 +866,7 @@ class H_anim {
 }
 H_anim.easings_fill();
 h.libs.anim = H_anim;
+window.H_anim = H_anim;
 
 /**
  * IntersectionObserver callback for scroll-triggered animations.<br>

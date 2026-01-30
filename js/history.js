@@ -289,6 +289,7 @@ class H_history {
 var h = h || {};
 h.libs = h.libs || {};
 h.libs.history = H_history;
+window.H_history = H_history;
 
 // var try_socials=false;
 // /**

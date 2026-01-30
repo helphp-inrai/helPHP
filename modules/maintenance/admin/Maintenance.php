@@ -185,7 +185,7 @@ class Maintenance extends HelPHP_module {
         $tab = H::tabs([], $tab_title, $tab_content);
         
         // $receiver_result = H::DIV(['class'=>$this->css.'receiver_result', 'id'=>self::module_name.'_receiver_result'.$this->dom_id]);
-        $script = H::script('Maintenance_a.create_instance("'.$this->dom_id.'", '.json_encode($this->actions).');', ['autoremove'=>1]);
+        $script = H::script('helphp_timeout(\'Maintenance_a.create_instance("'.$this->dom_id.'", '.addslashes(json_encode($this->actions)).');\');', ['autoremove'=>1]);
 
         return [$tab, $script];
     }

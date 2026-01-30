@@ -609,7 +609,7 @@ class Document extends HelPHP_module {
         }
 
         $js_params = ['id'=>$post[$this->ifld_data_id]];
-        $js = H::script('Document_a.create_instance("'.$this->dom_id.'",'.json_encode($js_params).');', ['autoremove'=>true]);
+        $js = H::script('helphp_timeout(\'Document_a.create_instance("'.$this->dom_id.'",'.addslashes(json_encode($js_params)).');\');', ['autoremove'=>true]);
         $output->add_child( $js );
         
         return $output;
@@ -1018,7 +1018,7 @@ class Document extends HelPHP_module {
                     $animscript='';
                     foreach($animations as $key => $line){
                         $id_anim = array_search($line['id_animation'], array_column($this->prepared_anim, "id"));
-                        $animscript.='new H_anim({ elements: "#block_'.$line['block_id'].'", '.$this->prepared_anim[$id_anim]['opts'].'});';
+                        $animscript.='helphp_timeout(\'new H_anim({ elements: "#block_'.$line['block_id'].'", '.$this->prepared_anim[$id_anim]['opts'].'});\');';
                     }
                     $anim_script=H::script($animscript,['autoremove'=>false]);
                     // $anim_script=H::script($animscript,['autoremove'=>true]);

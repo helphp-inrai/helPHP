@@ -2031,3 +2031,4 @@ class H_event {
 var h = h || {};
 h.libs = h.libs || {};
 h.libs.event = H_event;
+window.H_event = H_event;

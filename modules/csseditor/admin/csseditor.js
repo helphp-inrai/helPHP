@@ -35,7 +35,7 @@ class Csseditor_a extends H_module {
         type: 'theme',
         name: '',
         id_item: ''
-    }
+    };
 
     #order_pool_update = [];
     #order_timer = false;

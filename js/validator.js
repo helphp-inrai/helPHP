@@ -1041,3 +1041,4 @@ var h = h || {};
 h.libs = h.libs || {};
 
 h.libs.validator = H_validator;
+window.H_validator = H_validator;

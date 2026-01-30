@@ -92,7 +92,7 @@ class Tabs extends HelPHP_module{
             // $js.= 'main_tab.init();';
         }
 
-        $js = 'h.main_tab = Tabs_a.create_instance("'.$this->dom_id.'", '.json_encode(isset($CONFIG::MODULES_LIST['preview'])).');';
+        $js = 'helphp_timeout(\'h.main_tab = Tabs_a.create_instance("'.$this->dom_id.'", '.json_encode(isset($CONFIG::MODULES_LIST['preview'])).');\');';
         $script = H::script($js);
         $output->add_child([$parent,$script]);
 

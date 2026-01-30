@@ -182,9 +182,11 @@ class H extends Html {
         $head->add_child(H::META(array('name'=>'robots' , 'content'=>'index, follow')));
         $head->add_child(H::META(array('name'=>'revisit-after' , 'content'=>'7 days')));
         $head->add_child(H::META(array('name'=>'document-type' , 'content'=>'Public')));
-        if ($CONFIG::DEVMODE) {
+        if ($CONFIG::DEVMODE==true) {
             $head->add_child(H::META(array('http-equiv'=>'pragma' , 'content'=>'no-cache')));
             $head->add_child(H::META(array('http-equiv'=>'cache-control' , 'content'=>'no-cache, must-revalidate')));
+        }else{
+            $head->add_child(H::META(array('http-equiv'=>'cache-control' , 'content'=>'max-age=31536000, public')));
         }
         //iOS
         $head->add_child(H::META(array('name'=>'apple-mobile-web-app-capable' , 'content'=>'yes')));
@@ -2048,7 +2050,7 @@ class H extends Html {
             $list_result = H::DIV(['class'=>'hlp_autocomplete_search_list', 'id'=>$base_id.'search_list']);
             // $sub_div->add_child($input_search);
 
-            $js = 'H_ui_autocomplete.create_instance("'.$dom_id.'", '.json_encode($settings).');';
+            $js = 'helphp_timeout(\'H_ui_autocomplete.create_instance("'.$dom_id.'", '.addslashes(json_encode($settings)).');\');';
             // $js = 'autocomp.init("'.$params['name'].'", "'.$table_name.'",'.$field_name.','.$submit_on_change.',"'.$params['data-confirm'].'",'.$callback.',"'.$dom_id.'");';
             $script = H::script($js, ['autoremove'=>true]);
             
@@ -2145,7 +2147,7 @@ class H extends Html {
                 'callback' => $callback,
             ];
 
-            $js = 'H_ui_precomplete.create_instance("'.$dom_id.'", '.json_encode($settings).');';
+            $js = 'helphp_timeout(\'H_ui_precomplete.create_instance("'.$dom_id.'", '.addslashes(json_encode($settings)).');\');';
             $script = H::script($js, ['autoremove'=>true]);
 
         $div->add_child( [$current, $hidden_id, $input_search->label_tag(), $input_search, $list_search, $script] );
@@ -2422,7 +2424,7 @@ class H extends Html {
             $sub->add_child($btn);
         }
         $container->add_child($sub);
-        $container->add_child(H::script('H_ui_multi_state.create_instance("'.$params['id'].'", "'.$side.'", '.json_encode($toggle_mode).');',['autoremove'=>'autoremove']));
+        $container->add_child(H::script('helphp_timeout(\'H_ui_multi_state.create_instance("'.$params['id'].'", "'.$side.'", '.addslashes(json_encode($toggle_mode)).');\');',['autoremove'=>'autoremove']));
         return $container;
     }
 
@@ -2591,7 +2593,7 @@ class H extends Html {
             }
 
             $params = ['callback'=>$callback, 'base_id'=>$base_id];
-            $script = H::script('H_ui_tabs.create_instance("'.$dom_id.'", '.json_encode($params).');', ['autoremove'=>true]);
+            $script = H::script('helphp_timeout(\'H_ui_tabs.create_instance("'.$dom_id.'", '.addslashes(json_encode($params)).');\');', ['autoremove'=>true]);
 
         $output->add_child([$container_labels, $container_contents, $script]);
 

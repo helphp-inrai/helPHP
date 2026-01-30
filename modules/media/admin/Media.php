@@ -381,7 +381,7 @@ class Media extends HelPHP_module
             'media_id'=>$this->media_id,
             'params'=>$this->params
         ];
-        $js.= 'Media_a.create_instance("'.$this->dom_id.'", '.json_encode($settings).');';
+        $js.= 'helphp_timeout(\'Media_a.create_instance("'.$this->dom_id.'", '.addslashes(json_encode($settings)).');\');';
         $script = H::script($js, ['autoremove'=>true]);
 
         $container->add_child($script);

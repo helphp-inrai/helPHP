@@ -143,7 +143,8 @@ function minify($target){
     }
     $packer = new Packer($js_str, '10');
     $packed_js = $copyright.$packer->pack();
-    $packed_js=$js_str;
+    
+    // $packed_js=$js_str;
     // write into a file
     writeUTF8File($target.'jsgz/all.js', $packed_js);
     unlink($target.'jsgz/all.js.gz');
@@ -160,7 +161,8 @@ function minify($target){
     }
     $packer2 = new Packer($js_adm_str, '10');
     $packed_js = $copyright.$packer2->pack();
-    $packed_js=$js_adm_str;
+    
+    // $packed_js=$js_adm_str;
     // write into a file
     writeUTF8File($target.'jsgz/alladm.js', $packed_js);
     unlink($target.'jsgz/alladm.js.gz');

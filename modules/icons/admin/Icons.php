@@ -105,7 +105,7 @@ class Icons extends HelPHP_module {
                 $list_icons->add_child($dom_icon);
             }
 
-            $js= 'Icons_a.create_instance("'.$this->dom_id.'");';
+            $js= 'helphp_timeout(\'Icons_a.create_instance("'.$this->dom_id.'");\');';
             $script = H::script($js, ['autoremove'=>true]);
             
         $output->add_child([$title, $actions, $list_icons, $script]);

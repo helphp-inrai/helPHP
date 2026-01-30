@@ -378,7 +378,7 @@ class Csseditor extends HelPHP_module {
                 'preview'=>$this->preview,
                 'source' => $this->source_type.($this->source_params ? '¤'.$this->source_params : ''),
             ];
-            $js = 'Csseditor_a.create_instance("'.$this->dom_id.'", '.json_encode($params).');';
+            $js = 'helphp_timeout(\'Csseditor_a.create_instance("'.$this->dom_id.'", '.addslashes(json_encode($params)).');\');';
             $script = H::script($js, ['autoremove'=>1]);
 
         $output->add_child($script);

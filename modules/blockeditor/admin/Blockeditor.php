@@ -208,7 +208,7 @@ class Blockeditor extends HelPHP_module {
                 
                 // init js
                 $js = ucfirst(self::module_name).'_a.create_instance("'.$this->dom_id.'");';
-                $script = H::script($js);
+                $script = H::script('helphp_timeout(\''.$js.'\');');
                 $master_output->add_child($script);
             break;
         }

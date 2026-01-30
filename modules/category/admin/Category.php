@@ -412,7 +412,7 @@ class Category extends HelPHP_module {
             $settings = [
                 'widget_id'=>$this->widget_id
             ];
-            $js = H::script('Category_a.create_instance("'.$this->dom_id.'", '.json_encode($settings).');', ['autoremove'=>true]);
+            $js = H::script('helphp_timeout(\'Category_a.create_instance("'.$this->dom_id.'", '.addslashes(json_encode($settings)).');\');', ['autoremove'=>true]);
 
         $output->add_child( $js );
         return $output;

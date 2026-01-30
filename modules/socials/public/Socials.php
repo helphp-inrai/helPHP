@@ -73,7 +73,7 @@ class Socials extends HelPHP_module {
             default:
                 $master_output->add_child( $this->display($post) );
                 
-                $js = H::script('Socials.create_instance("'.$this->dom_id.'");', ['autoremove'=>1]);
+                $js = H::script('helphp_timeout(\'Socials.create_instance("'.$this->dom_id.'");\');', ['autoremove'=>1]);
                 $master_output->add_child( $js );
             break;
         }

@@ -448,5 +448,10 @@ var h = h || {};
 h.libs = h.libs || {};
 
 h.libs.generics = H_generics;
+window.H_generics = H_generics;
+
 h.libs.strings = H_strings;
+window.H_strings = H_strings;
+
 h.libs.math = H_math;
+window.H_math = H_math;

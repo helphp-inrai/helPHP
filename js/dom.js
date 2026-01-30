@@ -1853,3 +1853,4 @@ class H_dom {
 var h = h || {};
 h.libs = h.libs || {};
 h.libs.dom = H_dom;
+window.H_dom = H_dom;

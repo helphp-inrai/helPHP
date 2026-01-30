@@ -267,7 +267,7 @@ class Hierarchy extends HelPHP_module {
 
             $output->add_child($sub_container);
                 
-                $js = 'Hierarchy_a.create_instance("'.$this->dom_id.'", '.json_encode($this->list_items_id).');';
+                $js = 'helphp_timeout(\'Hierarchy_a.create_instance("'.$this->dom_id.'", '.addslashes(json_encode($this->list_items_id)).');\');';
                 $script = H::script($js);
             
             $output->add_child($script);

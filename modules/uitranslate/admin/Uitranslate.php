@@ -309,7 +309,7 @@ class Uitranslate extends HelPHP_module{
                 $gridItem[$lng_data] = H::BUTTON(['class'=>$this->css.'btn_translate', 'onclick'=>'h.modules.uitranslate_a["'.$this->dom_id.'"].translate("'.$lng_data.'");'], $this->get_tl('tlc_translate'));
             }
             array_push($grid, $gridItem);
-            $script = H::script('Uitranslate_a.create_instance("'.$this->dom_id.'");');
+            $script = H::script('helphp_timeout(\'Uitranslate_a.create_instance("'.$this->dom_id.'");\');');
             $langs = H::input_hidden(['id'=>'langsiso', 'value'=>json_encode($langdata)]);
             $output->add_child([$langs, $script]);
         }

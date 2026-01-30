@@ -293,7 +293,7 @@ class Users extends HelPHP_module{
                     
                     $fieldset->add_child([$street->label_tag(), $street, $postal_code->label_tag(), $postal_code, $city->label_tag(), $city, $country->label_tag(), $country, $state->label_tag(), $state]);
                         
-                        $script = H::script('Users_a.create_instance("'.$this->dom_id.'", '.$post[$this->ifld_address_id_country_data].');', ['autoremove'=>1]);
+                        $script = H::script('helphp_timeout(\'Users_a.create_instance("'.$this->dom_id.'", '.$post[$this->ifld_address_id_country_data].');\');', ['autoremove'=>1]);
                     
                     $fieldset->add_child($script);
 

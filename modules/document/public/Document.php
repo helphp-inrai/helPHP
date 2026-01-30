@@ -208,7 +208,7 @@ class Document extends HelPHP_module {
                 $animscript = '';
                 foreach($animations as $key => $line){
                     $id_anim = array_search($line['id_animation'], array_column($this->prepared_anim, "id"));
-                    $animscript.= 'new H_anim({elements: "#block_'.$line['block_id'].'", '.$this->prepared_anim[$id_anim]['opts'].'});';
+                    $animscript.= 'helphp_timeout(\'new H_anim({elements: "#block_'.$line['block_id'].'", '.$this->prepared_anim[$id_anim]['opts'].'});\');';
                 }
                 $anim_script = H::script($animscript, ['autoremove'=>false]);
                 // $anim_script=H::script($animscript,['autoremove'=>true]);

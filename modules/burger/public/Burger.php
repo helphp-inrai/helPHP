@@ -57,7 +57,7 @@ class Burger extends HelPHP_module
                 'menu_id' => $post['menu_id'],
                 'closed' => (isset($post['closed']) && $post['closed']) ? true : false
             ];
-            $js = H::script('Burger.create_instance("'.$this->dom_id.'", '.json_encode($params).');', ['autoremove'=>true]);
+            $js = H::script('helphp_timeout(\'Burger.create_instance("'.$this->dom_id.'", '.addslashes(json_encode($params)).');\');', ['autoremove'=>true]);
             return $js;
         }
     }

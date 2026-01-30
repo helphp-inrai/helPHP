@@ -157,7 +157,7 @@ class Notification extends HelPHP_module {
 
         $output->add_child([$txt]);
 
-            $js = 'Notification_a.create_instance("'.$this->dom_id.'");';
+            $js = 'helphp_timeout(\'Notification_a.create_instance("'.$this->dom_id.'");\');';
         
         $output->add_child(H::script($js));
         return $output;

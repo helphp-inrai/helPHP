@@ -115,7 +115,7 @@ class Search extends HelPHP_module {
                     'document_modele'=>$this->document_modele,
                     'category'=>$this->category
                 ];
-                $js = 'Search.create_instance("'.$this->dom_id.'", '.json_encode($params).');';
+                $js = 'helphp_timeout(\'Search.create_instance("'.$this->dom_id.'", '.addslashes(json_encode($params)).');\');';
                 $script = H::script($js, ['autoremove'=>true]);
                 $master_output->add_child( $script );
             break;
@@ -131,7 +131,7 @@ class Search extends HelPHP_module {
                     'document_modele'=>$this->document_modele,
                     'category'=>$this->category
                 ];
-                $js = 'Search.create_instance("'.$this->dom_id.'", '.json_encode($params).');';
+                $js = 'helphp_timeout(\'Search.create_instance("'.$this->dom_id.'", '.addslashes(json_encode($params)).');\');';
                 $script = H::script($js, ['autoremove'=>true]);
                 $master_output->add_child( $script );
             break;
