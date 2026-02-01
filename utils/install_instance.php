@@ -119,7 +119,7 @@ function install_instance($home_folder, $admin_user, $admin_pass, $db_root_user,
     if ($CONFIG_DB::DB_CENTRAL) $cmd.= ' --central_user='.$db_root_user_central.' --central_pass='.$db_root_password_central;
     if ($CONFIG_DB::MASTER_SLAVE_MODE) $cmd.= ' --slave_user='.$db_root_user_slave.' --slave_pass='.$db_root_password_slave;
     $res = shell_exec($cmd);
-     file_put_contents($home_folder.'errors.txt',$cmd.PHP_EOL, FILE_APPEND);
+     
 
     include_once($CONFIG::HELPHP_FOLDER.'/autoload.php');
 
