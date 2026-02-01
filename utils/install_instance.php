@@ -40,15 +40,25 @@ if ($CLI) { // call from CLI
         exit('path_not_found');
     }
 
-    $db_root_user = $argv[2];
-    $db_root_pass = $argv[3];
-    $admin_user = $argv[4];
-    $admin_pass = $argv[5];
+    $admin_user = $argv[2];
+    $admin_pass = $argv[3];
 
-    install_instance($target, $db_root_user, $db_root_pass, $admin_user, $admin_pass);
+    $db_root_user = $argv[4];
+    $db_root_pass = $argv[5];
+
+     for($i = 4; $i < count($argv); $i++){
+        $arg = $argv[$i];
+        $t = explode('=', $argv[$i]);
+        if ($t[0] == '--central_user') $root_username_central = $t[1];
+        if ($t[0] == '--central_pass') $root_password_central = $t[1];
+        if ($t[0] == '--slave_user') $root_username_slave = $t[1];
+        if ($t[0] == '--slave_pass') $root_password_slave = $t[1];
+    }
+
+    install_instance($target, $admin_user, $admin_pass, $db_root_user, $db_root_pass, $root_username_central, $root_password_central, $root_username_slave, $root_password_slave);
 }
 
-function install_instance($home_folder, $db_root_user, $db_root_pass, $admin_user, $admin_pass){
+function install_instance($home_folder, $admin_user, $admin_pass, $db_root_user, $db_root_pass, $db_root_user_central, $db_root_password_central, $db_root_user_slave, $db_root_password_slave){
 
     include_once($home_folder.'config/main.php');
     global $CONFIG;
@@ -104,11 +114,12 @@ function install_instance($home_folder, $db_root_user, $db_root_pass, $admin_use
     }
     
     umask($old_umask);
-
+    file_put_contents($home_folder.'errors.txt','folders done'.PHP_EOL, FILE_APPEND);
     $cmd = 'php '.$CONFIG::HELPHP_FOLDER.'utils/install_db_and_modules.php '.$home_folder.' '.$db_root_user.' '.$db_root_pass;
     if ($CONFIG_DB::DB_CENTRAL) $cmd.= ' --central_user='.$db_root_user_central.' --central_pass='.$db_root_password_central;
     if ($CONFIG_DB::MASTER_SLAVE_MODE) $cmd.= ' --slave_user='.$db_root_user_slave.' --slave_pass='.$db_root_password_slave;
     $res = shell_exec($cmd);
+     file_put_contents($home_folder.'errors.txt',$cmd.PHP_EOL, FILE_APPEND);
 
     include_once($CONFIG::HELPHP_FOLDER.'/autoload.php');
 
