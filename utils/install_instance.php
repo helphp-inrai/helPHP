@@ -197,8 +197,14 @@ function install_instance($home_folder, $admin_user, $admin_pass, $db_root_user,
     // make constants
     shell_exec('php '.$CONFIG::HELPHP_FOLDER.'utils/constants.php '.$home_folder);
 
+    // add extra data to the DB
     if (file_exists($CONFIG::HOME_FOLDER.'install.json')) {
         $DB->sql_from_json(file_get_contents($CONFIG::HOME_FOLDER.'install.json'));
+    }
+
+    // do extra stuff in the instance depending the need of the instance
+    if (file_exists($CONFIG::HOME_FOLDER.'install_extra.php')) {
+        include_once($CONFIG::HOME_FOLDER.'install_extra.php');
     }
 
     // add a file to indicate to the end of installation to the script waiting for.
