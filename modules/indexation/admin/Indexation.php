@@ -40,9 +40,6 @@ class Indexation extends HelPHP_module {
     protected $ACTION_DELETE = self::module_name.'_delete';
     protected $ACTION_SAVE = self::module_name.'_modify';
     protected $ACTION_SITEMAP = self::module_name.'_sitemap';
-    // protected $ACTION_ACTIVATE = self::module_name.'_activate';
-    // protected $ACTION_DEACTIVATE = self::module_name.'_deactivate';
-    // public $ACTION_SHOW_FORM = self::module_name.'_show_form';
     
     public function __construct($dom_container = null) {
         $this->prepare_module(self::module_name, true);
@@ -84,14 +81,6 @@ class Indexation extends HelPHP_module {
             case $this->ACTION_SITEMAP:
                 $this->create_sitemap($post);
             break;
-            // case $this->ACTION_ACTIVATE:
-            //     $post[$this->ifld_data_activated]=1;
-            //     $this->activate($post);
-            // break;
-            // case $this->ACTION_DEACTIVATE:
-            //     $post[$this->ifld_data_activated]=0;
-            //     $this->activate($post);
-            // break;
 
             default:
                 $this->prepare_fields($post, 'indexation_data');
@@ -187,13 +176,6 @@ class Indexation extends HelPHP_module {
             $DB->prepared_query($q, 'i', array($result['id']));
         }
     }
-
-    // public function activate(&$post)
-    // {
-    //     global $DB;
-    //     $q = 'UPDATE '.$this->bddt_data.' SET activated=? where  module_name= ? and module_param= ?';
-    //     $result = $DB->prepared_query_value($q, 'iss', array($post[$this->ifld_data_activated],$post[$this->ifld_data_module_name],$post[$this->ifld_data_module_param]));
-    // }
 
     public function create_sitemap() {
         global $LANG,$DB,$CONFIG,$FS;

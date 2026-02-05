@@ -31,6 +31,8 @@ use helPHP\libs\Utils;
 use helPHP\libs\Datetime;
 use helPHP\libs\Language;
 use helPHP\modules\indexation\public\Indexation;
+use helPHP\modules\indexation\admin\Indexation as Indexation_admin;
+
 
 class Document extends HelPHP_module {
 
@@ -169,8 +171,6 @@ class Document extends HelPHP_module {
             case $this->ACTION_EDIT_document_data:
                 if ($this->user_can_edit){ // nedded for security
 
-                    // Utils::error_log($post);
-
                     if (isset($post[self::module_name.'_id']) && $post[self::module_name.'_id']){
                         $post['document_data-id'] = $post[self::module_name.'_id'];
                     }
@@ -203,7 +203,6 @@ class Document extends HelPHP_module {
                     }
 
                     $post['document_data-id']=$this->copy_document_data($post);
-
                     $master_output->add_child( $this->module_header($post) );
                     // si les sous sections ont des affichages a ajouté à celui de base
                     $master_output->add_child( $this->form_search($post) );
@@ -252,16 +251,12 @@ class Document extends HelPHP_module {
 
                     Language::delete_translation_data($post, 'document', 'data', $post['document_data-id']);
 
-                    $this->delete_block($post, true);
-                
-                
-                    $post['document_data-id'] = 0;
-                    $this->reset_fields($post, 'document_data');
-                    
-                    $master_output->add_child( $this->module_header($post) );
+                    $_POST['indexation_data-module_name'] = 'document';
+                    $_POST['indexation_data-module_param'] = $post['document_data-id'];
+                    $_POST['indexation_action'] = 'indexation_delete';
+                    $module_indexation=new Indexation_admin();
+                    $module_indexation->process_data($_POST);
 
-                    $master_output->add_child( $this->form_search($post) );
-                    $master_output->add_child( $this->result_search($post) );
                 }
             break;
 
@@ -757,8 +752,6 @@ class Document extends HelPHP_module {
     public function document_preview($post){
         global $module_html_content;
         
-        // Utils::error_log($post);
-
         $mod_preview = new \helPHP\modules\preview\admin\Preview();
 
         $t = [];
@@ -883,15 +876,10 @@ class Document extends HelPHP_module {
     }
     //supprime les données
     public function delete_document_data(&$post) {
-        // Utils::error_log($post);
         global $DB;
         $q = 'DELETE FROM '.$DB->table('document_data').' WHERE id=?';
             $q.= $this->user_query_part();
         $res = $DB->prepared_query($q, 'i', [$post['document_data-id']]);
-
-        //  $q = 'DELETE FROM '.$DB->table('document_categories').' WHERE id_document_data=?';
-        //     $q.= $this->user_query_part();
-        // $res = $DB->prepared_query($q, 'i', [$post['document_data-id']]);
 
         \helPHP\modules\category\admin\Category::delete('document', $post['document_data-id']);
         \helPHP\modules\group\admin\Group::delete('document', $post['document_data-id']);
@@ -905,15 +893,10 @@ class Document extends HelPHP_module {
     }
 
     public function form_publish($post){
-        // Utils::error_log($post);
 
         $output = H::DIV(['class'=>$this->css.'subcontainer publish']);
 
             $form = H::form(['action'=>$this->get_index_relative_path(), 'dom_target'=>'.parent', 'class'=>$this->css.'form_publish form_edit']);
-
-            //     $title = H::SPAN(array('class'=>$this->css.'title_modal_edit module_title'), $this->get_tl('ttl_publish'));
-
-            // $form->add_child( $title );
 
                 $indexation = \helPHP\modules\indexation\admin\Indexation::button(self::module_name, $post['document_data-id']);
             
@@ -1221,7 +1204,6 @@ class Document extends HelPHP_module {
     //process et affiche le résultat de la recherche
     public function result_search(&$post){
         global $DB, $CONFIG_DB, $DB, $LANG, $CRYPT;
-        // Utils::error_log($post);
         $db_data = $CONFIG_DB::DB_TABLE_PREFIX.'_document_data';
         $db_lang_long = $DB->table('languages_long');
         $db_lang_short = $DB->table('languages_short');
@@ -1431,7 +1413,6 @@ class Document extends HelPHP_module {
         $db_data = $CONFIG_DB::DB_TABLE_PREFIX.'_document_data';
         
         $output = H::group('result_search');
-
         $pages = $post['pages'];
         if ($pages['page_count'] > 1) {
             // $form_pages = H::form(['action'=>$this->get_index_relative_path(), 'dom_target'=>$sub_container_id, 'class'=>$this->css.'form_pages form_pages']);
