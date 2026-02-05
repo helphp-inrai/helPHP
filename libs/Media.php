@@ -1077,7 +1077,7 @@ class Media {
             $media_id = $field_identifier.'¤'.$field_id;
             
             $mtime = filemtime($this->base_path.$media['path']);
-            if ($nodl==false){
+            if ($nodl==false || $CONFIG::SECUVID == false){
                 $path = $CONFIG::BASE_URL.'public/media/media.php?f='.$media_id.'&i='.$media['use_key'].'&p='.$media['process_key'].'&t='.$mtime;
             }else{
                 $path = $CONFIG::BASE_URL.'public/media/media.php?pp='.$this->encode_video_src([$media_id,$media['use_key']]).'&t='.$mtime;
