@@ -202,7 +202,9 @@ class Document extends HelPHP_module {
                         $post['document_data-id'] = $post[self::module_name.'_id'];
                     }
 
-                    $post['document_data-id']=$this->copy_document_data($post);
+                    $docid=$this->copy_document_data($post);
+                    $this->reset_fields($post, 'document_data');
+                    $post['document_data-id']=$docid;
                     $master_output->add_child( $this->module_header($post) );
                     // si les sous sections ont des affichages a ajouté à celui de base
                     $master_output->add_child( $this->form_search($post) );
