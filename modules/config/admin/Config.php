@@ -51,7 +51,7 @@ class Config extends HelPHP_module {
         'ROOT_FS',
         'SITE_FOLDER',
         'HOME_FOLDER',
-        'LOG_FOLDER',
+        'LOG_FILE',
         'HELPHP_FOLDER',
         'CRYPT_KEY',
         'MODULES_BASIC',

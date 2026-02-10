@@ -53,7 +53,7 @@ if ($CONFIG::DEVMODE) {
  * -ARRAY MANIPULATION SECTION
  * 
  * One is really used often : Utils::error_log(); that replace the classic error_log to 
- * send a more readable log in $CONFIG::LOG_FOLDER.'helPHP.log' file. 
+ * send a more readable log in $CONFIG::LOG_FILE file. 
  * It combine also the classic errors except error 500 (still going to apache error log in that case).
  * So do not hesitate to use it during your debug session.
  * 
@@ -1892,11 +1892,15 @@ class Utils
      */
     public static function error_handler($errno, $errstr, $errfile, $errline) {
         global $CONFIG;
-        if (!is_dir($CONFIG::LOG_FOLDER)) mkdir($CONFIG::LOG_FOLDER);
-        if (!is_file($CONFIG::LOG_FOLDER.'helPHP.log')) touch($CONFIG::LOG_FOLDER.'helPHP.log');
+        // If don't have LOG_FILE in your config, rename LOG_FOLDER to LOG_FILE, don't forget to add .'helPHP.log' at the end of your LOG_FILE
+        if (!is_file($CONFIG::LOG_FILE)){
+            $folder = Filesystem::get_file_path($CONFIG::LOG_FILE);
+            if (!is_dir($folder)) mkdir($folder);
+            touch($CONFIG::LOG_FILE);
+        }
 
         $today = date("F j H:i:s");
-        $logAuth = fopen($CONFIG::LOG_FOLDER.'helPHP.log', 'a+');
+        $logAuth = fopen($CONFIG::LOG_FILE, 'a+');
         if ($logAuth !== false) {
             fputs($logAuth, $today . ' | ERROR :' . $errfile . ' line : ' . $errline . ' : ' . $errstr . "\n");
             fclose($logAuth);
@@ -1913,7 +1917,7 @@ class Utils
 
         $lst = array_reverse(debug_backtrace());
 
-        $logAuth = fopen($CONFIG::LOG_FOLDER.'helPHP.log', 'a+');
+        $logAuth = fopen($CONFIG::LOG_FILE, 'a+');
         if ($logAuth !== false) {
             fputs($logAuth, '****************  BACKTRACE START  *****************************'."\n");
             fputs($logAuth, date("F j H:i:s")."\n");
@@ -1944,7 +1948,7 @@ class Utils
         $f = isset($lst[1]['function']) ? $lst[1]['function'] : '';
 
         $today = date("F j H:i:s");
-        $logAuth = fopen($CONFIG::LOG_FOLDER.'helPHP.log', 'a+');
+        $logAuth = fopen($CONFIG::LOG_FILE, 'a+');
         if ($logAuth !== false) {
             if ($short_form) {
                 fputs($logAuth, $today . ' | LOG   : '.print_r($data, true)."\n");

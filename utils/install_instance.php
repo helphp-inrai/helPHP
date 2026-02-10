@@ -94,13 +94,13 @@ function install_instance($home_folder, $admin_user, $admin_pass, $db_root_user,
     }
     
     // log
-    if (!file_exists($CONFIG::LOG_FOLDER)) {
-        mkdir($CONFIG::LOG_FOLDER, 0775, true);
-    }
-    if (!file_exists($CONFIG::LOG_FOLDER.'helPHP.log')) {
-        shell_exec('touch '.$CONFIG::LOG_FOLDER.'helPHP.log');
-    }
-    chmod($CONFIG::LOG_FOLDER.'helPHP.log', 00775);
+    // if (!file_exists($CONFIG::LOG_FILE)) {
+    //     mkdir($CONFIG::LOG_FOLDER, 0775, true);
+    // }
+    // if (!file_exists($CONFIG::LOG_FOLDER.'helPHP.log')) {
+    //     shell_exec('touch '.$CONFIG::LOG_FOLDER.'helPHP.log');
+    // }
+    // chmod($CONFIG::LOG_FOLDER.'helPHP.log', 00775);
 
     // css
     if (!file_exists($home_folder.'css')) {
