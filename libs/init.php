@@ -41,17 +41,15 @@
  */
 
 header('Content-type: text/html; charset=UTF-8');
-
+header("Cache-control: must-revalidate");
 global $CONFIG;
 $CONFIG = new \Config();
 if ($CONFIG::DEVMODE) {
     global $chron;
     $chron=new helPHP\libs\Datetime(); //useful only for perf testing...
     $chron->start_chrono();
-    ini_set('session.cache_limiter','nocache');
-}else{
-    ini_set('session.cache_limiter','max-age=86400, public');
 }
+
 //will create $CRYPT global
 helPHP\libs\Crypt::create_instance();
 

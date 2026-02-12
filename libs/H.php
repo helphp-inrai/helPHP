@@ -182,14 +182,9 @@ class H extends Html {
         $head->add_child(H::META(array('name'=>'robots' , 'content'=>'index, follow')));
         $head->add_child(H::META(array('name'=>'revisit-after' , 'content'=>'7 days')));
         $head->add_child(H::META(array('name'=>'document-type' , 'content'=>'Public')));
-        if ($CONFIG::DEVMODE==true) {
-            $head->add_child(H::META(array('http-equiv'=>'pragma' , 'content'=>'no-cache')));
-            $head->add_child(H::META(array('http-equiv'=>'cache-control' , 'content'=>'no-cache, must-revalidate')));
-        }else{
-            $head->add_child(H::META(array('http-equiv'=>'cache-control' , 'content'=>'max-age=31536000, public')));
-        }
+        
         //iOS
-        $head->add_child(H::META(array('name'=>'apple-mobile-web-app-capable' , 'content'=>'yes')));
+        $head->add_child(H::META(array('name'=>'mobile-web-app-capable' , 'content'=>'yes')));
         //ZOOM CONTROL !
         $head->add_child(H::META(array('name'=>'viewport' , 'content'=>'width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes')));
         //favicon
