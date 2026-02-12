@@ -182,7 +182,7 @@ class H extends Html {
         $head->add_child(H::META(array('name'=>'robots' , 'content'=>'index, follow')));
         $head->add_child(H::META(array('name'=>'revisit-after' , 'content'=>'7 days')));
         $head->add_child(H::META(array('name'=>'document-type' , 'content'=>'Public')));
-        
+
         //iOS
         $head->add_child(H::META(array('name'=>'mobile-web-app-capable' , 'content'=>'yes')));
         //ZOOM CONTROL !
@@ -226,8 +226,8 @@ class H extends Html {
                 $adm='';
             } else {
                 $adm='adm';
+                 $head->add_child(H::SCRIPT('',array('src'=>$pre.'js/externals/tinymce/tinymce.min.js.gz', 'language'=>'Javascript')));
             }
-            $head->add_child(H::SCRIPT('',array('src'=>$pre.'js/externals/tinymce/tinymce.min.js.gz', 'language'=>'Javascript')));
             $head->add_child(H::SCRIPT('',array('src'=>$CONFIG::BASE_URL.'jsgz/all'.$adm.'.js.gz'.$refresher, 'language'=>'Javascript')));
             $head->add_child(H::LINK(array('href'=>$CONFIG::BASE_URL.'css/gz/all'.$adm.'.css.gz'.$refresher, 'rel'=>'stylesheet' , 'type'=>'text/css')), 'css');
         }
