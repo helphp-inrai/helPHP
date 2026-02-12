@@ -378,7 +378,16 @@ class Core extends HelPHP_module {
         }
         $output = H::new_document($CONFIG::SITE_NAME.' administration', '', '', $metas);
         $body = $output->find_child('body');
-        // include_once('connection/admin/connection_admin_class.php');
+        
+        // add variable admin folder to js
+        // first JS executed
+        $js = 'H_constants.admin_folder = "'.$CONFIG::ADMIN_FOLDER.'";';
+
+        global $H_context;
+        if ($H_context != '') $js.= 'H_constants.context = "'.$H_context.'";';
+        
+        $script = H::script($js, ['autoremove'=>true]);
+        $body->add_child($script);
         
         if ($USER->connection_state == 0){
             $connectionForm=new Connection();
@@ -421,14 +430,7 @@ class Core extends HelPHP_module {
                 $body->add_child($div);
             }
 
-            // add variable admin folder to js
-            $script = H::script('H_constants.admin_folder = "'.$CONFIG::ADMIN_FOLDER.'";', ['autoremove'=>true]);
-            $body->add_child($script);
             
-            // if (is_file($CONFIG::HOME_FOLDER.'admin/koldron.js')) {
-            //     $body->add_child(H::script('', ['src'=>'koldron.js']));
-            //     $body->add_child(H::script('spd2_koldron.texts = {"choix_mod": "'.$this->get_tl('choix_mod').'"}'));
-            // }
         }
 
         return $output;

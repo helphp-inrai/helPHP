@@ -216,8 +216,13 @@ class Core extends HelPHP_module {
 
         if ($is_cordova) $body->add_child(H::script('', ['src'=>$CONFIG::BASE_URL.'public/app.js']));
 
-        $body->add_child(H::script('h.libs.animation.detect_anime();'));
-        
+        $js = 'h.libs.animation.detect_anime();';
+
+        global $H_context;
+        if ($H_context != '') $js.= 'H_constants.context = "'.$H_context.'";';
+
+        $body->add_child( H::script($js, ['autoremove'=>true]) );
+
         // PROCESSING HCODE
         $output = $this->parse_hcode($output);
         

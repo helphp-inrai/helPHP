@@ -119,7 +119,7 @@ class H_ajax {
 
         return obj;
     }
-     /**
+    /**
      * Submits a form when a select element changes.
      * 
      * @function
@@ -337,7 +337,7 @@ class H_ajax {
             return false;
         }
     }
-     /**
+    /**
      * Queues a sender for later execution.
      * @param {H_ajax_sender} sender - The sender to queue.
      */
@@ -625,7 +625,7 @@ class H_ajax_sender {
         }
 
     }
-     /**
+    /**
      * Resets the sender state.
      */
     reset(){
@@ -663,7 +663,7 @@ class H_ajax_sender {
 
     }
 
-   /**
+    /**
      * Handles upload progress events.
      * @param {ProgressEvent} event - The progress event.
      */
@@ -737,7 +737,7 @@ class H_ajax_sender {
             this._current_down_progress_callback(event,this);
         }
     }
-     /**
+    /**
      * Sets data and configuration for the AJAX request.
      * @param {Object} settings - AJAX settings. possible values :<br>
      *      - action = url php script<br>
@@ -754,7 +754,7 @@ class H_ajax_sender {
      *
      * @returns {boolean} True if data is set, false otherwise.
      */
-   set_data(settings){
+    set_data(settings){
         settings = settings || {};
 
         if(settings['skip_container']){
@@ -1263,7 +1263,7 @@ class H_ajax_sender {
 
         this._send_time = Date.now();
     }
-     /**
+    /**
      * Aborts the AJAX request.
      * @param {Event} [event] - Optional event.
      */
@@ -1750,7 +1750,7 @@ class H_ajax_file{
     pause_file(){
         this.paused = true;
     }
-     /**
+    /**
      * Resumes a paused file upload.
      */
     unpause_file(){

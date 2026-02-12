@@ -67,7 +67,7 @@ class H_module {
      * @returns {Settings} Default AJAX settings object.
      */
     ajax_settings(){
-        return {
+        let obj = {
             url: this.url,
             skip_container: true,
             no_timer: undefined,
@@ -81,6 +81,8 @@ class H_module {
             up_progress: undefined,
             down_progress: undefined,
         };
+        if (H_constants.context) obj.data.h_context = H_constants.context;
+        return obj;
     }
 
     /**

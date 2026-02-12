@@ -65,8 +65,12 @@ helPHP\libs\DB::create_instance();
 //will create $FS global
 helPHP\libs\Filesystem::create_instance();
 
+global $H_context;
+\helPHP\libs\Utils::error_log($_REQUEST);
+$H_context = (isset($_REQUEST['h_context']) && $_REQUEST['h_context'] != '') ? $_REQUEST['h_context'] : '';
+
 //will create $SESSION global
-helPHP\libs\Sessions::create_instance();
+helPHP\libs\Sessions::create_instance(($H_context != '' ? $H_context : false));
 // start the session
 // global $SESSION;
 // $SESSION::open_session();
@@ -89,7 +93,7 @@ if (isset($_REQUEST) && sizeof($_REQUEST) > 0) {
 
 // -----------------------------------------------
 //will create $LANG global
-helPHP\libs\Language::create_instance();
+helPHP\libs\Language::create_instance($H_context);
 // user account management
 // will create $USER global
 helPHP\libs\User::create_instance();

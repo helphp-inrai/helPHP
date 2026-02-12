@@ -35,7 +35,8 @@ class Preview extends HelPHP_module {
 
     const module_name = 'preview';
 
-    protected $ACTION_MODULE = self::module_name.'_module';
+    // protected $ACTION_MODULE = self::module_name.'_module';
+    protected $ACTION_UPDATE_SESSION_LANGUAGE = self::module_name.'_update_language_session';
 
     function __construct($dom_container = null) {
         $this->prepare_module(self::module_name,true);
@@ -52,9 +53,12 @@ class Preview extends HelPHP_module {
 
         $master_output = H::group('preview_display');
         switch($post[$this->input_action_identifier]){
-            case $this->ACTION_MODULE:
+            // case $this->ACTION_MODULE:
                 // $master_output->add_child( $this->DisplayModule($post) );
             // break;
+            case $this->ACTION_UPDATE_SESSION_LANGUAGE:
+                if (isset($post['iso'])) $_SESSION['preview_language'] = $post['iso'];
+            break;
             default:
                 $master_output->add_child( $this->display($post) );
                 // si les sous sections ont des affichages a ajouté à celui de base
@@ -157,7 +161,7 @@ class Preview extends HelPHP_module {
                 'add_rule_info' => $this->get_tl('add_rule_info')
             ];
 
-            $js = 'helphp_timeout(\'Preview_a.create_instance("'.$this->dom_id.'", '.addslashes(json_encode($params)).', '.\addslashes(json_encode($translate)).');\');';
+            $js = 'helphp_timeout(\'Preview_a.create_instance("'.$this->dom_id.'", '.addslashes(json_encode($params)).', '.\addslashes(json_encode($translate)).');\', 200);';
             if (isset($post['tab'])){
                 $name = $this->get_tl('module_name');
                 $js.= 'helphp_timeout("h.main_tab.add_name_to_tab('.$post['tab'].',\"'.htmlentities($name).'\")", 100);';

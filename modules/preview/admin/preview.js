@@ -76,7 +76,7 @@ class Preview_a extends H_module {
         let url = H_constants.base_url;
         if (this.is_admin) url += H_constants.admin_folder;
         if (H_generics.is_filled_object(settings)){
-            url = H_constants.base_url + 'public/preview/preview.php?';
+            url = H_constants.base_url + 'public/preview/preview.php?h_context=preview&';
             for(var key in settings){
                 url += key + '=' + settings[key] + '&';
             }
@@ -540,6 +540,42 @@ class Preview_a extends H_module {
 
         // resize_iframe();
         this.init_resize_observer();
+
+        this.origin = this.iframe.src;
+        this.iframe_forced_href_value = this.origin;
+
+        // to ensure that iframe stay with the right context, change all links that redirect to the site to add the context
+        let links = this.iframe_document.querySelectorAll('a');
+        Array.from(links).forEach((link)=>{
+            this.parse_link(link);
+        });
+
+        if (!this.observer) {
+            this.observer = new MutationObserver(()=>{this.observer_child_change();});
+            this.observer.observe(this.iframe_document.body, { childList: true, subtree:  true });
+        }
+    }
+    parse_link(link){
+        if (link.href && link.href.startsWith(H_constants.base_url)) {
+            let t = link.href.split('#'); 
+            let hash_part = t.length == 2 ? t[1] : false;
+            
+            t = t[0].split('?');
+            let get_part = t.length == 2 ? t[1] : false;
+            
+            let new_href = this.origin;
+            new_href += get_part !== false ? '&' + get_part : '';
+            new_href += hash_part !== false ? '#' + hash_part : '';
+
+            link.href = new_href;
+        }
+        H_dom.add_class(link, 'preview_parsed');
+    }
+    observer_child_change(){
+        let links = this.iframe_document.querySelectorAll('a:not(.preview_parsed)');
+        Array.from(links).forEach((link)=>{
+            this.parse_link(link);
+        });
     }
     toggle_ready_state_iframe(disable = true){
         H_dom.toggle_class(this.bar_outils, 'disable', disable);
@@ -601,8 +637,15 @@ class Preview_a extends H_module {
 
         this.iframe.src = this.iframe.src.replace('language='+this.current_language, 'language='+iso);
         this.current_language = iso;
-    }
 
+        let settings = this.ajax_settings();
+        settings.data = {
+            ...settings.data,
+            'preview_action': 'preview_update_language_session',
+            'iso': this.current_language
+        };
+        h.a.send(settings);
+    }
     
     static modal = false;
     // function called by other module to load their preview

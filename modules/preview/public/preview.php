@@ -49,8 +49,7 @@ $admin = isset($_GET['admin']);
 // $admin = isset($_GET['admin']) && intval($_GET['admin']) > 0;
 unset($_GET['admin']);
 
-$_POST = [];
-$_POST['core_insert'] = true;
+// $_POST = [];
 foreach($_GET as $key => $val){
     $_POST[$key] = $_GET[$key];
 }
@@ -63,12 +62,11 @@ if (isset($_GET['prevmode'])) {
 
 if (isset($_GET['language'])) {
     $_SESSION['preview_language'] = $_GET['language'];
-    // Utils::error_log($_SESSION['preview_language']);
 }
 
-
-
 if (isset($moduleName)) {
+    $_POST['core_insert'] = true;
+
     $output = H::new_document('HelPHP', '', '', false, !$admin);
 
     // remove css
@@ -91,7 +89,6 @@ if (isset($moduleName)) {
 
     echo $output;
 } else {
-    unset($_POST['core_insert']);
     if ($admin) include($CONFIG::HOME_FOLDER.$CONFIG::ADMIN_FOLDER.'index.php');
     else include($CONFIG::HOME_FOLDER.'index.php');
 }

@@ -107,6 +107,7 @@ class Sessions
         $SESSION = new Sessions();
         $SESSION->redis=$CONFIG::REDIS;
         $session_name = preg_replace("/[^A-Za-z0-9]/", '', $CONFIG::SITE_NAME);
+        if ($forceNewInstance !== false) $session_name.= preg_replace("/[^A-Za-z0-9]/", '', $forceNewInstance);
 
         session_name($session_name);
         if (!$SESSION->redis) {

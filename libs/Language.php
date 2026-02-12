@@ -133,9 +133,6 @@ class Language {
         // validation of the language so that it corresponds to an authorized language
         $this->current_language = $this->set_language_iso($this->current_language);
 
-        // storing the value of the current language in a global variable
-        $_GLOBAL[$identifier]=$this->current_language;
-
         // storing the value of the current language in a session variable
         $_SESSION[$identifier.Language::$context]=$this->current_language;
     }
@@ -183,9 +180,6 @@ class Language {
 
         // validation of the language so that it corresponds to an authorized language
         $this->current_language = $this->set_language_iso($this->current_language);
-
-         // storing the value of the current language in a global variable
-        $_GLOBAL[$identifier]=$this->current_language;
 
         // storing the value of the current language in a session variable
         $_SESSION[$identifier.Language::$context]=$this->current_language;
