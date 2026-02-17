@@ -2441,7 +2441,6 @@ class H extends Html {
         $baseroot = $CONFIG::HELPHP_FOLDER;
         $temp_path = $CONFIG::HOME_FOLDER.'js/tmp';
         $cmd = 'cp '.$baseroot.'js/ajax.js '.$temp_path.'/ajax.js';
-        $cmd.= ' && cp '.$baseroot.'js/animate.js '.$temp_path.'/animate.js';
         $cmd.= ' && cp '.$baseroot.'js/dom.js '.$temp_path.'/dom.js';
         $cmd.= ' && cp '.$baseroot.'js/events.js '.$temp_path.'/events.js';
         $cmd.= ' && cp '.$baseroot.'js/generics.js '.$temp_path.'/generics.js';
@@ -2459,7 +2458,15 @@ class H extends Html {
         array_push($output, H::script('',array('src'=>$include_path.'events.js'.$refresher , 'language'=>'Javascript')));
         array_push($output, H::script('',array('src'=>$include_path.'ajax.js'.$refresher , 'language'=>'Javascript')));
         array_push($output, H::script('',array('src'=>$include_path.'validator.js'.$refresher , 'language'=>'Javascript')));
-        array_push($output, H::script('',array('src'=>$include_path.'animate.js'.$refresher , 'language'=>'Javascript')));
+        if ($CONFIG::INCLUDE_JS_ANIMATE){
+            $cmd.= ' && cp '.$baseroot.'js/animate.js '.$temp_path.'/animate.js';
+            array_push($output, H::script('',array('src'=>$include_path.'animate.js'.$refresher , 'language'=>'Javascript')));
+     
+        }else{
+            //place holder to avoid error when calling H_anim when desactivated
+            array_push($output, H::script('class H_anim {constructor(opts){}}'));
+        }
+
         array_push($output, H::script('',array('src'=>$include_path.'history.js'.$refresher , 'language'=>'Javascript')));
         array_push($output, H::script('',array('src'=>$include_path.'ui.js'.$refresher , 'language'=>'Javascript')));
         array_push($output, H::script('',array('src'=>$include_path.'module.js'.$refresher , 'language'=>'Javascript')));

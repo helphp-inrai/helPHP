@@ -56,7 +56,7 @@ function make_constants_js($target) {
     $output.= 'H_constants.sids = '.$sids.';'.PHP_EOL;
     $output.= 'H_constants.base_url = "'.Config::BASE_URL.'";'.PHP_EOL;
     $output.= 'H_constants.site_folder = "'.Config::SITE_FOLDER.'";'.PHP_EOL;
-    // $output.='H_constants.include_js_animate = '.Config::INCLUDE_JS_ANIMATE.';'.PHP_EOL;
+    $output.= 'H_constants.include_js_animate = '.Config::INCLUDE_JS_ANIMATE.';'.PHP_EOL;
     $output.= 'H_constants.reload_noparams = "'.HelPHP_module::reload_no_params.'";'.PHP_EOL;
     $output.= 'H_constants.posted_varname = "'.$posted_varname.'";'.PHP_EOL;
     $output.= 'H_constants.posted_varname_container = "'.$posted_varname_container.'";'.PHP_EOL;

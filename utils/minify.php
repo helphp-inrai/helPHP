@@ -117,6 +117,9 @@ function minify($target){
     $js_statics = ['generics.js', 'dom.js', 'events.js', 'ajax.js', 'validator.js', 'animate.js', 'history.js', 'ui.js', 'module.js', 'init.js'];
     $js_folder = $CONFIG::HELPHP_FOLDER.'js/';
     foreach($js_statics as $file){
+        if ($CONFIG::INCLUDE_JS_ANIMATE==false && $file=="animate.js"){
+            continue;
+        }
         array_push($js_to_min, $js_folder.$file);
         array_push($js_to_min_admin, $js_folder.$file);
     }

@@ -43,7 +43,7 @@ class H_animation{
      * Iterates over the _animate array and calls process_anim for each.
      */
     static check_anim(){
-        if (H_animation._animate.length > 0){
+        if (H_animation._animate.length > 0 && H_constants.include_js_animate){
             for (let i = 0; i < H_animation._animate.length; i++){
                 H_animation.process_anim(H_animation._animate[i]);
             }

@@ -162,7 +162,7 @@ class H_history {
             }
             
             settings.success = function(res){
-                if (window.anim){
+                if (window.anim && H_constants.include_js_animate){
                     h.libs.animation.detect_anime(res);
                 }
                 
@@ -254,7 +254,7 @@ class H_history {
         }
         
         settings.success = function(res){
-            if (window.anim){
+            if (window.anim && H_constants.include_js_animate){
                 h.libs.animation.detect_anime(res);
             }
             if (!h.timer_modal_hidden){
