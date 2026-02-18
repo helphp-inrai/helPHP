@@ -843,8 +843,8 @@ class H_dom {
         }
 
         let t = '';
-        let sx = window.scrollX || (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.ScrollLeft == 'number' ? t : document.body).ScrollLeft || 0;
-        let sy = window.scrollY || (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.ScrollTop == 'number' ? t : document.body).ScrollTop || 0;
+        let sx = window.scrollX || (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.scrollLeft == 'number' ? t : document.body).scrollLeft || 0;
+        let sy = window.scrollY || (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.scrollTop == 'number' ? t : document.body).scrollTop || 0;
         if (!dom_element._computed_style) {
             dom_element._computed_style = {};
         }
@@ -971,8 +971,8 @@ class H_dom {
             y -= parent_style.rect.top + parent_style.BT + style.MT;
         } else {
             let t = '';
-            let sx = window.scrollX || (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.ScrollLeft == 'number' ? t : document.body).ScrollLeft || 0;
-            let sy = window.scrollY || (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.ScrollTop == 'number' ? t : document.body).ScrollTop || 0;
+            let sx = window.scrollX || (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.scrollLeft == 'number' ? t : document.body).scrollLeft || 0;
+            let sy = window.scrollY || (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.scrollTop == 'number' ? t : document.body).scrollTop || 0;
             x -= sx;
             y -= sy;
         }
@@ -1017,7 +1017,7 @@ class H_dom {
             new_left -= parent_style.rect.left + parent_style.BL + style.ML;
         } else {
             let t = '';
-            let sx = window.scrollX || (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.ScrollLeft == 'number' ? t : document.body).ScrollLeft || 0;
+            let sx = window.scrollX || (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.scrollLeft == 'number' ? t : document.body).scrollLeft || 0;
             new_left -= sx;
             console.log(new_left);
         }
@@ -1060,7 +1060,7 @@ class H_dom {
             new_top -= parent_style.rect.top + parent_style.BT + style.MT;
         } else {
             let t = '';
-            let sy = window.scrollY || (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.ScrollTop == 'number' ? t : document.body).ScrollTop || 0;
+            let sy = window.scrollY || (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.scrollTop == 'number' ? t : document.body).scrollTop || 0;
             new_top -= sy;
         }
 

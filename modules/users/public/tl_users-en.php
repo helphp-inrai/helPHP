@@ -12,6 +12,7 @@ $tl_data = array(
         'email_activate_subject' => '$1 Account Activation',
         'activation_success' => 'Your account has been activated!<br>',
         'modify' => 'Edit account',
+        'admin' => ' admin',
         'new' => 'Sign up',
         'login' => 'Username*',
         'old_password' => 'Old password',
@@ -48,6 +49,7 @@ $tl_data = array(
         'email_used' => 'Email already in use',
         'invalid_email' => 'Invalid email',
         'save_success' => 'Updated!',
-        'login_used' => 'login already used !'
+        'login_used' => 'login already used !',
+        'first_account_created'=>'Admin user created.'
     )
 );

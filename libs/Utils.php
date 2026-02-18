@@ -439,7 +439,7 @@ class Utils
         $content = file_get_contents($config_file);
 
         $lines = explode(PHP_EOL , $content);
-        
+
         $output = '';
         $found = [];
         foreach($lines as $l){

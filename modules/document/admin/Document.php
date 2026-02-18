@@ -1138,7 +1138,7 @@ class Document extends HelPHP_module {
             $form = H::form(['action'=>$this->get_index_relative_path(), 'dom_target'=>$this->dom_target, 'class'=>$this->css.'form_search form_search']);
 
                 $post['rechlnm'] = (!isset($post['rechlnm'])) ? '': $post['rechlnm'];
-                $text = H::input_text(['class'=>$this->css.'input_search search_input default' , 'name'=>'rechlnm', 'id'=>'rechlnm'.$this->dom_id, 'value'=>urldecode($post['rechlnm']), 'placeholder'=>$this->get_tl('search_placeholder'), 'onkeydown'=>'if (event.key == "Enter") recht.makeHash(event);']);
+                $text = H::input_text(['class'=>$this->css.'input_search search_input default' , 'name'=>'rechlnm', 'id'=>'rechlnm'.$this->dom_id, 'value'=>urldecode($post['rechlnm']), 'placeholder'=>$this->get_tl('search_placeholder'), 'data-returnsubmit'=>1]);
 
                 //nombre résultat par page
                 $selected = isset($post['nbr_result']) ? $post['nbr_result'] : $this->results_default_count;
@@ -1158,11 +1158,11 @@ class Document extends HelPHP_module {
             // advanced  optionnels fields 
             $advanced_fields = H::detail(['class'=>$this->css.'search_advanced_fields search_advanced_fields'], $this->get_tl('search_advanced_fields'));
 
-                $name = H::input_text(['name'=>'document_data-name', 'label'=>$this->get_tl('name'), 'value'=>$post['document_data-name'], 'class'=>'inp_text']);
+                $name = H::input_text(['name'=>'document_data-name', 'label'=>$this->get_tl('name'), 'value'=>$post['document_data-name'], 'class'=>'inp_text', 'data-returnsubmit'=>1]);
 
             $advanced_fields->add_child( H::DIV(['class'=>$this->css.'field_box field_box'], [$name->label_tag(), $name]) );
             
-                $creation_date = H::input_date(['name'=>'document_data-creation_date', 'label'=>$this->get_tl('creation_date'), 'value'=>Datetime::mysql_to_html_date($post['document_data-creation_date']), 'class'=>'inp_date']);
+                $creation_date = H::input_date(['name'=>'document_data-creation_date', 'label'=>$this->get_tl('creation_date'), 'data-returnsubmit'=>1, 'value'=>Datetime::mysql_to_html_date($post['document_data-creation_date']), 'class'=>'inp_date']);
 
             $advanced_fields->add_child( H::DIV(['class'=>$this->css.'field_box field_box'], [$creation_date->label_tag(), $creation_date]) );
             if ($this->mmode){
@@ -1177,18 +1177,19 @@ class Document extends HelPHP_module {
                     'class'=>$this->css,
                     'value'=>$post['document_data-modele'],
                     'placeholder'=>$post['document_data-modele'],
+                    'data-returnsubmit'=>1
                 ];
                 $modele = H::input_precomplete($opts, 'document_data', 'modele');
                 $advanced_fields->add_child( H::DIV(['class'=>$this->css.'field_box field_box'], [$modele->label_tag(), $modele]) );
             }
 
                 $post['document_data-summary']= isset($post['document_data-summary'])?$post['document_data-summary']:'';
-                $summary = H::input_text(['name'=>'document_data-summary', 'label'=>$this->get_tl('summary'), 'value'=>$post['document_data-summary'], 'class'=>'inp_short_text']);
+                $summary = H::input_text(['name'=>'document_data-summary', 'label'=>$this->get_tl('summary'), 'data-returnsubmit'=>1, 'value'=>$post['document_data-summary'], 'class'=>'inp_short_text']);
 
             $advanced_fields->add_child( H::DIV(['class'=>$this->css.'field_box field_box'], [$summary->label_tag(), $summary]) );
 
                 $post['document_data-name']= isset($post['document_data-name'])?$post['document_data-name']:'';
-                $title = H::input_text(['name'=>'document_data-name', 'label'=>$this->get_tl('title'), 'value'=>$post['document_data-name'], 'class'=>'inp_short_text']);
+                $title = H::input_text(['name'=>'document_data-name', 'data-returnsubmit'=>1, 'label'=>$this->get_tl('title'), 'value'=>$post['document_data-name'], 'class'=>'inp_short_text']);
 
             $advanced_fields->add_child( H::DIV(['class'=>$this->css.'field_box field_box'], [$title->label_tag(), $title]) );
 
@@ -1236,18 +1237,24 @@ class Document extends HelPHP_module {
         $s = trim($search_string);
         $s = explode(' ', $s);
         //on rend les DIVers mots obligatoires...
-        $fulltext_string='';
+        $fulltext_string = '';
         foreach ($s as $word) {
             $word = trim($word);
-            if ($word != '' && strlen($word) > 1) {
+            if ($word != '') {
                 $fulltext_string.= ' +'.$word;
             }
         }
         $search_string = trim(addslashes($fulltext_string));
-        
+
         if (isset($post['order_filter']) && $post['order_filter'] != ''){
             $order_filter = $db_data.'.'.$CRYPT->decrypt(substr($post['order_filter'], 0, -2));
             $sens = (substr($post['order_filter'], -1) == 'a') ? ' ASC' : ' DESC';
+            if ($order_filter == $db_data.'.summary'){
+                $order_filter = $db_lang_long.'.value';
+            }
+            if ($order_filter == $db_data.'.title'){
+                $order_filter = $db_lang_short.'.value';
+            }
         } else {
             $order_filter = 'score';
             $sens = ' DESC';
@@ -1269,84 +1276,82 @@ class Document extends HelPHP_module {
             unset($post['defaultmode']);
         }
 
+        \helPHP\libs\Utils::error_log($post);
         
         if (!isset($post['defaultmode'])){
             //liste des fields sur lesquels ont peut faire une recherche fulltext non multilingue
-            $text_fields = $db_data.'.modele';
+            $text_fields = $db_data.'.modele, '.$db_lang_short.'.value, '.$db_lang_long.'.value';
             
             //query principale
-    
             if ($search_string != ''){
-                $q='(SELECT DISTINCT SQL_CALC_FOUND_ROWS '.$db_data.'.id as id, COUNT(MATCH('.$text_fields.', '.$db_lang_short.'.value, '.$db_lang_long.'.value) AGAINST(? in boolean MODE)) as score ';
+                $q = '(SELECT DISTINCT SQL_CALC_FOUND_ROWS '.$db_data.'.id as id, COUNT(MATCH('.$text_fields.') AGAINST(? in boolean MODE)) as score';
                 $query_params_types .= 's';
                 array_push($query_values, $search_string);
             } else {
-                $q='(SELECT DISTINCT SQL_CALC_FOUND_ROWS '.$db_data.'.id as id, 1 as score ';
+                $q='(SELECT DISTINCT SQL_CALC_FOUND_ROWS '.$db_data.'.id as id, 1 as score';
             }
-            
-            
+
             //tables
-            $q.='FROM '.$db_data.','.$db_lang_short.','.$db_lang_long;
+            $q.=' FROM '.$db_data;
+
             // extra tables, languages or association. Important to left join them to be able to order by their value
-            if ($order_filter == $db_data.'.summary'){
+            if ($order_filter == $db_lang_long.'.value' && $search_string == ''){
                 $q.=' LEFT JOIN '.$db_lang_long.' ON ('.$db_lang_long.'.id_item='.$db_data.'.id AND '.$db_lang_long.'.id_data=? AND '.$db_lang_long.'.field_identifier="document_data-summary")';
                 $query_params_types .= 'i';
                 array_push($query_values, $LANG->current_id_data);
-                $order_filter = $db_lang_long.'.value';
             }
-            if ($order_filter == $db_data.'.title'){
+            if ($order_filter == $db_lang_short.'.value' && $search_string == ''){
                 $q.=' LEFT JOIN '.$db_lang_short.' ON ('.$db_lang_short.'.id_item='.$db_data.'.id AND '.$db_lang_short.'.id_data=? AND '.$db_lang_short.'.field_identifier="document_data-label")';
                 $query_params_types .= 'i';
                 array_push($query_values, $LANG->current_id_data);
-                $order_filter = $db_lang_short.'.value';
             }
 
-            if ($search_string != ''){
+            if ($search_string != '') {
+                // add long text in search
+                $q.= ' LEFT JOIN '.$db_lang_long.' ON ('.$db_lang_long.'.id_data=? AND '.$db_lang_long.'.field_identifier="document_data-summary" AND '.$db_lang_long.'.id_item='.$db_data.'.id)';
+                $query_params_types .= 'i';
+                array_push($query_values, $LANG->current_id_data);
+
+                // add short text in search
+                $q.= ' LEFT JOIN '.$db_lang_short.' ON ('.$db_lang_short.'.id_data=? AND '.$db_lang_short.'.field_identifier="document_data-label" AND '.$db_lang_short.'.id_item='.$db_data.'.id)';
+                $query_params_types .= 'i';
+                array_push($query_values, $LANG->current_id_data);
+
                 //recherche valeur dans les champs
                 $q.=' WHERE (MATCH('.$text_fields.') AGAINST(? in boolean MODE) ';
-                
                 $query_params_types .= 's';
                 array_push($query_values, $search_string);
             
-                $q.= ' OR (MATCH('.$db_lang_long.'.value) AGAINST (? in boolean MODE) AND '.$db_lang_long.'.id_data=? AND ('.$db_lang_long.'.field_identifier="document_data-summary") AND '.$db_lang_long.'.id_item='.$db_data.'.id)';
-                $query_params_types .= 'si';
-                array_push($query_values, $search_string, $LANG->current_id_data);
-
-                $q.= ' OR (MATCH('.$db_lang_short.'.value) AGAINST (? in boolean MODE) AND '.$db_lang_short.'.id_data=? AND ('.$db_lang_short.'.field_identifier="document_data-label") AND '.$db_lang_short.'.id_item='.$db_data.'.id)';
-                $query_params_types .= 'si';
-                array_push($query_values, $search_string, $LANG->current_id_data);
-
-
                 $q.= ')';
             } else {
                 $q.=' WHERE ';
             }
     
-                if (isset($post['document_data-name']) && $post['document_data-name'] != '') {
-                    $query_params_types .= 's';
-                    $query_conditions .=' AND '.$db_data.'.name LIKE ?';
-                    array_push($query_values, '%'.$post['document_data-name'].'%');
-                }
-                if (isset($post['document_data-creation_date']) && $post['document_data-creation_date'] != '') {
-                    $query_params_types .= 's';
-                    $query_conditions .=' AND '.$db_data.'.creation_date = ?';
-                    array_push($query_values, $post['document_data-creation_date']);
-                }
-                if (isset($post['document_data-modele']) && $post['document_data-modele'] != '') {
-                    $query_params_types .= 's';
-                    $query_conditions .=' AND '.$db_data.'.modele LIKE ?';
-                    array_push($query_values, '%'.$post['document_data-modele'].'%');
-                }
-                if (isset($post['document_data-summary']) && $post['document_data-summary'] != '') {
-                    $query_conditions.= ' AND ('.$db_lang_long.'.value LIKE ? AND '.$db_lang_long.'.field_identifier="document_data-summary" AND '.$db_lang_long.'.id_item='.$db_data.'.id AND '.$db_lang_long.'.id_data=?)';
-                    $query_params_types.= 'si';
-                    array_push($query_values, '%'.$post['document_data-summary'].'%',$LANG->current_id_data);
-                }
-                if (isset($post['document_data-name']) && $post['document_data-name'] != '') {
-                    $query_conditions.= ' AND ('.$db_lang_short.'.value LIKE ? AND '.$db_lang_short.'.field_identifier="document_data-label" AND '.$db_lang_short.'.id_item='.$db_data.'.id AND '.$db_lang_short.'.id_data=?)';
-                    $query_params_types.= 'si';
-                    array_push($query_values, '%'.$post['document_data-name'].'%',$LANG->current_id_data);
-                }
+            if (isset($post['document_data-name']) && $post['document_data-name'] != '') {
+                $query_params_types .= 's';
+                $query_conditions .=' AND '.$db_data.'.name LIKE ?';
+                array_push($query_values, '%'.$post['document_data-name'].'%');
+            }
+            if (isset($post['document_data-creation_date']) && $post['document_data-creation_date'] != '') {
+                $query_params_types .= 's';
+                $query_conditions .=' AND '.$db_data.'.creation_date = ?';
+                array_push($query_values, $post['document_data-creation_date']);
+            }
+            if (isset($post['document_data-modele']) && $post['document_data-modele'] != '') {
+                $query_params_types .= 's';
+                $query_conditions .=' AND '.$db_data.'.modele LIKE ?';
+                array_push($query_values, '%'.$post['document_data-modele'].'%');
+            }
+            if (isset($post['document_data-summary']) && $post['document_data-summary'] != '') {
+                $query_conditions.= ' AND ('.$db_lang_long.'.value LIKE ? AND '.$db_lang_long.'.field_identifier="document_data-summary" AND '.$db_lang_long.'.id_item='.$db_data.'.id AND '.$db_lang_long.'.id_data=?)';
+                $query_params_types.= 'si';
+                array_push($query_values, '%'.$post['document_data-summary'].'%',$LANG->current_id_data);
+            }
+            if (isset($post['document_data-name']) && $post['document_data-name'] != '') {
+                $query_conditions.= ' AND ('.$db_lang_short.'.value LIKE ? AND '.$db_lang_short.'.field_identifier="document_data-label" AND '.$db_lang_short.'.id_item='.$db_data.'.id AND '.$db_lang_short.'.id_data=?)';
+                $query_params_types.= 'si';
+                array_push($query_values, '%'.$post['document_data-name'].'%',$LANG->current_id_data);
+            }
 
             // clean first AND/OR if no text given
             if (str_ends_with($q, 'WHERE ')){
@@ -1356,25 +1361,24 @@ class Document extends HelPHP_module {
             $q .= $query_conditions;
             $q.=' GROUP BY id )';
             
-    
             //finalisation query :
             $q.= ' ORDER BY '.$order_filter.$sens.' LIMIT '.intval($post['start_index']).','.intval($post['page_limit']);
+            \helPHP\libs\Utils::error_log($q);
+            \helPHP\libs\Utils::error_log($query_values);
             $results = $DB->prepared_query_list($q,$query_params_types,$query_values);
         }
         
         if (isset($post['defaultmode'])) {
             $q='SELECT DISTINCT SQL_CALC_FOUND_ROWS '.$db_data.'.id as id, 1 as score FROM '.$db_data;
-            if ($order_filter == $db_data.'.summary'){
+            if ($order_filter == $db_lang_long.'.value'){
                 $q.=' LEFT JOIN '.$db_lang_long.' ON ('.$db_lang_long.'.id_item='.$db_data.'.id AND '.$db_lang_long.'.id_data=? AND '.$db_lang_long.'.field_identifier="document_data-summary")';
                 $query_params_types .= 'i';
                 array_push($query_values, $LANG->current_id_data);
-                $order_filter = $db_lang_long.'.value';
             }
-            if ($order_filter == $db_data.'.title'){
+            if ($order_filter == $db_lang_short.'.value'){
                 $q.=' LEFT JOIN '.$db_lang_short.' ON ('.$db_lang_short.'.id_item='.$db_data.'.id AND '.$db_lang_short.'.id_data=? AND '.$db_lang_short.'.field_identifier="document_data-label")';
                 $query_params_types .= 'i';
                 array_push($query_values, $LANG->current_id_data);
-                $order_filter = $db_lang_short.'.value';
             }
 
             if ($this->mmode){
@@ -1384,7 +1388,9 @@ class Document extends HelPHP_module {
             }
 
             $q.=' ORDER BY '.$order_filter.$sens.' LIMIT '.intval($post['start_index']).','.intval($post['page_limit']);
-            $results = $DB->prepared_query($q, $query_params_types, $query_values);
+            \helPHP\libs\Utils::error_log($q);
+            \helPHP\libs\Utils::error_log($query_values);
+            $results = $DB->prepared_query_list($q, $query_params_types, $query_values);
         }
         
         if (is_array($results)) {

@@ -64,7 +64,6 @@ helPHP\libs\DB::create_instance();
 helPHP\libs\Filesystem::create_instance();
 
 global $H_context;
-\helPHP\libs\Utils::error_log($_REQUEST);
 $H_context = (isset($_REQUEST['h_context']) && $_REQUEST['h_context'] != '') ? $_REQUEST['h_context'] : '';
 
 //will create $SESSION global

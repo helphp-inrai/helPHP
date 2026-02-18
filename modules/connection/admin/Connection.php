@@ -67,6 +67,7 @@ class Connection extends HelPHP_module {
                 return $master_output;
             }else{
                 $this->display->add_child( $master_output );
+                return;
             }
         }
 
@@ -177,7 +178,9 @@ class Connection extends HelPHP_module {
     }
 
     public function display_create_first_admin_form() {
-        global $module_html_content;
+        global $CONFIG,$module_html_content;
+
+        $this->dom_container.= ' first_use';
 
         $_POST['users_action'] = 'users_edit';
         $_POST['core_insert'] = 1;
@@ -201,4 +204,3 @@ class Connection extends HelPHP_module {
         $DB->prepared_query($q, 's', [$vars]);
     }
 }
-?>

@@ -194,6 +194,14 @@ class Users extends HelPHP_module{
             $q = 'UPDATE '.$this->bddt_data.' SET lastname=?, firstname=?, entity=?, vat_id=? WHERE id=?';
             $DB_CENTRAL->prepared_query($q, 'ssssi', [$post[$this->ifld_data_lastname],$post[$this->ifld_data_firstname],$post[$this->ifld_data_entity],$post[$this->ifld_data_vat_id],$id]);
             
+            if ($CONFIG::FIRST_USE === true) {
+                \helPHP\libs\Utils::write_in_config('FIRST_USE', 'b', false);
+
+                $this->reload_after_message = 'create_account_success';
+                $this->force_reload_delay = 5000;
+                return;
+            }
+
             $q = 'INSERT INTO '.$this->bddt_address.' SET id_country_data=?, id_country_state=?, street=?, postal_code=?, city=?, id_users_data=?';
             $DB_CENTRAL->prepared_query($q,'iisssi',[$post[$this->ifld_address_id_country_data],$post[$this->ifld_address_id_country_state],$post[$this->ifld_address_street],$post[$this->ifld_address_postal_code],$post[$this->ifld_address_city],$id]);
 
@@ -338,17 +346,16 @@ class Users extends HelPHP_module{
         
             $form->add_child( H::input_hidden(['name'=>$this->ifld_data_id , 'data-alwaysposted'=>1 , 'value' => $post[$this->ifld_data_id]]) );
 
-        $title = '';
-        if ($post[$this->ifld_data_id] > 0) {
-            $title = H::SPAN(['class'=>$this->css.'title module_title'], $this->get_tl('modify'));
-        } else {
-            if ($CONFIG::FIRST_USE == true) {
-                $entete_first = H::SPAN(['class'=>'users_account_firstmessage'], $this->get_tl('first_use'));
-                $form->add_child($entete_first);
+            if ($post[$this->ifld_data_id] > 0) {
+                $title = H::SPAN(['class'=>$this->css.'title module_title'], $this->get_tl('modify'));
+            } else {
+                $title = H::SPAN(['class'=>$this->css.'title module_title'], $this->get_tl('new'));
+                if ($CONFIG::FIRST_USE == true) {
+                    $admin = H::SPAN(['class'=>$this->css.'admin'], $this->get_tl('admin'));
+                    $title->add_child($admin);
+                }
+                $form->add_child(H::input_hidden(array('name'=>'user_action' , 'data-alwaysposted'=>1 , 'value' => 'create' )));
             }
-            $title = H::SPAN(['class'=>$this->css.'title module_title'], $this->get_tl('new'));
-            $form->add_child(H::input_hidden(array('name'=>'user_action' , 'data-alwaysposted'=>1 , 'value' => 'create' )));
-        }
 
         $output->add_child([$title, $form]);
 
@@ -382,6 +389,29 @@ class Users extends HelPHP_module{
         $mail_input = H::input_email(['name'=>$this->ifld_data_email, 'value'=>$post[$this->ifld_data_email], 'class'=>'users_form_input' , 'autocomplete'=>'email','data-required'=>1 ]);
         $form->add_child($mail_input->label_tag($this->get_tl('email'), ['class'=>'users_form_label']));
         $form->add_child($mail_input);
+
+        if ($CONFIG::FIRST_USE == true) {
+            $block_btns = H::DIV(['class'=>$this->css.'block_btn edit_buttons']);
+                $btn_save = H::submit_button(['name'=>$this->input_action_identifier, 'value'=>$this->ACTION_SAVE, 'class'=>$this->css.'btn_save button_save'], $this->get_tl('tlc_save'));
+            $block_btns->add_child( $btn_save );
+            if ($post[$this->ifld_data_id] > 0) {
+                $btn_del = H::submit_button_single(['name'=>$this->input_action_identifier, 'value'=>$this->ACTION_DELETE, 'class'=>$this->css.'btn_delete button_delete', 'data-confirm'=>$this->get_tl('confirm_delete')], $this->get_tl('tlc_delete'));
+                $block_btns->add_child( $btn_del );
+            }
+
+            $form->add_child($block_btns);
+
+            // to handle form return
+            $handle_return = H::DIV(['class'=>$this->css.'handle_return', 'id'=>$handle_return_id]);
+            $form->add_child($handle_return);
+
+            // if ($this->address){
+            //     $js = H::script('setTimeout(Users.init_change_country, 300);', ['autoremove'=>'autoremove']);
+            //     $form->add_child($js);
+            // }
+
+            return $output;
+        }
 
         $lastname_input = H::input_text(['name'=>$this->ifld_data_lastname, 'value'=>$post[$this->ifld_data_lastname], 'class'=>'users_form_input','data-required'=>1, 'label'=>$this->get_tl('lastname') ,'autocomplete'=>'family-name' ]);
         $form->add_child($lastname_input->label_tag(null, ['class'=>'users_form_label']));

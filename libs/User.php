@@ -217,15 +217,13 @@ class User
             $hash = $CRYPT->create_password_hash($password);
             $values=array($login , $email , $hash , $LANG->current_language);
             $params='ssss';
-            if ($CONFIG::FIRST_USE==true) {
-                $q.= ', active=?, admin=?, lastname=? ,firstname=?';
-                $params='ssssiiss';
-                array_push($values, 1, 1, trim($data['users_data-lastname']), trim($data['users_data-firstname']), $data['auto']);
+            if ($CONFIG::FIRST_USE == true) {
+                $q.= ', active=1, admin=1';
             }
             $test = $DB_CENTRAL->prepared_query($q, $params, $values);
 
             if ($test) {
-                if ($CONFIG::FIRST_USE==false) {
+                if ($CONFIG::FIRST_USE == false) {
                     array_push($this->message_list, 'account_created');
                 } else {
                     array_push($this->message_list, 'first_account_created');
