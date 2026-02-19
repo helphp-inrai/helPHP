@@ -2426,10 +2426,10 @@ class HelPHP_module
      */
     public function receive_tinymce_file()
     {
-        GLOBAL $CONFIG;
+        GLOBAL $CONFIG, $USER;
         if($CONFIG::TINYMCE_UPLOAD == true) {
             include_once('Tinymce.php');
-            Tinymce::receive_file('public/'.$this->module_name.'/images/');
+            Tinymce::receive_file('files/'.$this->module_name.'/'.$USER->id);
         }
         exit;
     }

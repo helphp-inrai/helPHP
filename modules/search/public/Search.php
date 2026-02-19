@@ -458,7 +458,7 @@ class Search extends HelPHP_module {
                 }
             }
             if ($pages['page_count'] > 1) {
-                $output->add_child($form_pages);
+                $output->add_after($form_pages);
             }
         } else {
             $no_result = H::DIV(['class'=>$this->css.'result_item no_result'], $this->get_tl('no_result'));

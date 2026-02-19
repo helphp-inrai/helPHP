@@ -22,7 +22,12 @@
  * 
  * Licence type : MIT.
  */
+var publish_modal=false;
 class Document_a extends H_module {
+
+    static documents_id_to_publish='';
+    static number_of_documents_to_publish=0;
+
     constructor(dom_id, settings) {
         super(dom_id);
 
@@ -38,6 +43,8 @@ class Document_a extends H_module {
         this.last_order = 1;
 
         this.block_modal = false;
+
+
 
         this.init_canvas();
         this.init_block_list();
@@ -320,6 +327,58 @@ class Document_a extends H_module {
     remove_temp() {
         let dom_new = document.getElementById('block_new' + this.dom_id);
         if (dom_new) dom_new.remove();
+    }
+
+    static publish_all(ids){
+        Document_a.documents_id_to_publish=ids.split(",");
+        Document_a.number_of_documents_to_publish =Document_a.documents_id_to_publish.length;
+        if (Document_a.documents_id_to_publish.length > 0){
+            Document_a.publish_next();
+        }
+    }
+
+    static publish_next(){
+            if (Document_a.documents_id_to_publish.length > 0){
+            var doc_id = Document_a.documents_id_to_publish.pop();
+            if (publish_modal==false){
+                publish_modal = H_ui.add_window(document.body, {
+                    hidden: true,
+                    modal: true,
+                    close: true,
+                    remove_on_close: true,
+                    class: 'document_publish_modal',
+                    content_resizable: true,
+                    title: 'Publishing all documents'
+                });
+
+                publish_modal.dom_element.setAttribute('id', 'publish_modal');
+                let div = H_dom.create_element('div', {
+                    class: 'publish_modal_container',
+                    id: 'publish_modal_container'
+                });
+                publish_modal.set_content(div);
+            }
+
+            let settings = {};
+            settings.url= H_constants.base_url + H_constants.admin_folder + 'document/index.php';
+            settings.dom_target = 'publish_modal_container';
+            settings.data = {
+                ...settings.data,
+                'document_data-id': doc_id,
+                'pub_all':true,
+                'total_doc':Document_a.number_of_documents_to_publish,
+                'published':(Document_a.number_of_documents_to_publish - Document_a.documents_id_to_publish.length),
+                document_action: 'document_publish',
+            };
+            settings.success = (res)=>{
+                publish_modal.show();
+                H_dom.set_alignment(publish_modal.dom_element, 0.5, 0.5);
+            };
+            h.a.send(settings);
+        }else{
+            publish_modal.hide();
+        }
+
     }
 }
 

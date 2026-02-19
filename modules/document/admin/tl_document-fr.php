@@ -51,6 +51,9 @@ $tl_data = array(
         'id' => 'ID',
         'confirm_delete' => 'Êtes vous sur?',
         'noresult' => 'Aucun résultat',
-        'document_data-label' => 'Titre'
+        'document_data-label' => 'Titre',
+        'publication_progress'=> 'Documents publiés : $1 / $2 ',
+        'document_cached'=> 'Document ID publié : $1',
+        'publish_all'=>'Publier tous les documents actifs'
     )
 );

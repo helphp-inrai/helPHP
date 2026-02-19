@@ -222,46 +222,49 @@ class H_ajax {
      * called by Tinymce.php lib optionnaly
      * @function 
      * @param {Object} blobInfo - TinyMCE blobInfo object.
-     * @param {Function} success - Success callback.
-     * @param {Function} failure - Failure callback.
+     * @param {Function} progress - progress callback.
      */
-    static tinymce_image_upload_handler(blobInfo, success, failure) {
-        var xhr, formData;
+    static tinymce_image_upload_handler(blobInfo, progress){
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.withCredentials = false;
+            xhr.open('POST', this.url);
 
-        xhr = new XMLHttpRequest();
-        xhr.withCredentials = false;
-        xhr.open('POST', this.url);
+            xhr.upload.onprogress = (e) => {
+                progress(e.loaded / e.total * 100);
+            };
 
-        xhr.onload = function() {
-            let json;
+            xhr.onload = () => {
+                if (xhr.status === 403) {
+                    reject({ message: 'HTTP Error: ' + xhr.status, remove: true });
+                    return;
+                }
 
-            if (xhr.status != 200) {
-                failure('HTTP Error: ' + xhr.status);
-                return;
-            }
+                if (xhr.status < 200 || xhr.status >= 300) {
+                    reject('HTTP Error: ' + xhr.status);
+                    return;
+                }
 
-            try{
-                json = JSON.parse(xhr.responseText);
-            }catch(e){
-                json = false;
-                console.log(e);
-            }
+                const json = JSON.parse(xhr.responseText);
 
-            if (!json || typeof json.location != 'string') {
-                failure('Invalid JSON: ' + xhr.responseText);
-                return;
-            }
+                if (!json || typeof json.location != 'string') {
+                    reject('Invalid JSON: ' + xhr.responseText);
+                    return;
+                }
 
-            success(json.location);
-        };
+                resolve(json.location);
+            };
 
-        formData = new FormData();
-        formData.append('file', blobInfo.blob(), blobInfo.filename());
-        formData.set('action', this.action);
+            xhr.onerror = () => {
+                reject('Image upload failed due to a XHR Transport error. Code: ' + xhr.status);
+            };
 
-        console.log(blobInfo.filename());
+            const formData = new FormData();
+            formData.append('file', blobInfo.blob(), blobInfo.filename());
+            formData.set('action', this.action);
 
-        xhr.send(formData);
+            xhr.send(formData);
+        });
     }
     /**
      * Sleep utility function (async).

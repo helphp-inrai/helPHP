@@ -65,9 +65,7 @@ class Tinymce
             unset($options['images_upload_url']);
         }
 
-        $options['plugins'] = '';
-
-        $options['plugins'] .= 'advlist lists link autolink charmap code table preview searchreplace directionality emoticons insertdatetime fullscreen searchreplace visualblocks quickbars wordcount charmap pagebreak nonbreaking visualchars'; // imagetools
+        $options['plugins'] = 'advlist lists link autolink charmap code table preview searchreplace directionality emoticons insertdatetime fullscreen searchreplace visualblocks quickbars wordcount charmap pagebreak nonbreaking visualchars'; // imagetools
         $options['menubar'] ='edit view insert format tools';
         $options['toolbar'] = ' undo redo searchreplace styles fontsize | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat code fullscreen animation ';
         $options['a11y_advanced_options'] = true;
@@ -86,6 +84,11 @@ class Tinymce
         $options['video_template_callback'] = 'function(data) {return \'<iframe width="\' + data.width + \'" height="\' + data.height + \'" src="\' + data.source1 + \'" allowfullscreen="allowfullscreen" </iframe>\';}';
         $options['convert_urls'] = false;
         $options['paste_merge_formats']= true;
+
+        if ($CONFIG::TINYMCE_UPLOAD === true) {
+            $options['plugins'] .= ' image';
+            $options['contextmenu'] = 'image '.$options['contextmenu'];
+        }
 
         switch($LANG->current_language) {
             case 'fr':
@@ -329,7 +332,7 @@ class Tinymce
 
         // tester $_SERVER['HTTP_REFERER']
 
-        $imageFolder = $CONFIG::HOME_FOLDER . $destinationFolder;
+        $imageFolder = $CONFIG::HOME_FOLDER.$destinationFolder;
   
         reset($_FILES);
         $temp = current($_FILES);
@@ -356,7 +359,7 @@ class Tinymce
             if (isset($_SERVER['HTTP_ORIGIN'])) {
 
                 // same-origin requests won't set an origin. If the origin is set, it must be valid.
-                if (in_array($_SERVER['HTTP_ORIGIN'], $accepted_origins)) {
+                if (in_array(rtrim($_SERVER['HTTP_ORIGIN'], '/').'/', $accepted_origins)) {
                     header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
                 } else {
                     header("HTTP/1.0 403 Origin Denied");

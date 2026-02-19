@@ -78,6 +78,7 @@ class Document extends HelPHP_module {
     private $ACTION_EDIT_document_data = self::module_name.'_edit';
     private $ACTION_COPY_document_data = self::module_name.'_copy';
     private $ACTION_PUBLISH = self::module_name.'_publish';
+    private $ACTION_PUBLISH_ALL = self::module_name.'_publish_all';
     private $ACTION_DELETE_document_data = self::module_name.'_delete';
     private $ACTION_SAVE_blocks_order = self::module_name.'_block_save_sort_order';
     //action additionnelles si il y a des sous sections
@@ -263,14 +264,29 @@ class Document extends HelPHP_module {
             break;
 
             case $this->ACTION_PUBLISH:
+                Utils::error_log($post);
                 if ($this->user_can_edit){ // nedded for security
                     $this->check_posted_data($post, 'document_data'); 
-                    
-                    $master_output->add_child( $this->form_publish($post) );
+                    if(!isset($post ['pub_all'])){
+                        $master_output->add_child( $this->form_publish($post) );
+                    }
                     $master_output->add_child( $this->publish_document($post));
                 }
             break;
             
+            case $this->ACTION_PUBLISH_ALL:
+                if ($this->user_can_edit){ // nedded for security
+                    
+                    $this->reset_fields($post, 'document_data');
+                    $post['defaultmode'] = true;
+                    $master_output->add_child( $this->module_header($post) );
+
+                    $master_output->add_child( $this->form_search($post) );
+                    $master_output->add_child( $this->result_search($post) );
+                    $master_output->add_child( $this->publish_all() );
+                    
+                }
+            break;
             
             case $this->ACTION_SAVE_blocks_order:
                 $this->save_blocks_order($post);
@@ -288,7 +304,7 @@ class Document extends HelPHP_module {
             break;
             
             case $this->ACTION_SEARCH:
-                $this->prepare_fields($post, 'document_data');
+                $this->check_posted_data($post, 'document_data');
                 $master_output->add_child( $this->module_header($post) );
                 $master_output->add_child( $this->form_search($post) );
                 $master_output->add_child( $this->result_search($post) );
@@ -567,8 +583,8 @@ class Document extends HelPHP_module {
                 }   else {
                     $title = H::DIV(['class'=>$this->css.'title module_title'], $this->get_tl('module_name'));
                     $button_new = H::submit_button_single(['class'=>$this->css.'btn_new button_new', 'title'=>$this->get_tl('tlc_new'), 'name'=>$this->input_action_identifier , 'id'=>self::module_name.'_btn_new_'.$this->dom_id, 'value'=>$this->ACTION_NEW_document_data], $this->get_tl('tlc_new'));  
-                    //  $button_new = H::BUTTON(['class'=>$this->css.'btn_new', 'title'=>$this->get_tl('tlc_new'), 'onclick'=>'H_search.modal_edit(0, "'.self::module_name.'", "data", "new", "'.$this->dom_id.'")'], $this->get_tl('tlc_new'));
-                    $actions->add_child( $button_new );
+                    $button_publish_all = H::submit_button_single(['class'=>$this->css.'btn_publish_all button_publish_all', 'title'=>$this->get_tl('publish_all'), 'name'=>$this->input_action_identifier , 'id'=>self::module_name.'_btn_publish_all_'.$this->dom_id, 'value'=>$this->ACTION_PUBLISH_ALL], $this->get_tl('publish_all'));  
+                    $actions->add_child( [$button_new,$button_publish_all] );
                 }
             $formc->add_child($actions);
             $output->add_child([$title,$formc]);
@@ -893,6 +909,13 @@ class Document extends HelPHP_module {
         $this->delete_block($post, true);
 
     }
+    public function publish_all(){
+        global $DB;
+        $documents=$DB->query_list('select distinct id from '.$DB->table('document_data').' WHERE active=1');
+        //launch the publish all function
+        
+        return H::script('Document_a.publish_all("'.implode(',',$documents).'");', ['autoremove'=>true]);
+    }
 
     public function form_publish($post){
 
@@ -929,31 +952,34 @@ class Document extends HelPHP_module {
     public function publish_document($post){
         //really simitar to public one, execpt we'll write the cached file.
         global $CONFIG,$DB,$LANG,$FS;
-
+        Utils::error_log($post);
         if(isset($post['document'])){
             $post['document_data-id'] = $post['document'];
         }
+        if(isset($post['pub_all'])){
+            $this->prepare_fields($post,'document_data');
 
-        // check if the route doesn't exist
-        $q = 'SELECT id FROM '.$this->bddt_data.' WHERE route = ? AND id <> ?';
-        $exist = $DB->prepared_query_value($q, 'si', [$post[$this->ifld_data_route], $post[$this->ifld_data_id]]);
-        if ($exist) {
-            $this->add_error('route_exist');
-            return;
-        }
+        }else{
+            // check if the route doesn't exist
+            $q = 'SELECT id FROM '.$this->bddt_data.' WHERE route = ? AND id <> ?';
+            $exist = $DB->prepared_query_value($q, 'si', [$post[$this->ifld_data_route], $post[$this->ifld_data_id]]);
+            if ($exist) {
+                $this->add_error('route_exist');
+                return;
+            }
 
-        if(isset($post['document_data-id']) && $post['document_data-id'] > 0) {
+            if(isset($post['document_data-id']) && $post['document_data-id'] > 0) {
 
-            // update publish date
-            $q = 'UPDATE '.$this->bddt_data.' SET publication_date=?, route=?, active=? WHERE id=?';
-            $DB->prepared_query($q, 'ssii', [$post['document_data-publication_date'], $post['document_data-route'], $post['document_data-active'], $post['document_data-id']]);
-        
-            $this->apply_bdd_data($post, 'document_data', false, $post['document_data-id']);
+                // update publish date
+                $q = 'UPDATE '.$this->bddt_data.' SET publication_date=?, route=?, active=? WHERE id=?';
+                $DB->prepared_query($q, 'ssii', [$post['document_data-publication_date'], $post['document_data-route'], $post['document_data-active'], $post['document_data-id']]);
             
-        } else {
-            return;
+                $this->apply_bdd_data($post, 'document_data', false, $post['document_data-id']);
+                
+            } else {
+                return;
+            }
         }
-
         $current_lang = $LANG->current_language;
         $langs = $LANG->get_languages_data();
         foreach ($langs as $key => $lang) {
@@ -1068,7 +1094,16 @@ class Document extends HelPHP_module {
             $FS->save_content($CONFIG::HOME_FOLDER.'public/document/cache/'.str_replace('/','¤',$post['document_data-route']).'-'.$lang['iso'].'.php', $da_document,true);
         }
         $LANG->set_language_iso($current_lang);
-        return "cached";
+        
+        $cached=H::span(['class'=>'cached_return'],$this->get_tl('document_cached', [$post[$this->ifld_data_id]]));
+        if(isset($post['pub_all'])){
+            $progress=H::span(['class'=>'cached_progress'],$this->get_tl('publication_progress', [$post['published'],$post['total_doc']]));
+            $next=H::script('setTimeout(function(){Document_a.publish_next();},2000);', ['autoremove'=>true]);
+            return [$progress,$next,$cached];
+        }else{
+            return $cached;
+        }
+        
     }
     
     //sauve les données.
@@ -1188,15 +1223,15 @@ class Document extends HelPHP_module {
 
             $advanced_fields->add_child( H::DIV(['class'=>$this->css.'field_box field_box'], [$summary->label_tag(), $summary]) );
 
-                $post['document_data-name']= isset($post['document_data-name'])?$post['document_data-name']:'';
-                $title = H::input_text(['name'=>'document_data-name', 'data-returnsubmit'=>1, 'label'=>$this->get_tl('title'), 'value'=>$post['document_data-name'], 'class'=>'inp_short_text']);
+                $post['document_data-title']= isset($post['document_data-title'])?$post['document_data-title']:'';
+                $title = H::input_text(['name'=>'document_data-title', 'data-returnsubmit'=>1, 'label'=>$this->get_tl('title'), 'value'=>$post['document_data-title'], 'class'=>'inp_short_text']);
 
             $advanced_fields->add_child( H::DIV(['class'=>$this->css.'field_box field_box'], [$title->label_tag(), $title]) );
 
             $btn_clear = H::submit_button(['class'=>$this->css.'btn_clear', 'name'=>$this->input_action_identifier, 'id'=>self::module_name.'_btn_clear'.$this->dom_id, 'value'=>'clear', 'title'=>$this->get_tl('tlc_clear')], $this->get_tl('tlc_clear'));
             $btn_search = H::submit_button(['class'=>$this->css.'btn_search', 'name'=>$this->input_action_identifier, 'id'=>self::module_name.'_btn_search'.$this->dom_id , 'value'=>$this->ACTION_SEARCH, 'title'=>$this->get_tl('tlc_search')], $this->get_tl('tlc_search'));
             
-        $form->add_child([$advanced_fields,$btn_clear,$btn_search]);
+        $form->add_child([$advanced_fields, $btn_clear, $btn_search]);
         
         $output->add_child( $form );
 
@@ -1272,11 +1307,11 @@ class Document extends HelPHP_module {
         if (isset($post['document_data-summary']) && $post['document_data-summary'] != '') {
             unset($post['defaultmode']);
         }
-        if (isset($post['document_data-name']) && $post['document_data-name'] != '') {
+        if (isset($post['document_data-title']) && $post['document_data-title'] != '') {
             unset($post['defaultmode']);
         }
 
-        \helPHP\libs\Utils::error_log($post);
+        // \helPHP\libs\Utils::error_log($post);
         
         if (!isset($post['defaultmode'])){
             //liste des fields sur lesquels ont peut faire une recherche fulltext non multilingue
@@ -1293,29 +1328,17 @@ class Document extends HelPHP_module {
 
             //tables
             $q.=' FROM '.$db_data;
+            // add long text in search
+            $q.= ' LEFT JOIN '.$db_lang_long.' ON ('.$db_lang_long.'.id_data=? AND '.$db_lang_long.'.field_identifier="document_data-summary" AND '.$db_lang_long.'.id_item='.$db_data.'.id)';
+            $query_params_types .= 'i';
+            array_push($query_values, $LANG->current_id_data);
 
-            // extra tables, languages or association. Important to left join them to be able to order by their value
-            if ($order_filter == $db_lang_long.'.value' && $search_string == ''){
-                $q.=' LEFT JOIN '.$db_lang_long.' ON ('.$db_lang_long.'.id_item='.$db_data.'.id AND '.$db_lang_long.'.id_data=? AND '.$db_lang_long.'.field_identifier="document_data-summary")';
-                $query_params_types .= 'i';
-                array_push($query_values, $LANG->current_id_data);
-            }
-            if ($order_filter == $db_lang_short.'.value' && $search_string == ''){
-                $q.=' LEFT JOIN '.$db_lang_short.' ON ('.$db_lang_short.'.id_item='.$db_data.'.id AND '.$db_lang_short.'.id_data=? AND '.$db_lang_short.'.field_identifier="document_data-label")';
-                $query_params_types .= 'i';
-                array_push($query_values, $LANG->current_id_data);
-            }
+            // add short text in search
+            $q.= ' LEFT JOIN '.$db_lang_short.' ON ('.$db_lang_short.'.id_data=? AND '.$db_lang_short.'.field_identifier="document_data-label" AND '.$db_lang_short.'.id_item='.$db_data.'.id)';
+            $query_params_types .= 'i';
+            array_push($query_values, $LANG->current_id_data);
 
             if ($search_string != '') {
-                // add long text in search
-                $q.= ' LEFT JOIN '.$db_lang_long.' ON ('.$db_lang_long.'.id_data=? AND '.$db_lang_long.'.field_identifier="document_data-summary" AND '.$db_lang_long.'.id_item='.$db_data.'.id)';
-                $query_params_types .= 'i';
-                array_push($query_values, $LANG->current_id_data);
-
-                // add short text in search
-                $q.= ' LEFT JOIN '.$db_lang_short.' ON ('.$db_lang_short.'.id_data=? AND '.$db_lang_short.'.field_identifier="document_data-label" AND '.$db_lang_short.'.id_item='.$db_data.'.id)';
-                $query_params_types .= 'i';
-                array_push($query_values, $LANG->current_id_data);
 
                 //recherche valeur dans les champs
                 $q.=' WHERE (MATCH('.$text_fields.') AGAINST(? in boolean MODE) ';
@@ -1347,10 +1370,10 @@ class Document extends HelPHP_module {
                 $query_params_types.= 'si';
                 array_push($query_values, '%'.$post['document_data-summary'].'%',$LANG->current_id_data);
             }
-            if (isset($post['document_data-name']) && $post['document_data-name'] != '') {
+            if (isset($post['document_data-title']) && $post['document_data-title'] != '') {
                 $query_conditions.= ' AND ('.$db_lang_short.'.value LIKE ? AND '.$db_lang_short.'.field_identifier="document_data-label" AND '.$db_lang_short.'.id_item='.$db_data.'.id AND '.$db_lang_short.'.id_data=?)';
                 $query_params_types.= 'si';
-                array_push($query_values, '%'.$post['document_data-name'].'%',$LANG->current_id_data);
+                array_push($query_values, '%'.$post['document_data-title'].'%',$LANG->current_id_data);
             }
 
             // clean first AND/OR if no text given
@@ -1363,8 +1386,6 @@ class Document extends HelPHP_module {
             
             //finalisation query :
             $q.= ' ORDER BY '.$order_filter.$sens.' LIMIT '.intval($post['start_index']).','.intval($post['page_limit']);
-            \helPHP\libs\Utils::error_log($q);
-            \helPHP\libs\Utils::error_log($query_values);
             $results = $DB->prepared_query_list($q,$query_params_types,$query_values);
         }
         
@@ -1388,8 +1409,6 @@ class Document extends HelPHP_module {
             }
 
             $q.=' ORDER BY '.$order_filter.$sens.' LIMIT '.intval($post['start_index']).','.intval($post['page_limit']);
-            \helPHP\libs\Utils::error_log($q);
-            \helPHP\libs\Utils::error_log($query_values);
             $results = $DB->prepared_query_list($q, $query_params_types, $query_values);
         }
         
