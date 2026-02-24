@@ -30,13 +30,14 @@ use helPHP\libs\HelPHP_module;
 use helPHP\libs\H;
 use helPHP\libs\Language;
 use helPHP\libs\Utils;
+use helPHP\modules\csseditor\admin\Csseditor;
 
 class Preview extends HelPHP_module {
 
     const module_name = 'preview';
 
     // protected $ACTION_MODULE = self::module_name.'_module';
-    protected $ACTION_UPDATE_SESSION_LANGUAGE = self::module_name.'_update_language_session';
+    protected $ACTION_UPDATE_SESSION = self::module_name.'_update_session';
 
     function __construct($dom_container = null) {
         $this->prepare_module(self::module_name,true);
@@ -56,8 +57,13 @@ class Preview extends HelPHP_module {
             // case $this->ACTION_MODULE:
                 // $master_output->add_child( $this->DisplayModule($post) );
             // break;
-            case $this->ACTION_UPDATE_SESSION_LANGUAGE:
+            case $this->ACTION_UPDATE_SESSION:
                 if (isset($post['iso'])) $_SESSION['preview_language'] = $post['iso'];
+                if (isset($post['theme'])){
+                    if (isset($post['admin'])) $_SESSION['current_csseditor_theme_preview_admin'] = $post['theme'];
+                    else $_SESSION['current_csseditor_theme_preview_public'] = $post['theme'];
+                    $_SESSION['current_csseditor_theme'] = $post['theme'];
+                }
             break;
             default:
                 $master_output->add_child( $this->display($post) );
@@ -72,7 +78,7 @@ class Preview extends HelPHP_module {
     }
     
     public function display (&$post) {
-        global $DB, $MEDIA, $LANG;
+        global $DB, $MEDIA, $LANG, $CONFIG;
 
         $modal = (isset($post['module']) && isset($post['id'])) ? true : false;
         $admin = (isset($post['prevmode']) && $post['prevmode'] == 'admin') ? true : false;
@@ -123,9 +129,16 @@ class Preview extends HelPHP_module {
                 $radios[] = ['label'=>$this->get_tl('desktop'), 'value'=>'desktop'];
                 $mode = H::input_multiple_radios(['name'=>'mode', 'values'=>$radios, 'class'=>$this->css.'switch_mode', 'selected'=>'desktop', 'callback'=>$this->inst_js.'.toggle_preview_mode(event);']);
 
+                $current_theme = Csseditor::get_current_theme(true, $admin);
+                // theme selection
+                $q = 'SELECT id, CONCAT("'.$this->get_tl('select_theme').'", name) as name, id_source as "data-id_source" FROM '.$DB->table('csseditor_theme').' WHERE admin='.($admin ? 1 : 0);
+                $themes = $DB->query_list($q);
+                $opts_data = ['first_empty'=>false, 'label_key'=>'name', 'value_key'=>'id', 'options'=>$themes];
+                $select_theme = H::select(['id'=>self::module_name.'_select_theme'.$this->dom_id, 'name'=>'preview_theme', 'onchange'=>$this->inst_js.'.change_theme(event);', 'class'=>$this->css.'select_theme'], $opts_data, $current_theme);
+
                 $css_picker = H::BUTTON(['class'=>$this->css.'picker_css', 'id'=>'preview_picker_css'.$this->dom_id, 'title'=>$this->get_tl('picker_css')], $this->get_tl('picker_css'));
 
-            if (!$modal) $outils->add_child([$btn_refresh,$btn_picker,$mode,$css_picker]);
+            if (!$modal) $outils->add_child([$btn_refresh,$btn_picker,$mode,$select_theme,$css_picker]);
             else $outils->add_child([$btn_refresh,$mode,$css_picker]);
 
             // title, what are we previewing
@@ -147,13 +160,14 @@ class Preview extends HelPHP_module {
                 $q.=' FROM '.$DB->table('csseditor_source').' WHERE type=? AND admin=?)';
                 $selectors = $DB->prepared_query_list($q, 'si', [$post['css_source'], $admin]);
             } else {
-                $id_theme = \helPHP\modules\csseditor\admin\Csseditor::get_current_theme(true, $admin);
+                // $id_theme = \helPHP\modules\csseditor\admin\Csseditor::get_current_theme(true, $admin);
                 $q = 'SELECT DISTINCT selector FROM '.$DB->table('csseditor_rules').' WHERE id_source = (SELECT id_source';
-                $q.=' FROM '.$DB->table('csseditor_theme').' WHERE id='.$id_theme.')';
+                $q.=' FROM '.$DB->table('csseditor_theme').' WHERE id='.$current_theme.')';
                 $selectors = $DB->query_list($q);
             }
             $params['css_selectors'] = $selectors;
             $params['language'] = $current_language;
+            $params['theme'] = $current_theme;
             $translate = [
                 'preview_new_rules' => $this->get_tl('preview_new_rules'),
                 'preview_existing_rules' => $this->get_tl('preview_existing_rules'),

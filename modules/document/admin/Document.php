@@ -1098,7 +1098,7 @@ class Document extends HelPHP_module {
         $cached=H::span(['class'=>'cached_return'],$this->get_tl('document_cached', [$post[$this->ifld_data_id]]));
         if(isset($post['pub_all'])){
             $progress=H::span(['class'=>'cached_progress'],$this->get_tl('publication_progress', [$post['published'],$post['total_doc']]));
-            $next=H::script('setTimeout(function(){Document_a.publish_next();},2000);', ['autoremove'=>true]);
+            $next=H::script('setTimeout(function(){Document_a.publish_next();},300);', ['autoremove'=>true]);
             return [$progress,$next,$cached];
         }else{
             return $cached;

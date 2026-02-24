@@ -377,6 +377,7 @@ class Document_a extends H_module {
             h.a.send(settings);
         }else{
             publish_modal.hide();
+            publish_modal=false;
         }
 
     }

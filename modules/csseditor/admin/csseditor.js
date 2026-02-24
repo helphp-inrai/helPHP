@@ -753,7 +753,7 @@ class Csseditor_a extends H_module {
         };
         if (this.preview) {
             settings.success = () => {
-                h.modules.preview_a[this.dom_id].refresh_iframe();
+                h.modules.preview_a[this.dom_id].set_theme(this.#theme.id);
             };
         }
         

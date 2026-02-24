@@ -357,17 +357,19 @@ class Csseditor extends HelPHP_module {
 
     public static function get_current_theme($preview, $admin, $force_admin_or_public = false){
         global $CONFIG;
+        $id_theme = 0;
         if ($preview) {
-            if ($admin) return isset($_SESSION['current_csseditor_theme_preview_admin']) ? $_SESSION['current_csseditor_theme_preview_admin'] : $CONFIG::THEME_ID_ADMIN;
-            else return isset($_SESSION['current_csseditor_theme_preview_public']) ? $_SESSION['current_csseditor_theme_preview_public'] : $CONFIG::THEME_ID;
+            if ($admin) $id_theme = isset($_SESSION['current_csseditor_theme_preview_admin']) ? $_SESSION['current_csseditor_theme_preview_admin'] : $CONFIG::THEME_ID_ADMIN;
+            else $id_theme = isset($_SESSION['current_csseditor_theme_preview_public']) ? $_SESSION['current_csseditor_theme_preview_public'] : $CONFIG::THEME_ID;
         } else if ($force_admin_or_public){
-            if ($admin) return isset($_SESSION['current_csseditor_theme_admin']) ? $_SESSION['current_csseditor_theme_admin'] : $CONFIG::THEME_ID_ADMIN;
-            else return isset($_SESSION['current_csseditor_theme_public']) ? $_SESSION['current_csseditor_theme_public'] : $CONFIG::THEME_ID;
+            if ($admin) $id_theme = isset($_SESSION['current_csseditor_theme_admin']) ? $_SESSION['current_csseditor_theme_admin'] : $CONFIG::THEME_ID_ADMIN;
+            else $id_theme = isset($_SESSION['current_csseditor_theme_public']) ? $_SESSION['current_csseditor_theme_public'] : $CONFIG::THEME_ID;
         } else {
-            if (isset($_SESSION['current_csseditor_theme']) && $_SESSION['current_csseditor_theme'] > 0) return $_SESSION['current_csseditor_theme'];
-            else if ($admin) return $CONFIG::THEME_ID_ADMIN;
-            else return $CONFIG::THEME_ID;
+            if (isset($_SESSION['current_csseditor_theme']) && $_SESSION['current_csseditor_theme'] > 0) $id_theme = $_SESSION['current_csseditor_theme'];
+            else if ($admin) $id_theme = $CONFIG::THEME_ID_ADMIN;
+            else $id_theme = $CONFIG::THEME_ID;
         }
+        return $id_theme;
     }
     public function display_editor(&$post) {
         global $CONFIG;
@@ -1451,7 +1453,7 @@ class Csseditor extends HelPHP_module {
         $this->check_posted_data($post, 'csseditor_theme', ['id', 'name', 'admin', 'options']);
         $post[$this->ifld_source_admin] = $post[$this->ifld_theme_admin];
 
-        // teste si le nom n'est pas déjà pris
+        // test if the name already exist
         $q = 'SELECT id FROM '.$this->bddt_theme.' WHERE name=? AND id<>?';
         $exist = $DB->prepared_query_value($q, 'si', [$post[$this->ifld_theme_name], $post[$this->ifld_theme_id]]);
         if (!$exist) {
@@ -1468,6 +1470,8 @@ class Csseditor extends HelPHP_module {
 
                 if (isset($post['duplic_theme']) && $post['duplic_theme'] && isset($post['duplic_theme_id']) && $post['duplic_theme_id'] > 0) {
                     // Duplicate a theme, copy every data linked to the previous source theme
+                    $q = 'SELECT id_source FROM '.$this->bddt_theme.' WHERE id=?';
+                    $id_source = $DB->prepared_query_value($q, 'i', [$post['duplic_theme_id']]);
 
                     // insert new theme
                     $q = 'INSERT INTO '.$this->bddt_theme.' SET id_source=?, name=?, options=?, admin=?';
@@ -1476,19 +1480,19 @@ class Csseditor extends HelPHP_module {
 
                     // copy variables
                     $q = 'INSERT INTO '.$this->bddt_variables.'(id_source,id_media,name,properties) SELECT ?,id_media,name,properties FROM '.$this->bddt_variables.' WHERE id_source=?';
-                    $DB->prepared_query($q,'ii',[$post[$this->ifld_source_id],$post['duplic_theme_id']]);
+                    $DB->prepared_query($q,'ii',[$post[$this->ifld_source_id],$id_source]);
                     
                     // copy keyframes
                     $q = 'INSERT INTO '.$this->bddt_keyframes.'(id_source,name,value) SELECT ?,name,value FROM '.$this->bddt_keyframes.' WHERE id_source=?';
-                    $DB->prepared_query($q,'ii',[$post[$this->ifld_source_id],$post['duplic_theme_id']]);
+                    $DB->prepared_query($q,'ii',[$post[$this->ifld_source_id],$id_source]);
                     
                     // copy fonts
-                    $q = 'INSERT INTO '.$this->bddt_fonts.'(name,file) SELECT ?,name,file FROM '.$this->bddt_fonts.' WHERE id_source=?';
-                    $DB->prepared_query($q,'ii',[$post[$this->ifld_source_id],$post['duplic_theme_id']]);
+                    $q = 'INSERT INTO '.$this->bddt_fonts.'(id_source,name) SELECT ?,name FROM '.$this->bddt_fonts.' WHERE id_source=?';
+                    $DB->prepared_query($q,'ii',[$post[$this->ifld_source_id],$id_source]);
 
                     // copy rules
                     $q = 'INSERT INTO '.$this->bddt_rules.'(id_source,id_media,selector,properties,`sort_order`) SELECT ?,id_media,selector,properties,`sort_order` FROM '.$this->bddt_rules.' WHERE id_source=?';
-                    $DB->prepared_query($q,'ii',[$post[$this->ifld_source_id],$post['duplic_theme_id']]);
+                    $DB->prepared_query($q,'ii',[$post[$this->ifld_source_id],$id_source]);
 
                 } else {
 

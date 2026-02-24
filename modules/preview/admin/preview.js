@@ -72,6 +72,7 @@ class Preview_a extends H_module {
         delete(settings.css_selectors);
 
         this.current_language = settings.language;
+        this.current_theme = settings.theme;
 
         let url = H_constants.base_url;
         if (this.is_admin) url += H_constants.admin_folder;
@@ -641,10 +642,54 @@ class Preview_a extends H_module {
         let settings = this.ajax_settings();
         settings.data = {
             ...settings.data,
-            'preview_action': 'preview_update_language_session',
+            'preview_action': 'preview_update_session',
             'iso': this.current_language
         };
         h.a.send(settings);
+    }
+    change_theme(evt){
+        let targ = evt.target;
+        let id_theme = targ.selectedOptions[0].value;
+        if (id_theme == this.current_theme) return;
+
+        this.iframe.src = this.iframe.src.replace('theme='+this.current_theme, 'theme='+id_theme);
+        this.current_theme = id_theme;
+
+        let settings = this.ajax_settings();
+        settings.data = {
+            ...settings.data,
+            'preview_action': 'preview_update_session',
+            'theme': this.current_theme,
+        };
+        if (this.is_admin) settings.data.admin = true;
+        if (h.modules['csseditor_a'] && h.modules['csseditor_a'][this.dom_id] && h.modules['csseditor_a'][this.dom_id].exist()) {
+            settings.success = () => {
+                let select = document.getElementById('csseditor_select_theme' + this.dom_id);
+                for (let i = 0; i < select.length; i++){
+                    let opt = select[i];
+                    if (opt.value == id_theme) {
+                        opt.selected = true;
+                        h.e.send_event(select, 'change');
+                        break;
+                    }
+                }
+            };
+        }
+        h.a.send(settings);
+    }
+    set_theme(id){
+        if (id <= 0) return;
+
+        let select = document.getElementById('preview_select_theme' + this.dom_id);
+        for (let i = 0; i < select.length; i++){
+            let opt = select[i];
+            if (opt.value == id) {
+                opt.selected = true;
+                h.e.send_event(select, 'change');
+                break;
+            }
+        }
+
     }
     
     static modal = false;

@@ -21,5 +21,6 @@ $tl_data = array(
         'preview_existing_rules' => 'Règles existantes',
         'preview_element' => 'Elément $1',
         'add_rule_info' => 'Cliquer sur une règle pour l\'utiliser dans l\'éditeur de css.<br>Les règles sont classés par leur position dans la hiérarchie DOM. Les premières règles correspondent au dernier élément de la hiérarchie (enfant), les dernières règles correspondent au début de la hiérarchie (parent).',
+        'select_theme'=>'Thème CSS : '
     )
 );
