@@ -226,7 +226,8 @@ class H extends Html {
                 $adm='';
             } else {
                 $adm='adm';
-                 $head->add_child(H::SCRIPT('',array('src'=>$pre.'js/externals/tinymce/tinymce.min.js.gz', 'language'=>'Javascript')));
+                $head->add_child(H::SCRIPT('',array('src'=>$pre.'js/externals/tinymce/tinymce.min.js.gz', 'language'=>'Javascript')));
+                $head->add_child(H::SCRIPT('',array('src'=>$pre.'js/externals/alwan/alwan.min.js', 'language'=>'Javascript')));
             }
             $head->add_child(H::SCRIPT('',array('src'=>$CONFIG::BASE_URL.'jsgz/all'.$adm.'.js.gz'.$refresher, 'language'=>'Javascript')));
             $head->add_child(H::LINK(array('href'=>$CONFIG::BASE_URL.'css/gz/all'.$adm.'.css.gz'.$refresher, 'rel'=>'stylesheet' , 'type'=>'text/css')), 'css');
