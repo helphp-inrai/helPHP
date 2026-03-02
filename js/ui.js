@@ -3417,6 +3417,11 @@ class H_ui_disposition {
         this.remove_container(obj);
 
         this.separators.splice(this.separators.indexOf(obj.index), 1);
+
+        if (this.separators.length == 0){
+            // no more separator, removed the last container
+            this.clean();
+        }
     }
     resize_separators(){
         this.separators.forEach((i)=>{
@@ -3745,8 +3750,10 @@ class H_ui_disposition {
         }
         // remove parent container and move all the container outside it
         let parent = this.global_container.parentElement;
-        this.containers.forEach(elem => H_dom.append_content(parent, elem));
-        H_dom.remove_element(this.global_container);
+        if (parent) {
+            this.containers.forEach(obj => H_dom.append_content(parent, obj.dom_elem));
+            H_dom.remove_element(this.global_container);
+        }
     }
     
     static instances = {};
