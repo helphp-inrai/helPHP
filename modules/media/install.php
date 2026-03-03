@@ -6,6 +6,7 @@ $files = array(
     0=>['media/admin/index.php', 'admin/media/index.php', 0755],
     1=>['media/public/index.php', 'public/media/index.php', 0755],
     2=>['media/public/video_encode.php', 'public/media/video_encode.php', 0755],
+    3=>['media/public/media.php', 'public/media/media.php', 0755],
 );
 
 $folders = array(
