@@ -616,7 +616,7 @@ class Csseditor_a extends H_module {
                 'csseditor_rules-selector': this.current_rules,
             };
             settings.success = (res) => {
-                if (this.preview) {
+                if (this.preview && h.modules.preview_a && h.modules.preview_a[this.dom_id]) {
                     h.modules.preview_a[this.dom_id].refresh_iframe();
                     h.modules.preview_a[this.dom_id].remove_rule(this.current_rules);
                 }
@@ -687,7 +687,7 @@ class Csseditor_a extends H_module {
 
             this.refresh_list_rules(false);
 
-            if (this.preview) {
+            if (this.preview && h.modules.preview_a && h.modules.preview_a[this.dom_id]) {
                 h.modules.preview_a[this.dom_id].refresh_iframe();
             }
         };
@@ -736,7 +736,7 @@ class Csseditor_a extends H_module {
             'csseditor_variables-name': name,
             'index': index
         };
-        if (this.preview) {
+        if (this.preview && h.modules.preview_a && h.modules.preview_a[this.dom_id]) {
             settings.success = () => {
                 h.modules.preview_a[this.dom_id].refresh_iframe();
             };
@@ -751,7 +751,7 @@ class Csseditor_a extends H_module {
             csseditor_action: 'csseditor_refresh_all_variable',
             preview_embed: this.preview
         };
-        if (this.preview) {
+        if (this.preview && h.modules.preview_a && h.modules.preview_a[this.dom_id]) {
             settings.success = () => {
                 h.modules.preview_a[this.dom_id].set_theme(this.#theme.id);
             };
@@ -763,7 +763,7 @@ class Csseditor_a extends H_module {
     delete_variable(id_source, index) {
         H_ui.popup_modal.hide();
         H_dom.remove_element(document.getElementById('csseditor_var-' + id_source + '-' + index + this.dom_id));
-        if (this.preview) h.modules.preview_a[this.dom_id].refresh_iframe();
+        if (this.preview && h.modules.preview_a && h.modules.preview_a[this.dom_id]) h.modules.preview_a[this.dom_id].refresh_iframe();
     }
     add_variable_to_input(evt) {
         h.e.stop_event(evt);

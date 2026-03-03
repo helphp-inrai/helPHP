@@ -5,6 +5,7 @@ $module_name = 'blockeditor';
 $files = array(
     0=>['blockeditor/admin/index.php', 'admin/blockeditor/index.php', 0755],
     1=>['blockeditor/public/index.php', 'public/blockeditor/index.php', 0755],
+    2=>['blockeditor/index.php', 'public/block/index.php', 0755],
     2=>['blockeditor/index.php', 'admin/block/index.php', 0755],
 );
 

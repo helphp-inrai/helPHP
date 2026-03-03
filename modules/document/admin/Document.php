@@ -450,7 +450,6 @@ class Document extends HelPHP_module {
 
     public function edit_anim_block($post){
         global $DB;
-          // $document_data_id,$block_id;
         //check if block got animation
         if (isset($post['document_id']) && isset($post['block_name_id']) && $post['block_name_id'] !=''){
             $q='SELECT DISTINCT id_animation from '.$DB->table('block_animation').' where id_document=? AND block_id =?';
@@ -465,13 +464,12 @@ class Document extends HelPHP_module {
         
         $output = H::DIV(['id'=>'animation_edition'.$this->dom_id, 'class'=>$this->css.'subcontainer blockanimation']);
             $form = H::form(['action'=>$this->get_index_relative_path(), 'dom_target'=>'.parent', 'class'=>$this->css.'form_edit form_edit']);
-                // $selected = isset($post['block_animation']) ? $post['block_animation'] : 0;
                 $opts_data = array('value_key'=>'id', 'label_key'=>'name', 'options'=>$this->prepared_anim);
                 $select = H::select(['id'=>self::module_name.'_block_anime'.$this->dom_id, 'name'=>'block_animation', 'label'=>$this->get_tl('block_animation'), 'data-alwaysposted'=>1], $opts_data, $post['block_animation']);
                 $btn_save = H::submit_button(['id'=>self::module_name.'_btn_save'.$this->dom_id, 'name'=>$this->input_action_identifier, 'value'=>$this->ACTION_SAVE_ANIMATION_block], $this->get_tl('tlc_save'));
                 $document_id=H::input_hidden(['name'=>'document_id','value'=>$post['document_id']]);
                 $block_name_id=H::input_hidden(['name'=>'block_name_id','value'=>$post['block_name_id']]);
-                $form->add_child([$select->label_tag(),$select,$document_id,$mode,$block_name_id,$btn_save]);
+            $form->add_child([$select->label_tag(),$select,$document_id,$mode,$block_name_id,$btn_save]);
         $output->add_child($form);
         return $output;
     }
@@ -1160,7 +1158,7 @@ class Document extends HelPHP_module {
         }
     }
 
-    //affiche les options de recherche
+    //display search options
     public function form_search($post) {
         global $DB;
         
@@ -1175,7 +1173,7 @@ class Document extends HelPHP_module {
                 $post['rechlnm'] = (!isset($post['rechlnm'])) ? '': $post['rechlnm'];
                 $text = H::input_text(['class'=>$this->css.'input_search search_input default' , 'name'=>'rechlnm', 'id'=>'rechlnm'.$this->dom_id, 'value'=>urldecode($post['rechlnm']), 'placeholder'=>$this->get_tl('search_placeholder'), 'data-returnsubmit'=>1]);
 
-                //nombre résultat par page
+                //number of result per page
                 $selected = isset($post['nbr_result']) ? $post['nbr_result'] : $this->results_default_count;
                 $results_per_page = [['val'=>12], ['val'=>24], ['val'=>48], ['val'=>96]];
                 $opts_data = array('value_key'=>'val', 'label_key'=>'val', 'options'=>$results_per_page);
