@@ -168,6 +168,8 @@ class Preview extends HelPHP_module {
             $params['css_selectors'] = $selectors;
             $params['language'] = $current_language;
             $params['theme'] = $current_theme;
+            // add connection to transfer connection to the context session of preview
+            if (isset($_SESSION[\helPHP\libs\User::session_connection_data])) $params['co_hash'] = urlencode($_SESSION[\helPHP\libs\User::session_connection_data]);
             $translate = [
                 'preview_new_rules' => $this->get_tl('preview_new_rules'),
                 'preview_existing_rules' => $this->get_tl('preview_existing_rules'),

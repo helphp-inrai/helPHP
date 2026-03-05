@@ -215,8 +215,8 @@ function generate_index($module_name, $path, $public){
 
     // generating index.php
     $index_content = '<?php'.PHP_EOL.PHP_EOL;
-    $index_content.= 'if (is_file(\'../../config/main.php\')) {'.PHP_EOL;
-    $index_content.= '    include_once(\'../../config/main.php\');'.PHP_EOL;
+    $index_content.= 'if (is_file(\'include_once(dirname(dirname(__DIR__)).'/config/main.php');/main.php\')) {'.PHP_EOL;
+    $index_content.= '    include_once(\'include_once(dirname(dirname(__DIR__)).'/config/main.php');/main.php\');'.PHP_EOL;
     $index_content.= '} else if (is_file(\'../config/main.php\')){'.PHP_EOL;
     $index_content.= '    include_once(\'../config/main.php\');'.PHP_EOL;
     $index_content.= '}'.PHP_EOL;

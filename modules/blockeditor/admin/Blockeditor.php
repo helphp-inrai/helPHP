@@ -303,7 +303,6 @@ class Blockeditor extends HelPHP_module {
             $css = H::STYLE(array('rel'=>'stylesheet' , 'type'=>'text/css', 'id'=>'css_block¤'.$post['id']), $css);
         }
         return $css.$js.$this->parse_hcode($modulep->process_data($_POST, true), ($post['prevmode'] == 'admin'));
-
     }
 
     public function install_block($name){

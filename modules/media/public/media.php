@@ -28,11 +28,7 @@ use helPHP\libs\Media;
 use helPHP\libs\Utils;
 
 
-if (is_file('../../config/main.php')) {
-    include_once('../../config/main.php');
-} else if (is_file('../config/main.php')){
-    include_once('../config/main.php');
-}
+include_once(dirname(dirname(__DIR__)).'/config/main.php');
 include_once(Config::HELPHP_FOLDER.'autoload.php');
 
 $field_identifier = isset($_GET['f']) ? $_GET['f'] : false;

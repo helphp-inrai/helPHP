@@ -169,7 +169,7 @@ class H extends Html {
         $lalang=$LANG->current_language;
 
         //header
-        $document = H::HTML(array('lang' => $lalang));
+        $document = H::HTML(array('lang' => $lalang, 'style'=>'--fhd-vr: 1;--fhd-hr: 1;'));
         $head=H::HEAD();
         $head->add_child(H::TITLE(null, $title));
         $head->add_child(H::META(array('charset'=>'utf-8')));

@@ -25,6 +25,7 @@
  */
 
 use helPHP\libs\DB;
+use helPHP\libs\Filesystem;
 use helPHP\utils\Packer;
 use helPHP\libs\Utils;
 use helPHP\modules\csseditor\admin\Csseditor;
@@ -149,8 +150,13 @@ function minify($target){
     
     // $packed_js=$js_str;
     // write into a file
+    if (!is_dir($target.'jsgz')){
+        global $FS;
+        $FS->mkdir($target.'jsgz');
+    }
+
     writeUTF8File($target.'jsgz/all.js', $packed_js);
-    unlink($target.'jsgz/all.js.gz');
+    if (file_exists($target.'jsgz/all.js.gz')) unlink($target.'jsgz/all.js.gz');
     // gzip the file and adjust it right
     exec("gzip ".$target."/jsgz/all.js");
     chmod($target."jsgz/all.js.gz", 0755);
@@ -168,7 +174,7 @@ function minify($target){
     // $packed_js=$js_adm_str;
     // write into a file
     writeUTF8File($target.'jsgz/alladm.js', $packed_js);
-    unlink($target.'jsgz/alladm.js.gz');
+    if (file_exists($target.'jsgz/alladm.js.gz')) unlink($target.'jsgz/alladm.js.gz');
     // gzip the file and adjust it right
     exec("gzip ".$target."jsgz/alladm.js");
     chmod($target."jsgz/alladm.js.gz", 0755);

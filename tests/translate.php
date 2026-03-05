@@ -3,7 +3,7 @@ namespace helPHP\tests;
 
 // $baseroot = dirname($_SERVER['DOCUMENT_ROOT']);
 // $siteroot = explode(dirname($_SERVER['SCRIPT_NAME']), $_SERVER['SCRIPT_FILENAME'])[0];
-include_once('../config/main.php');
+include_once(dirname(__DIR__).'/config/main.php');
 include_once(\Config::HELPHP_FOLDER.'autoload.php');
 
 use helPHP\libs\HelPHP_module;

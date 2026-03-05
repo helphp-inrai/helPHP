@@ -1,6 +1,6 @@
 <?php
 
-include_once('../../config/main.php');
+include_once(dirname(dirname(__DIR__)).'/config/main.php');
 include_once(Config::HELPHP_FOLDER.'autoload.php');
 
 use helPHP\libs\Ajax;

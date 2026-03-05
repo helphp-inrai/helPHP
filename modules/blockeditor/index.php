@@ -3,11 +3,7 @@
 
 // index for instance/admin/block
 
-if (is_file('../../config/main.php')) {
-    include_once('../../config/main.php');
-} else if (is_file('../config/main.php')){
-    include_once('../config/main.php');
-}
+include_once(dirname(dirname(__DIR__)).'/config/main.php');
 include_once(Config::HELPHP_FOLDER.'autoload.php');
 
 $module = new helPHP\modules\block\Bridge();

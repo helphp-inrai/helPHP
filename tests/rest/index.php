@@ -5,7 +5,7 @@ use helPHP\libs\Crypt;
 use helPHP\libs\Utils;
 use helPHP\libs\Rest;
 
-include_once('../../config/main.php');
+include_once(dirname(dirname(__DIR__)).'/config/main.php');
 include_once(\Config::HELPHP_FOLDER.'autoload.php');
 
 global $APIURL;

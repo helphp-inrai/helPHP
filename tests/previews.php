@@ -26,7 +26,7 @@
 
 namespace helPHP\tests;
 
-include_once('../config/main.php');
+include_once(dirname(__DIR__).'/config/main.php');
 include_once('../../helPHP/autoload.php');
 
 use helPHP\libs\HelPHP_module;
