@@ -6,6 +6,8 @@ If you are up to date and a new version is out, __the modifications that you nee
 
 ---
 
+## commit [aad4f42](https://github.com/helphp-inrai/helPHP/commit/aad4f429efbec362aa70582a26d0f3ef52afc8fa) - [patch link](http://www.helphp.org/patch/patch-2026_03_19-1.zip)
+
 - __Block news__ Added field to choose the number of element to display (be careful to add the new field in block news, see patch)
 - __Indexation admin__ Activate list parameter for media / clean code
 - __Csseditor admin__ Added timestamp to url for downloading theme to ignore cached version
