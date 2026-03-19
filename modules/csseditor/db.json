@@ -386,5 +386,207 @@
                 }
             ]
         }
+    ],
+    "entries": [
+        {
+            "table": "csseditor_media",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "1"
+                },
+                {
+                    "name": "name",
+                    "type": "s",
+                    "value": "Default"
+                },
+                {
+                    "name": "value",
+                    "type": "s",
+                    "value": ""
+                },
+                {
+                    "name": "sort_order",
+                    "type": "i",
+                    "value": "1"
+                },
+                {
+                    "name": "active",
+                    "type": "i",
+                    "value": "1"
+                },
+                {
+                    "name": "initial",
+                    "type": "i",
+                    "value": "0"
+                },
+                {
+                    "name": "id_initial",
+                    "type": "i",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "table": "csseditor_media",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "2"
+                },
+                {
+                    "name": "name",
+                    "type": "s",
+                    "value": "Smartphone only"
+                },
+                {
+                    "name": "value",
+                    "type": "s",
+                    "value": "@media screen and (max-width: 767px)"
+                },
+                {
+                    "name": "sort_order",
+                    "type": "i",
+                    "value": "4"
+                },
+                {
+                    "name": "active",
+                    "type": "i",
+                    "value": "1"
+                },
+                {
+                    "name": "initial",
+                    "type": "i",
+                    "value": "0"
+                },
+                {
+                    "name": "id_initial",
+                    "type": "i",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "table": "csseditor_media",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "3"
+                },
+                {
+                    "name": "name",
+                    "type": "s",
+                    "value": "Tablet only"
+                },
+                {
+                    "name": "value",
+                    "type": "s",
+                    "value": "@media screen and (max-width: 1280px) and (min-width: 768px)"
+                },
+                {
+                    "name": "sort_order",
+                    "type": "i",
+                    "value": "3"
+                },
+                {
+                    "name": "active",
+                    "type": "i",
+                    "value": "1"
+                },
+                {
+                    "name": "initial",
+                    "type": "i",
+                    "value": "0"
+                },
+                {
+                    "name": "id_initial",
+                    "type": "i",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "table": "csseditor_media",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "4"
+                },
+                {
+                    "name": "name",
+                    "type": "s",
+                    "value": "Tablet & Smarthphone"
+                },
+                {
+                    "name": "value",
+                    "type": "s",
+                    "value": "@media screen and (max-width: 1280px)"
+                },
+                {
+                    "name": "sort_order",
+                    "type": "i",
+                    "value": "2"
+                },
+                {
+                    "name": "active",
+                    "type": "i",
+                    "value": "1"
+                },
+                {
+                    "name": "initial",
+                    "type": "i",
+                    "value": "0"
+                },
+                {
+                    "name": "id_initial",
+                    "type": "i",
+                    "value": "0"
+                }
+            ]
+        },
+        {
+            "table": "csseditor_media",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "i",
+                    "value": "5"
+                },
+                {
+                    "name": "name",
+                    "type": "s",
+                    "value": "@media print"
+                },
+                {
+                    "name": "value",
+                    "type": "s",
+                    "value": "@media print"
+                },
+                {
+                    "name": "sort_order",
+                    "type": "i",
+                    "value": "5"
+                },
+                {
+                    "name": "active",
+                    "type": "i",
+                    "value": "1"
+                },
+                {
+                    "name": "initial",
+                    "type": "i",
+                    "value": "0"
+                },
+                {
+                    "name": "id_initial",
+                    "type": "i",
+                    "value": "0"
+                }
+            ]
+        }
     ]
 }

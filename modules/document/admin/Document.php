@@ -445,6 +445,26 @@ class Document extends HelPHP_module {
             }
         }
 
+        // copy indexation 
+        $q = 'SELECT * FROM '.$DB->table('indexation_data').' WHERE module_name=? AND module_param=?';
+        $indexation_data = $DB->prepared_query_line($q, 'ss', ['document', $post['document_data-id']]);
+        if ($indexation_data){
+            $q = 'INSERT INTO '.$DB->table('indexation_data').' SET module_name=?, module_param=?, image=?, activated=?';
+            $DB->prepared_query($q, 'sssi', [$indexation_data['module_name'], $new_id, $indexation_data['image'], $indexation_data['activated']]);
+            $new_indexation_id = $DB->last_insert_id();
+            if ($indexation_data) {
+                $q = 'INSERT INTO '.$DB->table('languages_long').' (id_data,id_item,field_identifier,value) SELECT id_data,?,field_identifier,value FROM '.$DB->table('languages_long').' WHERE id_item=? AND field_identifier LIKE "indexation_data-%"';
+                $res = $DB->prepared_query($q,'ii',[$new_indexation_id, $indexation_data['id']]);
+                $q = 'INSERT INTO '.$DB->table('languages_short').' (id_data,id_item,field_identifier,value) SELECT id_data,?,field_identifier,value FROM '.$DB->table('languages_short').' WHERE id_item=? AND field_identifier LIKE "indexation_data-%"';
+                $res = $DB->prepared_query($q,'ii',[$new_indexation_id, $indexation_data['id']]);
+                // copy indexation media if any
+                if (\helPHP\libs\Media::has_media('indexation_data-image', $indexation_data['id'])){
+                    global $MEDIA;
+                    $MEDIA->copy_use('indexation_data-image¤'.$indexation_data['id'], 'indexation_data-image¤'.$new_indexation_id);
+                }
+            }
+        }
+
         return $new_id;
     }
 

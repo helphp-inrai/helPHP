@@ -59,11 +59,33 @@ class Media_a extends H_module {
 
         // hidden field to indicate this media input is modified
         this.dom_elems.inp_modified = document.getElementById('media_modified' + this.dom_id);
+
         //big view
         if (this.params.big_view) {
             this.dom_elems.big_view = document.getElementById('media_big_view' + this.dom_id);
             if (this.dom_elems.big_view) h.e.add_event(this.dom_elems.big_view, 'change', this.toggle_big_view.bind(this));
         }
+
+        // btn activate lang
+        this.dom_elems.activate_lang = document.getElementById('media_btn_activate_lang' + this.dom_id);
+        if (this.dom_elems.activate_lang) h.e.add_event_click(this.dom_elems.activate_lang, this.switch_language_mode.bind(this));
+        this.dom_elems.lang_list = document.getElementById('media_lang_list' + this.dom_id);
+        // Lang buttons
+        if (this.dom_elems.lang_list){
+            this.lang = [];
+            let btns = this.dom_elems.lang_list.getElementsByClassName('media_admin_lang_item');
+            Array.from(btns).forEach((button)=>{
+                let iso = button.dataset.iso;
+                let obj = {
+                    iso,
+                    button,
+                    uploader: document.getElementById('media_uploader' + this.dom_id + (iso ? '-' + iso : ''))
+                };
+                h.e.add_event_click(button, ()=>{this.toggle_language(iso);});
+                this.lang.push(obj);
+            });
+        }
+
         // progress bar
         this.dom_elems.progress_state = document.getElementById('media_progress_state' + this.dom_id);
         this.dom_elems.progress_label = document.getElementById('media_progress_label' + this.dom_id);
@@ -128,6 +150,7 @@ class Media_a extends H_module {
             }
         }
     }
+
     display_list(evt){
         H_ui.open_popup_modal(evt, 'media', {
             'media_action': 'media_list',
@@ -196,12 +219,14 @@ class Media_a extends H_module {
         // close modal
         H_ui.popup_modal.hide();
     }
+
     refresh_media(use_key) {
         let img = document.getElementById('media_current_img' + use_key + this.dom_id);
         if (img) {
             img.src = img.src + 't=' + new Date().getTime();
         }
     }
+
     display_edit(evt, use_key) {
         H_ui.open_popup_modal(evt, 'media', {
             'dom_id': this.dom_id,
@@ -210,6 +235,7 @@ class Media_a extends H_module {
             'use_key': use_key,
         });
     }
+
     delete_media(evt, use_key, confirmed = false) {
         if (!confirmed) {
             let confirm = evt.target.dataset.confirm;
@@ -234,6 +260,7 @@ class Media_a extends H_module {
         };
         h.a.send(settings);
     }
+
     toggle_big_view(evt){
         let settings = this.ajax_settings();
         settings.data = {
@@ -244,6 +271,7 @@ class Media_a extends H_module {
         };
         h.a.send(settings);
     }
+
     send_files() {
         let settings = this.ajax_settings();
         settings.dom_target = 'media_uploader' + this.dom_id;
@@ -302,6 +330,49 @@ class Media_a extends H_module {
     calculate_aspect_ratio(base_width, base_height, max_width, max_height) {
         var ratio = Math.min(max_width / base_width, max_height / base_height);
         return { width: base_width * ratio, height: base_height * ratio };
+    }
+
+    switch_language_mode(evt){
+        if (this.params.lang) {
+            H_ui.confirm_popup(evt.target.dataset.confirm, ()=>{this.delete_language_media();});
+        } else {
+            H_dom.remove_class(this.dom_elems.lang_list, 'hidden');
+            H_dom.add_class(evt.target, 'active');
+            this.toggle_language('');
+            this.params.lang = true;
+        }
+    }
+    toggle_language(iso){
+        if (iso === this.params.lang_iso) return;
+
+        this.lang.forEach((lang) => {
+            if (lang.iso == iso) {
+                lang.button.classList.toggle('selected', true);
+                lang.uploader.classList.toggle('selected', true);
+                lang.uploader.classList.toggle('hidden', false);
+            } else {
+                lang.button.classList.toggle('selected', false);
+                lang.uploader.classList.toggle('selected', false);
+                lang.uploader.classList.toggle('hidden', true);
+            }
+        });
+        this.params.lang_iso = iso;
+    }
+    delete_language_media(){
+        let settings = this.ajax_settings();
+        settings.data = {
+            ...settings.data,
+            media_action: 'media_delete_languages',
+            media_id: this.media_id
+        };
+        settings.success = () => {
+            H_dom.add_class(this.dom_elems.lang_list, 'hidden');
+            H_dom.remove_class(evt.target, 'active');
+            this.params.lang = false;
+            this.toggle_language('');
+            
+        };
+        h.a.send(settings);
     }
 
     exist() {

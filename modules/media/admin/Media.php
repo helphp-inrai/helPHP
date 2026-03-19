@@ -45,6 +45,7 @@ class Media extends HelPHP_module
     protected $ACTION_UPLOADER = self::module_name.'_display_uploader';
     protected $ACTION_UPLOAD = self::module_name.'_upload';
     protected $ACTION_SAVE_NAME = self::module_name.'_save_name';
+    protected $ACTION_DELETE_LANG = self::module_name.'_delete_languages';
     
     public $mode = false;
     
@@ -54,29 +55,32 @@ class Media extends HelPHP_module
         'multiple'=>false,                  // accept multiple file
 
         // about extra widget
-        'delete'=>true,                     // affiche la croix pour supprimer
-        'edit'=>true,                       // affiche le btn pour editer
+        'delete'=>true,                     // display delete button
+        'edit'=>true,                       // display edit button
         'options'=>true,
-        'big_view'=>false,                  // affiche le btn pour la big view
-        'list'=>false,                      // affiche le btn pour la liste
-        'no_resize'=>false,                 // désactive la possibilité de resize une image
+        'big_view'=>false,                  // display big view button
+        'list'=>false,                      // display list choice 
+        'no_resize'=>false,                 // deactivate resize option in edit
         'display_current'=>true,
         
         // callbacks
         // 'on_save'=>false,                // fonction js appelé après le save de l'image
-        'on_delete'=>false,                 // fonction js appelé après le save de l'image
+        'on_delete'=>false,                 // callback on media delete
         
         // about final process on file
-        'original'=>false,                  // garde l'original ou pas
+        'original'=>false,                  // keep original or not
         // 'instances'=>false,              // pour faire une image unique si instances multiples
         // 'link_edition'=>false,           // édition lié, c-a-d que la modification se répercute sur toutes les tailles de l'image
+
+        'lang' => false,                    // is multilanguage mode activate
+        'lang_iso' => false                 // false when default media, otherwise iso of the language,
     ];
     
     //id du media
-    private $media_id= false;
+    private $media_id = false;
     private $field_identifier, $field_id;
     //process
-    private $process=false;
+    private $process = false;
     private $path;
     
     public function __construct($dom_container = null, $field_identifier = false, $field_id=false, $process=false, $params=false, &$post=[]) {
@@ -117,6 +121,15 @@ class Media extends HelPHP_module
 
             $_SESSION['media_list'][$this->media_id]['params'] = json_encode($this->params);
             $_SESSION['media_list'][$this->media_id]['time'] = time();
+        }
+
+        // detect if language is activated by the presence of a media for a lang.
+        // test on lang_iso to only do the query once when loading the default uploader
+        if ($this->params['lang_iso'] == false) {
+            global $DB;
+            $q = 'SELECT id FROM '.$DB->table('media_use').' WHERE field_identifier LIKE ? AND field_identifier NOT LIKE ?';
+            $lang_exist = $DB->prepared_query_list($q, 'ss', [$this->field_identifier.'___¤'.$this->field_id, $this->media_id]);
+            if ($lang_exist) $this->params['lang'] = true;
         }
 
         $this->clean_session();
@@ -200,6 +213,10 @@ class Media extends HelPHP_module
             case $this->ACTION_DELETE:
                 $master_output->add_child( $this->delete_media($post) );
             break;
+
+            case $this->ACTION_DELETE_LANG:
+                $master_output->add_child( $this->delete_languages($post) );
+            break;
             
             case $this->ACTION_UPLOADER:
             default:
@@ -242,21 +259,71 @@ class Media extends HelPHP_module
 
     //MEDIA UPLOAD WIDGET
     public function display_uploader($post) {
-        global $FS,$CONFIG;
+        global $FS, $CONFIG, $LANG, $DB;
         
         $js = '';
 
-        $container = H::DIV(['class'=>$this->css.'uploader', 'id'=>self::module_name.'_uploader'.$this->dom_id]);
+        $output = H::group('uploader'.$this->params['lang_iso']);
+
+        if ($this->params['lang_iso'] === false && count($CONFIG::AVAILABLE_LANGUAGES) > 1) {
+
+            $output = H::DIV(['class'=>$this->css.'container_uploader', 'id'=>self::module_name.'_widget'.$this->dom_id]);
+
+            // add language toggler only if it's the default widget
+            $div_lang = H::DIV(['class'=>$this->css.'lang']);
+                $activate_lang = H::button_icon('globe', ['class'=>$this->css.'btn_activate_lang', 'id'=>self::module_name.'_btn_activate_lang'.$this->dom_id, 'data-confirm'=>$this->get_tl('delete_languages_media'), 'title'=>$this->get_tl('activate_lang')]);
+                $lang_list = H::DIV(['class'=>$this->css.'lang_list', 'id'=>self::module_name.'_lang_list'.$this->dom_id]);
+                    $default = H::DIV(['class'=>$this->css.'lang_item default', 'data-iso'=>'', 'title'=>$this->get_tl('default')], $this->get_tl('default'));
+                $lang_list->add_child( $default );
+                if (!$this->params['lang']) $lang_list->add_class('hidden');
+                foreach ($LANG->get_languages_data() as $key => $lang) {
+                    $block_lang = H::DIV(['class'=>$this->css.'lang_item', 'data-iso'=>$lang['iso'], 'title'=>$lang['label']], $lang['own'].' ('.$lang['iso'].')');
+                    if ($this->params['lang'] && $LANG->current_language == $lang['iso']) $block_lang->add_class('selected');
+                    $lang_list->add_child( $block_lang );
+                }
+            $div_lang->add_child( [$activate_lang, $lang_list] );
+            $output->add_child($div_lang);
+        }
+
+        $container = H::DIV(['class'=>$this->css.'uploader', 'id'=>self::module_name.'_uploader'.$this->dom_id, 'data-iso'=>($this->params['lang_iso'] ? $this->params['lang_iso'] : '')]);
         if (isset($this->params['label'])) $container->label = $this->params['label'];
-            
+        if ($this->params['lang'] === true && $this->params['lang_iso'] != $LANG->current_language) $container->add_class('hidden');
+
             if (!$this->params['multiple']) {
-                $current_media = MEDIA_Class::get_media($this->field_identifier, $this->field_id);
-                if ($current_media) $current_media = [$current_media];
+                // the next code is a copy of the MEDIA::get_media method without the language iso part
+                $q = 'SELECT d.id as id_media, u.id as id_use, d.type, d.path, d.big_view, d.width, d.height, u.use_key, u.process_key, u.field_identifier as media_id FROM '.$DB->table('media_data').' d INNER JOIN '.$DB->table('media_use').' u ON u.field_identifier=? AND u.id_media=d.id';
+                $current_media = $DB->prepared_query_line($q, 's', [$this->media_id]);
+                if ($current_media) {
+                    $q = 'SELECT count(*) FROM '.$DB->table('media_use').' WHERE id_media='.$current_media['id_media'];
+                    $current_media['nbinstances'] = $DB->query_value($q);
+
+                    global $LANG;
+                    $current_media['name'] = Language::load_short_translation_value($current_media['media_id'], $current_media['id_media'], $LANG->current_id_data);
+
+                    $current_media = [$current_media];
+                }
             } else {
-                $current_media = MEDIA_Class::get_media_list($this->field_identifier, $this->field_id);
+                // the next code is a copy of the MEDIA::get_media_list method without the language iso part
+                $q = 'SELECT GROUP_CONCAT(id_media SEPARATOR ",") as id_medias, use_key FROM '.$DB->table('media_use').' WHERE field_identifier=? GROUP BY use_key';
+                $tmp = $DB->prepared_query_list($q, 's', [$this->media_id]);
+                $current_media = [];
+                foreach($tmp as $line){
+                    $q = 'SELECT d.id as id_media, u.id as id_use, d.type, d.path, d.big_view, d.width, '.$line['use_key'].' as use_key, u.field_identifier as media_id FROM '.$DB->table('media_data').' d INNER JOIN '.$DB->table('media_use').' u';
+                    $q.=' ON u.id_media=d.id AND d.id IN ('.$line['id_medias'].') ORDER BY d.width ASC LIMIT 1';
+                    $media = $DB->query_line($q);
+                    if (!$media) continue;
+                    
+                    $q = 'SELECT count(*) FROM '.$DB->table('media_use').' WHERE id_media='.$media['id_media'];
+                    $media['nbinstances']= $DB->query_value($q);
+
+                    global $LANG;
+                    $media['name'] = Language::load_short_translation_value($media['media_id'], $media['id_media'], $LANG->current_id_data);
+
+                    array_push($current_media, $media);
+                }
                 $container->add_class('multiple');
             }
-                
+
             $div_drop = H::DIV(['class'=>$this->css.'droper', 'id'=>self::module_name.'_droper'.$this->dom_id]);
 
                 $icon = H::icon('upload-cloud', ['class'=>$this->css.'droper_icon']);
@@ -277,28 +344,28 @@ class Media extends HelPHP_module
 
         $container->add_child($div_drop);
 
-            if ($this->params['options']){
-                $div_options = H::DIV(['class'=>$this->css.'options']);
-                    $ttl = H::DIV(['class'=>$this->css.'options_ttl', 'data-target_id'=>self::module_name.'_options_subcontainer'.$this->dom_id], $this->get_tl('options'));
-                    $subdiv_options = H::DIV(['class'=>$this->css.'options_subcontainer hidden', 'id'=>self::module_name.'_options_subcontainer'.$this->dom_id]);
-                        $upload_options = H::fieldset(['class'=>$this->css.'options_fieldset upload'], $this->get_tl('upload'));
-                            // forcer le jpg
-                            $inp_force_jpg = H::input_checkbox(['name'=>'media_force_jpg'.$this->dom_id, 'value'=>1, 'label'=>$this->get_tl('lab_force_jpg'), 'title'=>$this->get_tl('inf_force_jpg')]);
-                        $upload_options->add_child([$inp_force_jpg->label_tag(),$inp_force_jpg]);
-                    $subdiv_options->add_child([$upload_options]);
-                    
-                        $images_options = H::fieldset(['class'=>$this->css.'options_fieldset upload'], $this->get_tl('images'));
-                            if ($this->params['big_view']) {
-                                $checked = ($current_media) ? $current_media[0]['big_view'] : 1;
-                                $inp_big_view = H::input_checkbox(['name'=>'media_big_view'.$this->dom_id, 'value'=>1, 'label'=>$this->get_tl('lab_big_view'), 'title'=>$this->get_tl('inf_big_view'), 'checked'=>$checked, 'id'=>self::module_name.'_big_view'.$this->dom_id]);
-                                $images_options->add_child([$inp_big_view->label_tag(),$inp_big_view]);
-                            }
-                        if (count($images_options->get_children()) > 1) $subdiv_options->add_child([$images_options]); // > 1 because of the legend
-                $div_options->add_child([$ttl,$subdiv_options]);
-                // $js.= 'H_ui.toggle_accordion("'.$this->css.'options_ttl'.'","hidden");';
+        if ($this->params['options']){
+            $div_options = H::DIV(['class'=>$this->css.'options']);
+                $ttl = H::DIV(['class'=>$this->css.'options_ttl', 'data-target_id'=>self::module_name.'_options_subcontainer'.$this->dom_id], $this->get_tl('options'));
+                $subdiv_options = H::DIV(['class'=>$this->css.'options_subcontainer hidden', 'id'=>self::module_name.'_options_subcontainer'.$this->dom_id]);
+                    $upload_options = H::fieldset(['class'=>$this->css.'options_fieldset upload'], $this->get_tl('upload'));
+                        // forcer le jpg
+                        $inp_force_jpg = H::input_checkbox(['name'=>'media_force_jpg'.$this->dom_id, 'value'=>1, 'label'=>$this->get_tl('lab_force_jpg'), 'title'=>$this->get_tl('inf_force_jpg')]);
+                    $upload_options->add_child([$inp_force_jpg->label_tag(),$inp_force_jpg]);
+                $subdiv_options->add_child([$upload_options]);
                 
-                $container->add_child($div_options);
-            }
+                    $images_options = H::fieldset(['class'=>$this->css.'options_fieldset upload'], $this->get_tl('images'));
+                        if ($this->params['big_view']) {
+                            $checked = ($current_media) ? $current_media[0]['big_view'] : 1;
+                            $inp_big_view = H::input_checkbox(['name'=>'media_big_view'.$this->dom_id, 'value'=>1, 'label'=>$this->get_tl('lab_big_view'), 'title'=>$this->get_tl('inf_big_view'), 'checked'=>$checked, 'id'=>self::module_name.'_big_view'.$this->dom_id]);
+                            $images_options->add_child([$inp_big_view->label_tag(),$inp_big_view]);
+                        }
+                    if (count($images_options->get_children()) > 1) $subdiv_options->add_child([$images_options]); // > 1 because of the legend
+            $div_options->add_child([$ttl,$subdiv_options]);
+            // $js.= 'H_ui.toggle_accordion("'.$this->css.'options_ttl'.'","hidden");';
+            
+            $container->add_child($div_options);
+        }
         
             $base_name = 'media_data['.$this->media_id.']';
             $file_name = $base_name.'[files]';
@@ -377,6 +444,27 @@ class Media extends HelPHP_module
             $container->add_child( H::input_hidden(['name'=>'media_is_shared'.$this->dom_id, 'value'=>0, 'id'=>self::module_name.'_input_shared'.$this->dom_id]) );
         }
 
+        $output->add_child($container, 'uploader_container-'.$this->params['lang_iso']);
+
+        if ($this->params['lang_iso'] === false && count($CONFIG::AVAILABLE_LANGUAGES) > 1) {
+            foreach ($LANG->get_languages_data() as $key => $lang) {
+                $params = $this->params;
+                $params['lang_iso'] = $lang['iso'];
+                $t = [];
+                $t['dom_id'] = $this->dom_id.'-'.$lang['iso'];
+                $sub_med = new Media(null, $this->field_identifier.'-'.$lang['iso'], $this->field_id, $this->process, $params, $t);
+                $sub_med->get_dom_id($t);
+                $output->add_child( $sub_med->process_display($t, 'uploader') );
+                if ($this->params['lang'] === true && $LANG->current_language == $lang['iso']) {
+                    $chld = $output->find_child('uploader_container-'.$lang['iso'], 5);
+                    if ($chld) $chld->add_class('selected');
+                } else {
+                    $chld = $output->find_child('uploader_container-'.$lang['iso'], 5);
+                    if ($chld) $chld->add_class('hidden');
+                }
+            }
+        }
+
         $settings = [
             'media_id'=>$this->media_id,
             'params'=>$this->params
@@ -384,9 +472,9 @@ class Media extends HelPHP_module
         $js.= 'helphp_timeout(\'Media_a.create_instance("'.$this->dom_id.'", '.addslashes(json_encode($settings)).');\');';
         $script = H::script($js, ['autoremove'=>true]);
 
-        $container->add_child($script);
-        
-        return $container;
+        $output->add_child($script);
+
+        return $output;
     }
     
     //MEDIA UPLOAD
@@ -852,7 +940,7 @@ class Media extends HelPHP_module
         $field_identifier = explode('¤', $this->media_id)[0];
         $field_id = explode('¤', $this->media_id)[1];
 
-        if ($MEDIA->delete_media($field_identifier, $field_id, $post['media_use_key'])){
+        if ($MEDIA->delete_media_strict($field_identifier, $field_id, $post['media_use_key'])){
             return 'done';
         }
 
@@ -886,66 +974,12 @@ class Media extends HelPHP_module
             }
         }
     }
-    
-    // public function changeSymlink($post, $path = false)
-    // {
-    //     global $DB,$FS,$CONFIG;
-    //     if (isset($post[$this->ifld_data_field_identifier])) {
-    //         $field_identifier = strstr($post[$this->ifld_data_field_identifier], 'page') ? 'page%' : $post[$this->ifld_data_field_identifier];
-    //     } else {
-    //         $field_identifier = $post['field_identifier'];
-    //     }
-    //     if (!$path) {
-    //         $q = 'SELECT DISTINCT path FROM '.$this->bddt_data.' WHERE field_identifier=? AND field_id=?';
-    //         $paths = $DB->prepared_query_list($q, 'si', [isset($post[$this->ifld_data_field_identifier]) ? $post[$this->ifld_data_field_identifier] : $post['field_identifier'], $post[$this->ifld_data_field_id]]);
-    //         foreach ($paths as $key => $path) {
-    //             $this->changeSymlink($post, $path);
-    //         }
-    //         return;
-    //     }
-    //     $name = $FS->get_file_name($path);
-    //     $name = strstr($name, '-'.$this->media_id, true);
-        
-    //     $q = 'SELECT DISTINCT * FROM '.$this->bddt_data.' WHERE field_identifier LIKE ? AND path LIKE ? AND type=3 ORDER BY id ASC';
-    //     $list = $DB->prepared_query_list($q, 'ss', [$field_identifier, $path]);
-    //     if ($list) {
-    //         foreach ($list as $key => $line) {
-    //             if ($key == 0) {
-    //                 // le premier élément devient la nouvelle cible du lien symbolique
-    //                 $id = $list[0]['id'];
-    //                 $new_path = str_replace($post[$this->ifld_data_field_identifier].'-'.$post[$this->ifld_data_field_id], $list[0]['field_identifier'].'-'.$list[0]['field_id'], $path);
-    //                 //~ $new_path = $list[0]['path'];
-    //                 $new_field_identifier = $list[0]['field_identifier'];
-    //                 $new_field_id = $list[0]['field_id'];
-    //                 //~ unlink($CONFIG::HOME_FOLDER.$new_path);
-    //                 copy($CONFIG::HOME_FOLDER.$path, $CONFIG::HOME_FOLDER.$new_path);
-    //                 // change le type et le path
-    //                 $q = 'UPDATE '.$this->bddt_data.' SET type=1, path="'.$new_path.'" WHERE id='.$id;
-    //                 $DB->query($q);
-    //                 // change la cible du process
-    //                 $q = 'UPDATE '.$this->bddt_process.' SET field_identifier=?, field_id=? WHERE field_identifier=? AND field_id=?';
-    //                 $DB->prepared_query($q, 'sisi', [$new_field_identifier, $new_field_id, $post[$this->ifld_data_field_identifier], $post[$this->ifld_data_field_id]]);
-    //             } else {
-    //                 // les autres doivent pointer vers la nouvelle cible
-    //                 $q = 'UPDATE '.$this->bddt_data.' SET path="'.$new_path.'" WHERE id='.$line['id'];
-    //                 $DB->query($q);
-    //             }
-    //         }
-    //     }
-    // }
-    
-    // public function CopyTiny($post)
-    // {
-    //     global $DB;
-    //     //~ Utils::error_log($post);
-    //     if (isset($post['src_field_identifier']) && isset($post['dst_field_identifier'])) {
-    //         $q = 'SELECT DISTINCT * FROM '.$this->bddt_data.' WHERE field_identifier LIKE ?';
-    //         $list = $DB->prepared_query_list($q, 's', [$post['src_field_identifier']]);
-    //         if ($list) {
-    //             foreach ($list as $media_data) {
-    //                 $DB->duplicate_line($this->bddt_data, $media_data, ['field_identifier'=>$post['dst_field_identifier'], 'type'=>3]);
-    //             }
-    //         }
-    //     }
-    // }
+
+    public function delete_languages($post){
+        global $LANG, $MEDIA;
+
+        foreach ($LANG->get_languages_data() as $key => $lang) {
+            $MEDIA->delete_media_strict($this->field_identifier.'-'.$lang['iso'], $this->field_id);
+        }
+    }
 }

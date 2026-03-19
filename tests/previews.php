@@ -47,7 +47,7 @@ class Preview_test extends helPHP_Module {
 
     public function process_data(&$post) {
         if (parent::process_data($post) == false) {
-            //utilisateur non autorisé sur ce module
+            // user not authorized for this module
             return null;
         }
         

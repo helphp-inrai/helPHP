@@ -175,7 +175,7 @@ class Media {
                 $t = explode('¤', $media_id);
                 $field_identifier = $t[0];
                 $field_id = $t[1];
-                $this->delete_media($field_identifier,$field_id, 0);
+                $this->delete_media_strict($field_identifier, $field_id, 0);
             }
             
             if (isset($data['files'])){
@@ -446,7 +446,7 @@ class Media {
     /**
      * Copies a usage record from one media identifier to another.
      *
-     * Duplicates all entries in the media_use table for the given source media ID to the target media ID.
+     * Duplicates all entries in the media_use table for the given source media ID to the target media ID (including language media).
      *
      * @param string $media_id_to_copy The source logical media identifier.
      * @param string $media_id         The target logical media identifier.
@@ -456,12 +456,22 @@ class Media {
     public function copy_use($media_id_to_copy, $media_id){
         global $DB;
 
-        $q = 'SELECT * FROM '.$this->db_use.' WHERE field_identifier=?';
-        $uses = $DB->prepared_query_list($q, 's', [$media_id_to_copy]);
+        $t = explode('¤', $media_id_to_copy);
+        $field_identifier_to_copy = $t[0];
+        $field_id_to_copy = $t[1];
+
+        $t = explode('¤', $media_id);
+        $field_identifier = $t[0];
+        $field_id = $t[1];
+
+        $q = 'SELECT * FROM '.$this->db_use.' WHERE field_identifier=? OR field_identifier LIKE ?';
+        $uses = $DB->prepared_query_list($q, 'ss', [$media_id_to_copy, $field_identifier_to_copy.'-__¤'.$field_id_to_copy]);
         if (!$uses) return false;
         foreach($uses as $use){
+            $new_media_id = str_replace($field_identifier_to_copy, $field_identifier, $use['field_identifier']);
+            $new_media_id = str_replace($field_id_to_copy, $field_id, $new_media_id);
             $q = 'INSERT INTO '.$this->db_use.' SET field_identifier=?, use_key=?, process_key=?, id_media=?, id_process=?, share=1';
-            $DB->prepared_query($q,'siiii', [$media_id, $use['use_key'], $use['process_key'], $use['id_media'], $use['id_process']]);
+            $DB->prepared_query($q,'siiii', [$new_media_id, $use['use_key'], $use['process_key'], $use['id_media'], $use['id_process']]);
         }
         return true;
     }
@@ -1068,40 +1078,35 @@ class Media {
      * @return mixed HTML output or false if not found.
      */
     public function get_html($field_identifier = false, $field_id = false, $size = 'small', $use_key = false,$nodl=false){
-        if (!self::has_media($field_identifier, $field_id)) return false;
-
         $media = self::get_media($field_identifier, $field_id, $size, $use_key);
+        if ($media === false) return false;
         
-        if ($media){
-            global $CONFIG;
-            $media_id = $field_identifier.'¤'.$field_id;
-            
-            $mtime = filemtime($this->base_path.$media['path']);
-            if ($nodl==false || $CONFIG::SECUVID == false){
-                $path = $CONFIG::BASE_URL.'public/media/media.php?f='.$media_id.'&i='.$media['use_key'].'&p='.$media['process_key'].'&t='.$mtime;
-            }else{
-                $path = $CONFIG::BASE_URL.'public/media/media.php?pp='.$this->encode_video_src([$media_id,$media['use_key']]).'&t='.$mtime;
-            }
-            
-            switch ($media['type']){
-                case 1: // img
-                    $class = 'hlp_media image';
-                    $class.= ($media['width'] > $media['height']) ? ' landscape' : ' portrait';
-                    $output = H::IMG(['class'=>$class, 'src'=>$path, 'alt'=>$media['name']]);
-                break;
-                case 2: // video
-                    global $FS;
-                    $output = H::VIDEO(['class'=>'hlp_media video', 'controls'=>1]);
-                    $output->add_child( H::SOURCE(['src'=>$path, 'type'=>'video/'.$FS->get_file_ext($media['path'])]) );
-                break;
-                case 3: // audio
-                default:
-
-                break;
-            }
-            
-            return $output;
+        global $CONFIG;
+        $mtime = filemtime($this->base_path.$media['path']);
+        if ($nodl==false || $CONFIG::SECUVID == false){
+            $path = $CONFIG::BASE_URL.'public/media/media.php?f='.$media['media_id'].'&i='.$media['use_key'].'&p='.$media['process_key'].'&t='.$mtime;
+        }else{
+            $path = $CONFIG::BASE_URL.'public/media/media.php?pp='.$this->encode_video_src([$media['media_id'], $media['use_key']]).'&t='.$mtime;
         }
+        
+        switch ($media['type']){
+            case 1: // img
+                $class = 'hlp_media image';
+                $class.= ($media['width'] > $media['height']) ? ' landscape' : ' portrait';
+                $output = H::IMG(['class'=>$class, 'src'=>$path, 'alt'=>$media['name']]);
+            break;
+            case 2: // video
+                global $FS;
+                $output = H::VIDEO(['class'=>'hlp_media video', 'controls'=>1]);
+                $output->add_child( H::SOURCE(['src'=>$path, 'type'=>'video/'.$FS->get_file_ext($media['path'])]) );
+            break;
+            case 3: // audio
+            default:
+
+            break;
+        }
+        
+        return $output;
     }
     /**
      * Retrieves a media record for the given field identifier and ID.
@@ -1126,11 +1131,14 @@ class Media {
             return false;
         }
 
-        global $DB, $CONFIG;
+        global $DB, $CONFIG, $LANG;
         $media_id = $field_identifier.'¤'.$field_id;
+        $media_lang = $field_identifier.'-'.$LANG->current_language.'¤'.$field_id;
         $db_data = $DB->table('media_data');
         $db_use = $DB->table('media_use');
-        $q = 'SELECT d.id as id_media, u.id as id_use, d.type, d.path, d.big_view, d.width, d.height, u.use_key, u.process_key FROM '.$db_data.' d INNER JOIN '.$db_use.' u ON u.field_identifier=? AND u.id_media=d.id';
+        $q = 'SELECT d.id as id_media, u.id as id_use, d.type, d.path, d.big_view, d.width, d.height, u.use_key, u.process_key, u.field_identifier as media_id FROM '.$db_data.' d INNER JOIN ';
+        $q.= $db_use.' u ON (u.field_identifier=? OR (u.field_identifier=? AND NOT EXISTS';
+        $q.=' (SELECT 1 FROM '.$db_use.' WHERE field_identifier=?)) AND u.id_media=d.id)';
         if ($use_key !== false){
             $q.=' AND u.use_key=?';
         }
@@ -1148,9 +1156,9 @@ class Media {
             break;
         }
         if ($use_key !== false){
-            $media = $DB->prepared_query_line($q, 'si', [$media_id, $use_key]);
+            $media = $DB->prepared_query_line($q, 'sssi', [$media_lang, $media_id, $media_lang, $use_key]);
         } else {
-            $media = $DB->prepared_query_line($q, 's', [$media_id]);
+            $media = $DB->prepared_query_line($q, 'sss', [$media_lang, $media_id, $media_lang]);
         }
 
         // media exist in db but not in the disk
@@ -1160,7 +1168,7 @@ class Media {
         $media['nbinstances']= $DB->query_value($q);
 
         global $LANG;
-        $media['name'] = Language::load_short_translation_value('media_data-filename',$media['id_media'],$LANG->current_id_data);
+        $media['name'] = Language::load_short_translation_value($media['media_id'], $media['id_media'], $LANG->current_id_data);
         
         return $media;
     }
@@ -1187,17 +1195,19 @@ class Media {
             return false;
         }
         
-        global $DB;
+        global $DB, $LANG;
         $media_id = $field_identifier.'¤'.$field_id;
+        $media_lang = $field_identifier.'-'.$LANG->current_language.'¤'.$field_id;
         $db_data = $DB->table('media_data');
         $db_use = $DB->table('media_use');
         // get all the medias for one field identifier as a list of id
-        $q = 'SELECT GROUP_CONCAT(id_media SEPARATOR ",") as id_medias, use_key FROM '.$db_use.' WHERE field_identifier=? GROUP BY use_key';
-        $tmp = $DB->prepared_query_list($q, 's', [$media_id]);
+        $q = 'SELECT GROUP_CONCAT(id_media SEPARATOR ",") as id_medias, use_key FROM '.$db_use.' WHERE (field_identifier=? OR';
+        $q.=' (field_identifier=? AND NOT EXISTS (SELECT 1 FROM '.$db_use.' WHERE field_identifier=?))) GROUP BY use_key';
+        $tmp = $DB->prepared_query_list($q, 'sss', [$media_lang, $media_id, $media_lang]);
         $medias = [];
         foreach($tmp as $line){
             // get the nearest to the size wanted for each use key
-            $q = 'SELECT d.id as id_media, u.id as id_use, d.type, d.path, d.big_view, d.width, '.$line['use_key'].' as use_key FROM '.$db_data.' d INNER JOIN '.$db_use.' u';
+            $q = 'SELECT d.id as id_media, u.id as id_use, d.type, d.path, d.big_view, d.width, '.$line['use_key'].' as use_key, u.field_identifier as media_id FROM '.$db_data.' d INNER JOIN '.$db_use.' u';
             $q.=' ON u.id_media=d.id AND d.id IN ('.$line['id_medias'].')';
             switch (strtolower($size)) {
                 case 'small':
@@ -1219,7 +1229,7 @@ class Media {
             $media['nbinstances']= $DB->query_value($q);
 
             global $LANG;
-            $media['name'] = Language::load_short_translation_value('media_data-filename',$media['id_media'],$LANG->current_id_data);
+            $media['name'] = Language::load_short_translation_value($media['media_id'], $media['id_media'], $LANG->current_id_data);
 
             array_push($medias, $media);
         }
@@ -1238,11 +1248,12 @@ class Media {
             return false;
         }
         
-        global $DB;
+        global $DB, $LANG;
         $media_id = $field_identifier.'¤'.$field_id;
+        $media_lang = $field_identifier.'-'.$LANG->current_language.'¤'.$field_id;
         $db_data = $DB->table('media_data');
         $db_use = $DB->table('media_use');
-        $q = 'SELECT count(d.id) FROM '.$db_data.' d INNER JOIN '.$db_use.' u ON u.field_identifier="'.$media_id.'" AND d.id=u.id_media';
+        $q = 'SELECT count(d.id) FROM '.$db_data.' d INNER JOIN '.$db_use.' u ON ((u.field_identifier="'.$media_id.'" OR u.field_identifier LIKE "'.$media_lang.'") AND d.id=u.id_media)';
         $count = $DB->query_value($q);
         if ($count > 0) {
             return true;
@@ -1252,7 +1263,7 @@ class Media {
     }
 
     /**
-     * Deletes all media for a given field identifier and use key.
+     * Deletes all media for a given field identifier and use key (including language one).
      * Only deletes the media file if it is not referenced elsewhere.
      *
      * @param string|false $field_identifier The field identifier.
@@ -1262,7 +1273,32 @@ class Media {
      * @return bool True on success, false on failure.
      */
     public function delete_media($field_identifier = false, $field_id = false, $use_key = false){
-        global $DB, $FS, $CONFIG;
+        global $LANG;
+
+        if ($field_identifier === false || $field_id === false) {
+            return false;
+        }
+
+        foreach($LANG->get_languages_data() as $lang){
+            $this->delete_media_strict($field_identifier.'-'.$lang['iso'], $field_id, $use_key);
+        }
+
+        $this->delete_media_strict($field_identifier, $field_id, $use_key);
+
+        return true;
+    }
+    /**
+     * Deletes all media for a given field identifier and use key. Will act on the exact field_identifier set and will not try to act on language linked media.
+     * Only deletes the media file if it is not referenced elsewhere.
+     *
+     * @param string|false $field_identifier The field identifier.
+     * @param string|false $field_id         The field ID.
+     * @param int|false    $use_key          The use key.
+     *
+     * @return bool True on success, false on failure.
+     */
+    public function delete_media_strict($field_identifier = false, $field_id = false, $use_key = false){
+        global $DB, $CONFIG;
 
         if ($field_identifier === false || $field_id === false) {
             return false;

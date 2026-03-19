@@ -77,5 +77,8 @@ $tl_data = array(
         'multi_del' => 'Etes vous sur de vouloir supprimer ces images ?',
         'media_data-filename' => 'Nom du fichier',
         'edit_preview'=>'Prévisualisation',
+        'activate_lang'=>'Activer les médias par langues',
+        'default'=>'Défaut',
+        'delete_languages_media'=>'Êtes-vous sûr ? Cela va supprimer tout les médias liés aux langues. Seulement le média par défaut sera conservé.'
     )
 );

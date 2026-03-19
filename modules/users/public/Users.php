@@ -141,7 +141,7 @@ class Users extends HelPHP_module{
 
         $mailer = new Mail();
 
-        $url_activate = $CONFIG::BASE_URL.'?users|users_action=users_activate|'.User::activate.'='.$code.'|login='.$username;
+        $url_activate = $CONFIG::BASE_URL.'?users=|users_action=users_activate|'.User::activate.'='.$code.'|login='.$username;
 
         // $link_style = 'style="display: inline-block;text-decoration: underline;outline: none;text-align: center;box-shadow: 0px 0px 0px #5d5d5d;cursor: pointer;border: 1px solid transparent;color: #FAFAFA;padding: 8px 20px;background: #0894D2;border-radius: 3px;text-shadow: none;"'
         $link = '<a href="'.$url_activate.'">'.$this->get_tl('click_me_activate').'</a>';

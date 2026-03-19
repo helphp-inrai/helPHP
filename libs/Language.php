@@ -296,7 +296,7 @@ class Language {
         $table_allowed = $DB->table(Language::lang_module_name.'_allowed');
         $table_data = $DB->table(Language::lang_module_name.'_data');
 
-        $q = 'SELECT DISTINCT a.id_data, a.id, d.iso, d.fr AS label, d.own_language AS own, d.libretranslate';
+        $q = 'SELECT DISTINCT a.id_data, a.id, d.iso, d.en AS label, d.own_language AS own, d.libretranslate';
         $q.= ' FROM '.$table_allowed.' a';
         $q.= ' LEFT JOIN '.$table_data.' d ON a.id_data = d.id';
         $q.= ' ORDER BY a.id';

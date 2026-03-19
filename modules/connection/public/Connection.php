@@ -340,7 +340,7 @@ class Connection extends HelPHP_module {
         $mail_content = $this->get_tl('reinit_password_mail', [$user_data['login'], $CONFIG::DOMAIN]);
 
         // $link_style = 'style="display: inline-block;text-decoration: none;outline: none;text-align: center;box-shadow: 0px 0px 0px #5d5d5d;cursor: pointer;border: 1px solid transparent;color: #FAFAFA;padding: 8px 20px;background: #0894D2;border-radius: 3px;text-shadow: none;"';
-        $mail_content.= '<a href='.$CONFIG::BASE_URL.'?users|users_action=users_new_password|code='.$code.'>Reset password</a></br>';
+        $mail_content.= '<a href='.$CONFIG::BASE_URL.'?users=|users_action=users_new_password|code='.$code.'>Reset password</a></br>';
         
         $mail = new Mail();
         global $CONFIG_EMAIL;

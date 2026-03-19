@@ -88,7 +88,8 @@ class Deco extends HelPHP_module {
         $this->scroll = isset($post['scroll']) ? isset($post['scroll']) : $this->scroll;
 
         global $DB;
-        $q = ' SELECT * FROM '.$this->bddt_data.' WHERE id=?';
+        $q = ' SELECT deco.*, bloc.id as id_block_data FROM '.$this->bddt_data.' deco LEFT JOIN '.$DB->table('block_data').' bloc ON';
+        $q.=' (deco.block_name=bloc.name) WHERE deco.id=?';
         $data = $DB->prepared_query_line($q, 'i', [$post['id']]);
         if (!$data) {
             Utils::error_log('data not found in db for id '.$post['id']);
@@ -103,6 +104,8 @@ class Deco extends HelPHP_module {
             $output = H::group('deco_display'.$this->dom_id);
         }
 
+        $css = \helPHP\modules\csseditor\admin\Csseditor::get_css_source('block', $data['id_block_data']);
+        if ($css) $output->add_child( H::STYLE(null, $css) );
         $output->add_child( \helPHP\modules\block\Bridge::load('deco', [], $data['block_name'], $data['id_block']) );
 
         $js = '';
@@ -119,17 +122,4 @@ class Deco extends HelPHP_module {
 
         return $output;
     }
-
-    // public function showDeco($output)
-    // {
-    //     $this->dom_container .= '_'.$this->css;
-        
-    //     $output = $this->integrate_module($output);
-        
-    //     if ($this->scroll !== false) {
-    //         return [$output, H::script('H_ui.scroll_toggle_class("'.$this->dom_container.'", '.$this->scroll.', "fixed");')];
-    //     } else {
-    //         return $output;
-    //     }
-    // }
 }

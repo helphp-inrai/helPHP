@@ -14,7 +14,7 @@ class Test extends helPHP_Module
 {
 
     //----------------------------------------------------------------------------------------------
-    // variables indispensables à tous les modules
+    // essential variables for all modules
     //----------------------------------------------------------------------------------------------
 
     const module_name = 'test';
@@ -24,26 +24,26 @@ class Test extends helPHP_Module
 
     protected $admin = false;
 
-    // nom du champ d'action intégré au formulaire (ici c'est soit un bouton submit soit un select)
+    // name of the form action field (here either a submit button or a select)
     protected $input_action_identifier = self::module_name.'_action';
 
     protected $action_check_user_right = self::module_name.'_check_url';
     //----------------------------------------------------------------------------------------------
-    // variables spécifiques à ce module
+    // module-specific variables
     //----------------------------------------------------------------------------------------------
 
     private $css_class = self::module_name.'_admin_';
     
     private $groups = [];
     
-    // nom du div conteneur dom où afficher le retour html
+    // name of the DOM container div to display the HTML output
     protected $dom_container = '';
     // protected $dom_container = self::module_name.'_container';
 
     public function __construct($dom_container = null, $comments = false)
     {
         // global $DB;
-        // execution de la classe parent qui initialise la langue et les données de traduction
+        // execute parent class which initializes the language and translation data
 
         parent::__construct($dom_container);
         
@@ -52,7 +52,7 @@ class Test extends helPHP_Module
     public function process_data(&$post)
     {
         if (parent::process_data($post) == false) {
-            //utilisateur non autorisé sur ce module
+            // user not authorized for this module
            return null;
         }
         // Utils::error_log($post);

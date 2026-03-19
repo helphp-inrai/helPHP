@@ -1,6 +1,6 @@
 <?php
 $tl_data = array(
     'en'=>array (
-        'title'=>'News'
+        'title'=>'What\'s new ?'
     )
 );

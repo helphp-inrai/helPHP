@@ -444,7 +444,7 @@ class Filesystem
      * @param mixed $destination the destination folder
      * @param mixed $newName='' if it's necessary to rename
      * 
-     * @return String cmd to execute
+     * @return Array cmd to execute
      * 
      */
     private function recurse_copy($path,$destination,$newName='')
@@ -486,6 +486,12 @@ class Filesystem
             $res = file_put_contents($path, $content);
             if ($res !== false) {
                 chmod($path, $rights);
+                // if this chmod fail, you have perhaps some permissions issue, 
+                // to let apache and your user handle files, you should use some shell commands like:
+                // usermod -a -G www-data your_user
+                // chown -R your_user:www-data /instance
+                // chmod 664 -R  /instance
+
             }
             return $res;
         } else {
@@ -1238,10 +1244,10 @@ class Filesystem
                                 array_push($sequenceFile['child'], $file);
                                 
                             } else {
-                                // Pas le même nom, fin de séquence
+                                // Not the same name, end of sequence
                                 if ($inSequence){
-                                    // on sort d'une sequence, recupere la ligne que l'on vient d'ajouter
-                                    // ajoute celle pour la sequence et remet la derniere
+                                    // leaving a sequence, retrieve the line we just added
+                                    // add the one for the sequence and reinsert the last one
                                     $last = array_pop($files);
                                     
                                     $sequence = array(
@@ -1262,7 +1268,7 @@ class Filesystem
                                 }
                                 
                                 if ($sequenceName != ''){
-                                    // potentiel début d'une nouvelle séquence
+                                    // potential start of a new sequence
                                     $sequenceIndex = str_replace($sequenceName, '', $noext);
                                     $sequenceFile = array(
                                         'type'=>'sequence',

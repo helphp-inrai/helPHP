@@ -63,6 +63,9 @@ class News extends HelPHP_module {
                 $q_groups = ' AND grp.id_group_data IS NULL';
             }
 
+            $q = 'SELECT number_display FROM '.$DB->table('block_news').' WHERE id=?';
+            $limit = $DB->prepared_query_value($q, 'i', [$post[$this->ifld_news_id]]);
+
             $q = 'SELECT DISTINCT doc.id as id, sht.value as title, lng.value as description, ind.id as indexation,doc.publication_date as date FROM '.$DB->table('document_data').' doc';
             $q.=' LEFT JOIN '.$DB->table('languages_short').' sht ON (sht.field_identifier = "document_data-label" AND sht.id_item = doc.id AND sht.id_data='.$LANG->current_id_data.')';
             $q.=' LEFT JOIN '.$DB->table('languages_long').' lng ON (lng.field_identifier = "document_data-summary" AND lng.id_item = doc.id AND lng.id_data='.$LANG->current_id_data.')';
@@ -70,7 +73,7 @@ class News extends HelPHP_module {
             $q.=' LEFT OUTER JOIN '.$DB->table('group_content').' grp ON (grp.field_identifier="document" AND grp.id_item=doc.id)';
             $q.=' WHERE doc.active=1';
             $q.= $q_groups;
-            $q.=' ORDER BY publication_date DESC LIMIT 0, 3';
+            $q.=' ORDER BY publication_date DESC LIMIT 0, '.intval($limit);
 
             $lst = $DB->query_list($q);
 

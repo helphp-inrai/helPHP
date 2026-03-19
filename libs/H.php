@@ -197,7 +197,7 @@ class H extends Html {
         $head->add_child(H::SCRIPT('', array('src'=>$pre.'js/storages.js'.$refresher , 'language'=>'Javascript')));
         
         if ($CONFIG::DEVMODE) {
-            $head->add_child(H::SCRIPT('',array('src'=>$pre.'js/externals/tinymce/tinymce.min.js', 'language'=>'Javascript')));
+            $head->add_child(H::SCRIPT('',array('src'=>$pre.'js/externals/tinymce/tinymce.min.js.gz', 'language'=>'Javascript')));
             $head->add_child(H::SCRIPT('',array('src'=>$pre.'js/externals/alwan/alwan.min.js', 'language'=>'Javascript')));
             $head->add_child(H::LINK(array('rel'=>'stylesheet' , 'type'=>'text/css', 'href'=>$pre.'js/externals/alwan/alwan.min.css')));
             $head->add_child(H::load_js($public, $pre, $refresher));
@@ -302,7 +302,7 @@ class H extends Html {
         $attributes['style'] = 'pointer-events: none;';
 
         $svg = H::tag(H::SVG, $attributes);
-            $use = H::tag(H::USE, ['href'=>$CONFIG::BASE_URL.'./images/icons/'.H::svg_sprite.'#'.$name]);
+            $use = H::tag(H::USE, ['href'=>$CONFIG::BASE_URL.'images/icons/'.H::svg_sprite.'#'.$name]);
         $svg->add_child($use);
 
         return $svg;

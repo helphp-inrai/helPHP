@@ -112,7 +112,8 @@ class News extends HelPHP_module {
 
             $form->add_child(H::input_hidden(['name'=>$this->ifld_news_id, 'value'=>$post[$this->ifld_news_id], 'data-alwaysposted'=>1]));
 
-                $form->add_child([]);
+                $number_display = H::input_integer(['name'=>$this->ifld_news_number_display,'id'=>$this->ifld_news_number_display, 'label'=>$this->get_tl('number_display'), 'value'=>$post[$this->ifld_news_number_display], 'class'=>'inp_int']);
+                $form->add_child([$number_display->label_tag(),$number_display]);
 
 
                 $block_btns = H::DIV(['class'=>$this->css.'block_btns edit_buttons']);
@@ -137,14 +138,14 @@ class News extends HelPHP_module {
         if($post[$this->ifld_news_id] == 0 || !isset($post[$this->ifld_news_id])){
             // create
             $post[$this->ifld_news_creadate] = date("Y-m-d H:i:s"); 
-            $q = 'INSERT INTO '.$DB->table('block_news').' SET creadate=?';
-            $success = $DB->prepared_query($q,'s',[$post[$this->ifld_news_creadate]]);
+            $q = 'INSERT INTO '.$DB->table('block_news').' SET number_display=?,creadate=?';
+            $success = $DB->prepared_query($q,'is',[$post[$this->ifld_news_number_display],$post[$this->ifld_news_creadate]]);
             $post[$this->ifld_news_id] = $DB->last_insert_id();
             
         }else{
             $post[$this->ifld_news_creadate] = date("Y-m-d H:i:s"); 
-            $q = 'UPDATE '.$DB->table('block_news').' SET creadate=? where id=?';
-            $success = $DB->prepared_query($q,'si',[$post[$this->ifld_news_creadate],$post[$this->ifld_news_id]]);
+            $q = 'UPDATE '.$DB->table('block_news').' SET number_display=?,creadate=? where id=?';
+            $success = $DB->prepared_query($q,'isi',[$post[$this->ifld_news_number_display],$post[$this->ifld_news_creadate],$post[$this->ifld_news_id]]);
         }
         if (isset($post['need_id'])) {
             $_SESSION[$post['need_id']] = $post[$this->ifld_news_id];
@@ -164,4 +165,4 @@ class News extends HelPHP_module {
 
     }
 }
-$json_sql='"{\"name\":\"news\",\"json\":\"[]\"}';
+$json_sql='"{\"name\":\"news\",\"json\":\"[{\"type\":\"integer\",\"name\":\"number_display\",\"limit\":\"\",\"index\":\"\",\"sort_order\":\"1\"}]\"}';

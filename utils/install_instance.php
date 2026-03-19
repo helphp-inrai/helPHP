@@ -73,7 +73,7 @@ function install_instance($home_folder, $admin_user, $admin_pass, $db_root_user,
     // create public and admin folder
     $old_umask = umask(2);
     if (!file_exists($home_folder.'public')) mkdir($home_folder.'public', 0775, true);
-    if (!file_exists($home_folder.'admin')) mkdir($home_folder.'admin', 0775, true);
+    if (!file_exists($home_folder.$CONFIG::ADMIN_FOLDER)) mkdir($home_folder.$CONFIG::ADMIN_FOLDER, 0775, true);
 
     // make all directories and symbol link needed by the instance to work properly
     // js folders

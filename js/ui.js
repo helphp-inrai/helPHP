@@ -697,57 +697,6 @@ class H_ui {
                     }
                 }
             }
-
-            // let iso_list = [];
-            // let visible = false;
-            // let previous_hidden = false;
-            // let input_hidden = false;
-            // for(let i = 0; i < selector.children.length; i++){
-            //     let child = selector.children[i];
-            //     if (child.name && child.name == 'hlp_translate_selected_lang') {
-            //         input_hidden = child;
-            //         continue;
-            //     }
-            //     if (child.dataset.iso == button.dataset.iso) {
-            //         child.classList.toggle('hidden',true);
-            //         child.classList.toggle('selected',false);
-            //         previous_hidden = true;
-            //     } else if (previous_hidden && !visible) {
-            //         child.classList.toggle('hidden',false);
-            //         child.classList.toggle('selected',true);
-            //         visible = true;
-            //         if (input_hidden) input_hidden.value = child.dataset.iso;
-            //     } else {
-            //         child.classList.toggle('hidden',true);
-            //         child.classList.toggle('selected',false);
-            //     }
-            //     if(child.classList.contains('hidden')){
-            //         iso_list.push(child.dataset.iso);
-            //     }
-            // }
-
-            // if (!visible){
-            //     // toggle to visible the first iso.
-            //     selector.children[1].classList.toggle('hidden',false);
-            //     selector.children[1].classList.toggle('selected',true);
-            //     delete(iso_list[0]);
-            //     if (input_hidden) input_hidden.value = selector.children[1].dataset.iso;
-            // }
-
-            // let container = selector.parentNode;
-            // for(let i = 0; i < container.children.length;i++){
-            //     let child = container.children[i];
-            //     if(child.dataset && child.dataset.iso){
-            //         if(iso_list.indexOf(child.dataset.iso) > -1){
-            //             child.classList.toggle('hidden',true);
-            //             child.classList.toggle('selected',false);
-            //         }else{
-            //             child.classList.toggle('hidden',false);
-            //             child.classList.toggle('selected',true);
-            //         }
-            //     }
-
-            // }
         },
         translate: function(event){
             let container = event.target.parentNode;
@@ -983,8 +932,7 @@ window.H_ui = H_ui;
  * - disable_background_click: boolean (disable closing by clicking background and pressing ESC key)<br>
  * - auto_alignement: boolean (enable auto-alignment on content change)<br>
  * - special: boolean (special modal, higher z-index)<br>
- * - special_level: number|string (priority level for special modals, or 'err' for error modals)<br>
-
+ * - special_level: number|string (priority level / css z_index for special modals, or 'err' for error modals with +100 as z_index)<br>
  * Used as h.libs.ui_window.
  */
 class H_ui_window {
@@ -1279,6 +1227,7 @@ class H_ui_window {
 
     /**
      * Adds or removes the modal mask as needed.
+     * if the special_level is not an int but 'err' like error, the z_index += 100 !
      * @param {boolean} value - True to enable modal.
      */
     set modal(value){

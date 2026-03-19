@@ -2482,7 +2482,7 @@ class Csseditor extends HelPHP_module {
             
                 $FS->copy($path, $tmp_path);
 
-                $FS->pack([$tmp_path.$name], $CONFIG::HOME_FOLDER.'temp/', $data_return['name'], 'zip');
+                $FS->pack([$tmp_path], $CONFIG::HOME_FOLDER.'temp/', $data_return['name'], 'zip');
                 // store the zip name in the session. Use it in the download theme function
                 $_SESSION['theme_file_to_download'] = $data_return['name'].'.zip';
                 

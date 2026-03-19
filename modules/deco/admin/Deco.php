@@ -296,8 +296,6 @@ class Deco extends HelPHP_module {
     public function save_block($post){
         global $DB;
 
-        Utils::error_log($post);
-
         $q = 'SELECT block_name, id_block FROM '.$this->bddt_data.' WHERE id=?';
         $prev = $DB->prepared_query_line($q, 'i', [$post[$this->ifld_data_id]]);
         if ($prev['block_name'] != $post['block_name']){
@@ -307,8 +305,6 @@ class Deco extends HelPHP_module {
     }
     public function delete_block($post){
         global $DB;
-
-        Utils::error_log($post);
 
         $q = 'UPDATE '.$this->bddt_data.' SET block_name="", id_block=0 WHERE id=?';
         $DB->prepared_query($q, 'i', [$post[$this->ifld_data_id]]);

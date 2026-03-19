@@ -830,7 +830,7 @@ class DB
                     array_push($tmp, $line);
                 }
             }
-            // on libère la mémoire
+            // free up memory
             mysqli_free_result($r);
 
             return $tmp;
@@ -921,8 +921,8 @@ class DB
     public function table_exists($table_name, $forceRequest = false)
     {
         if (!$forceRequest) {
-            if (isset($existing_tables[$table_name])) {
-                return $existing_tables[$table_name];
+            if (isset($this->existing_tables[$table_name])) {
+                return $this->existing_tables[$table_name];
             }
         }
         

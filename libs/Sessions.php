@@ -113,6 +113,9 @@ class Sessions
         if (!$SESSION->redis) {
             if ($CONFIG::DEVMODE) {
                 $SESSION->init_db();
+            }else{
+                $SESSION->db_sessions = $DB->table('sessions');
+                $SESSION->db_references = $DB->table('sessions_references');
             }
             
             session_set_save_handler(
@@ -144,7 +147,7 @@ class Sessions
         if (!$DB->table_exists($this->db_sessions)){
             $json_db = ['table'=>$this->db_sessions, 'fields'=>[
                 'id'=>                  ['type'=>'bigint', 'primary'=>true],
-                'session_id'=>          ['type'=>'varchar', 'size'=>32, 'default'=>'', 'index'=>true],
+                'session_id'=>          ['type'=>'varchar', 'size'=>255, 'default'=>'', 'index'=>true],
                 'session_data'=>        ['type'=>'text', 'default'=>'NULL'],
                 'creation_time'=>       ['type'=>'timestamp', 'default'=>'current_timestamp'],
                 'session_expiration'=>  ['type'=>'timestamp', 'default'=>'current_timestamp'],
@@ -156,7 +159,7 @@ class Sessions
         $this->db_references = $DB->table('sessions_references');
         if (!$DB->table_exists($this->db_references)){
             $json_db = ['table'=>$this->db_references, 'fields'=>[
-                'session_id'=>  ['type'=>'varchar', 'size'=>32, 'default'=>''],
+                'session_id'=>  ['type'=>'varchar', 'size'=>255, 'default'=>''],
                 'id'=>          ['type'=>'bigint', 'default'=>'0'],
                 'updatetime'=>  ['type'=>'timestamp', 'default'=>'current_timestamp']
             ]];

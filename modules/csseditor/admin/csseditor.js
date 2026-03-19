@@ -703,7 +703,7 @@ class Csseditor_a extends H_module {
                 i++;
                 let variable = this.variables[source][key];
                 if (variable.medias[id_media]) {
-                    let properties = Array.from(document.getElementById('csseditor_var-' + i + this.dom_id).getElementsByClassName('csseditor_admin_var_properties'));
+                    let properties = Array.from(document.getElementById('csseditor_var-' + this.#source.id + '-' + i + this.dom_id).getElementsByClassName('csseditor_admin_var_properties'));
                     properties.forEach(property => {
                         H_dom.toggle_class(property, 'hidden', property.dataset.id != id_media);
                     });
@@ -837,7 +837,8 @@ class Csseditor_a extends H_module {
             let data = JSON.parse(res);
             
             if (data.type == 'theme') {
-                fetch(this.url + '?csseditor_action=csseditor_download_theme').then(resp => {
+                // add time to request to ignore cached version
+                fetch(this.url + '?csseditor_action=csseditor_download_theme&t=' + Date.now()).then(resp => {
                     if (resp.status === 200) {
                         return resp.blob();
                     } else {

@@ -25,12 +25,9 @@
  */
 namespace helPHP\modules\indexation\admin;
 
-use helPHP\libs\Ajax;
 use helPHP\libs\HelPHP_module;
 use helPHP\libs\H;
 use helPHP\libs\Language;
-use helPHP\libs\Media;
-use helPHP\libs\Utils;
 use helPHP\modules\media\admin\Media as Media_UI;
 
 class Indexation extends HelPHP_module {
@@ -102,7 +99,7 @@ class Indexation extends HelPHP_module {
             $label_activate = H::SPAN(['class'=>$this->css.'label'], $this->get_tl('activated'));
             $activated = H::input_checkbox(array('data-alwaysposted'=>1, 'name'=>$this->ifld_data_activated, 'checked'=>$checked, 'value'=>1));
 
-   
+
         $form->add_child([$label_activate, $activated]);
             $hidden_id = H::input_hidden(array('data-alwaysposted'=>1, 'name'=>$this->ifld_data_id, 'value'=>$post[$this->ifld_data_id]));
             $hidden_name = H::input_hidden(array('data-alwaysposted'=>1, 'name'=>$this->ifld_data_module_name, 'value'=>$post[$this->ifld_data_module_name]));
@@ -112,9 +109,9 @@ class Indexation extends HelPHP_module {
             $tl_block = $this->translate_block($post, [$this->ifld_data_title, $this->ifld_data_keywords, $this->ifld_data_description], 'ssl', [2=>['no_tiny'=>true]]);
 
         $form->add_child($tl_block);
-         
+        
 
-            $params = ['accept'=>'image/*', 'label'=>$this->get_tl('image')];
+            $params = ['accept'=>'image/*', 'label'=>$this->get_tl('image'), 'list'=>true];
             $process['process'] = [['type'=>'image_to_file', 'quality'=>80]];
             $image = Media_UI::display('uploader', $params, $this->ifld_data_image, $post[$this->ifld_data_id], $process);
 

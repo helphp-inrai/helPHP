@@ -147,11 +147,11 @@ class Burger extends H_module {
         H_dom.toggle_class(this.menu_parent, 'hidden', false);
         H_dom.toggle_class(this.menu_parent, 'visible', true);
         
-        if (document.body.style.overflow != 'hidden') {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'auto';
-        }
+        // if (document.body.style.overflow != 'hidden') {
+        //     document.body.style.overflow = 'hidden';
+        // } else {
+        //     document.body.style.overflow = 'auto';
+        // }
         window.scrollTo(0, 0);
 
         h.e.add_event_click_outside(this.menu_parent, this.close.bind(this));
