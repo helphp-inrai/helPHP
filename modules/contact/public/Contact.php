@@ -105,7 +105,7 @@ class Contact extends HelPHP_module {
     }
     public function send($post) {
 
-                
+        global $CONFIG_EMAIL, $CONFIG;        
         if ($this->check_token($post,300)) {
             if (isset($post['contact_lastname']) && isset($post['contact_email']) && isset($post['contact_subject']) && isset($post['contact_content'])) {
 
@@ -130,6 +130,12 @@ class Contact extends HelPHP_module {
                 $message.='Message : '."<br>".$content_mess;
 
                 $sended = false;
+                if ($CONFIG_EMAIL::EMAIL_SIGNATURE_BODY != ''){
+                    $message.= $CONFIG_EMAIL::EMAIL_SIGNATURE_BODY;
+                    foreach($CONFIG_EMAIL::EMBEDED as $to_embed){
+                        $this->mail->mail->AddEmbeddedImage($CONFIG::HOME_FOLDER.$to_embed['src'], $to_embed['name']);
+                    } 
+                }
                 foreach ($this->email_receiver as $to) {
                     if ($this->mail->Send($to, $subject, $message, $email_sender)) {
                         $sended = true;
