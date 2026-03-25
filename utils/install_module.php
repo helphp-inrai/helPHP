@@ -111,11 +111,12 @@ function install_module($instance_path, $module_name, $ignore_file_and_folder = 
 
     $files = '';
     $folders = '';
+    $symlinks = '';
 
     include($modules_folder.$module_name.'/install.php');
 
-    //creating folders
     if (!$ignore_file_and_folder) {
+        //creating folders
         if (is_array($folders)) {
             if (sizeof($folders)>0) {
                 foreach ($folders as $fold) {
@@ -135,6 +136,17 @@ function install_module($instance_path, $module_name, $ignore_file_and_folder = 
                 }
             }
         }
+
+        // making symbolic link
+        if (is_array($symlinks)) {
+            if (sizeof($symlinks)>0) {
+                foreach ($symlinks as $symlink) {
+                    $symlink[1] = str_replace("admin/", $CONFIG::ADMIN_FOLDER, $symlink[1]);
+                    if (file_exists($modules_folder.$symlink[0])) shell_exec('ln -sf '.$modules_folder.$symlink[0].' '.$instance_path.'/'.$symlink[1]);
+                }
+            }
+        }
+
     }
 
     //creating tables and inserting data

@@ -123,7 +123,7 @@ class Video extends HelPHP_module {
                 $nodonwload = H::input_checkbox(['name'=>$this->ifld_video_nodonwload,'id'=>$this->ifld_video_nodonwload, 'label'=>$this->get_tl('nodonwload'), 'value'=>1, 'class'=>' inp_check' , 'checked'=>$checked]);
                 $label_video = H::SPAN(['class'=>$this->css.'label'], $this->get_tl('video'));
                 $params = ['accept'=>'video/*'];
-                $video = Media_UI::display('uploader', $params, $this->ifld_video_video, $post[$this->ifld_video_id]);
+                $video = Media_UI::display('uploader', $params, $this->ifld_video_video, $post[$this->ifld_video_id], ['process'=>[['type'=>'recomp']]]);
                 $youtubesrc = H::input_text(['name'=>$this->ifld_video_youtubesrc,'id'=>$this->ifld_video_youtubesrc, 'label'=>$this->get_tl('youtubesrc'), 'value'=>$post[$this->ifld_video_youtubesrc], 'class'=>'inp_short_text']);
                 $form->add_child([$autoplay->label_tag(),$autoplay,$control->label_tag(),$control,$vloop->label_tag(),$vloop,$nodonwload->label_tag(),$nodonwload,$label_video,$video,$youtubesrc->label_tag(),$youtubesrc]);
 

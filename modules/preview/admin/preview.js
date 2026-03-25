@@ -462,7 +462,7 @@ class Preview_a extends H_module {
         modules.forEach((elem) => {
             let btn = {};
             btn.label = elem.name;
-            btn.handler = ()=>{change_hash(elem.name, elem.id);};
+            btn.handler = ()=>{this.change_hash(elem.name, elem.id);};
             settings.buttons.push(btn);
         });
         let modal = new H_ui_prompt(settings);

@@ -6,9 +6,12 @@ $files = array(
     0 => ['core/admin/index.php', 'admin/core/index.php', 0755],
     1 => ['core/admin/main_index.php', 'admin/index.php', 0755],
     2 => ['core/public/index.php', 'public/core/index.php', 0755],
-    3 => ['core/public/upload.php', 'public/core/upload.php', 0755],
-    4 => ['core/public/main_index.php', 'index.php', 0755],
-    5 => ['core/public/.htaccess', '.htaccess', 0755]
+    3 => ['core/public/main_index.php', 'index.php', 0755],
+    4 => ['core/public/.htaccess', '.htaccess', 0755]
+);
+
+$symlinks = array(
+    0 => ['core/public/upload.php', 'public/core/upload.php'],
 );
 
 $folders = array(

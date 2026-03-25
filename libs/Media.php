@@ -240,11 +240,11 @@ class Media {
                                 } else {
                                     $process = [];
                                 }
-                                $process['output'] = (isset($process['output'])) ? $process['output'] : $file_path;
                                 $process['input'] = $file_path;
                                 $process['use_key'] = $use_key;
                                 $process['pid'] = 'video'.$media_id;
                                 $process['media_id'] = $media_id;
+                                \helPHP\libs\Utils::error_log($process);
                                 $this->video_process($process);
                                 $media_processed = true;
                             }
@@ -1136,9 +1136,9 @@ class Media {
         $media_lang = $field_identifier.'-'.$LANG->current_language.'¤'.$field_id;
         $db_data = $DB->table('media_data');
         $db_use = $DB->table('media_use');
-        $q = 'SELECT d.id as id_media, u.id as id_use, d.type, d.path, d.big_view, d.width, d.height, u.use_key, u.process_key, u.field_identifier as media_id FROM '.$db_data.' d INNER JOIN ';
-        $q.= $db_use.' u ON (u.field_identifier=? OR (u.field_identifier=? AND NOT EXISTS';
-        $q.=' (SELECT 1 FROM '.$db_use.' WHERE field_identifier=?)) AND u.id_media=d.id)';
+        $q = 'SELECT d.id as id_media, u.id as id_use, d.type, d.path, d.big_view, d.width, d.height, u.use_key, u.process_key, u.field_identifier as media_id';
+        $q.=' FROM '.$db_data.' d, '.$db_use.' u WHERE u.id_media=d.id AND (u.field_identifier=? OR (u.field_identifier=?';
+        $q.=' AND NOT EXISTS (SELECT 1 FROM hphp_media_use WHERE field_identifier=?)))';
         if ($use_key !== false){
             $q.=' AND u.use_key=?';
         }
@@ -1491,6 +1491,12 @@ class Media {
             }
 
             //loading original
+            $new_name = Filesystem::replace_file_name($process['input'], $process['media_id'].'¤'.$process['use_key']);
+            $FS->move([['path'=>$process['input'], 'name'=>$FS->get_file_name($new_name)]], $FS->get_file_path($process['input']));
+            $process['input'] = $new_name;
+
+            if (!isset($process['output'])) $process['output'] = $process['input'];
+
             $this->current_media = $process['input'];
             
             if (isset($process['sequence'])){
@@ -1502,7 +1508,7 @@ class Media {
 
             $filename = $FS->get_file_name($process['input']);
             if (isset($process['original']) && $process['original'] && !$no_bdd) {
-                // //saving original data in DB :
+                //saving original data in DB :
                 $this->save_media($process['media_id'], $process['use_key'], -1, $process['input'],$filename,1, 2);
             }
             //-------------------------
@@ -1628,10 +1634,11 @@ class Media {
            //checking if there is an output, if it's not the case we do nothing more...
             if (isset($process['output'])) {
                 $filename = $FS->get_file_name($process['output']);
-                if ($filename == 'video.mp4') {
-                    $process['output'] = str_replace($filename, $FS->get_file_name($process['input']), $process['output']);
-                    $process['output'] = str_replace($FS->get_file_ext($process['output']), 'mp4', $process['output']);
-                }
+                
+                // $process['output'] = '';
+                // if ($filename == 'video.mp4') {
+                    // $process['output'] = str_replace($filename, $FS->get_file_name($process['input']), $process['output']);
+                // }
                 //checking if there is already a file
                 if (is_file($process['output']) && $process['output'] != $process['input']) {
                     unlink($process['output']);
@@ -1640,6 +1647,10 @@ class Media {
                 if (is_dir($FS->get_file_path($process['output']))) {
 
                     //must verify in videoinfos if recomp is needed
+                    if ($FS->get_file_ext($process['output']) != 'mp4') {
+                        $process['output'] = str_replace($FS->get_file_ext($process['output']), 'mp4', $process['output']);
+                        $recomp_force = true;
+                    }
 
                     if (!isset($recomp_force) && $this->check_video_compat($this->video_info) == false) {
                         $recomp_force = true;
@@ -1649,7 +1660,6 @@ class Media {
                         //we must recompress
                         //FFMPEG PROCESS HERE !
                         $ff_options.=' \''.$process['output'].'\' 2>&1';
-                        // Utils::error_log('/usr/bin/ffmpeg'.$ff_options);
                         if (!$no_bdd){
                             Utils::system_process('/usr/bin/ffmpeg'.$ff_options, $process['pid']);
                         } else {
@@ -1671,7 +1681,7 @@ class Media {
                     
                     if (!$no_bdd){
                         //saving children data in DB :
-                        $id_media = $this->save_media($process['media_id'], $process['use_key'], 0, $process['input'],$filename,0, 2);
+                        $id_media = $this->save_media($process['media_id'], $process['use_key'], 0, $process['output'], $filename,0, 2);
                         $this->save_use($process['media_id'], $process['use_key'], 0, $id_media, $id_process);
                     }
                     return 'done';

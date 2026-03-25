@@ -80,6 +80,7 @@ class Utils
            1 => array("pipe", "w"),
            2 => array("pipe", "w")
         );
+        \helPHP\libs\Utils::error_log($cmd);
         $process = proc_open($cmd, $descriptorspec, $pipes, realpath('./'), array());
         if ($key == '') {
             $key = time().'_'.floor(rand()*10000);
@@ -888,6 +889,7 @@ class Utils
             case 'm21': $mime='application/mp21'; break;
             case 'mp4a': $mime='audio/mp4'; break;
             case 'mp4': $mime='video/mp4'; break;
+            case 'mkv': $mime='video/x-matroska'; break;
             case 'm3u8': $mime='application/x-mpegURL'; break;
             case 'ts': $mime='video/MP2T'; break;
             case 'mus': $mime='application/vnd.musician'; break;

@@ -4,7 +4,10 @@ $module_name = 'preview';
 
 $files = array(
     0=>['preview/admin/index.php', 'admin/preview/index.php', 0755],
-    1=>['preview/public/preview.php', 'public/preview/preview.php', 0755],
+);
+
+$symlinks = array(
+    0 => ['preview/public/preview.php', 'public/preview/preview.php'],
 );
 
 $folders = array(

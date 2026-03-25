@@ -81,7 +81,7 @@ class Filesystem
     
     public function __construct($root_fs=false)
     {
-        global $CONFIG;
+        global $CONFIG,$DB;
         $this->root_fs = ($root_fs) ? $root_fs : $CONFIG::ROOT_FS;
         $this->lock_time = ($CONFIG::TOKEN_MINUTE * 60) / 10; // 1 min
         
@@ -90,6 +90,9 @@ class Filesystem
         }else{
             if ($CONFIG::DEVMODE) {
                 $this->init_db();
+            }else{
+                $this->db_lock = $DB->table('filesystem_lock');
+                $this->db_history = $DB->table('filesystem_history');
             }
             $this->redis = false;
         }

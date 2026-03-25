@@ -98,7 +98,7 @@ class Sessions
      */
     public static function create_instance($forceNewInstance = false)
     {
-        global $SESSION,$CONFIG;
+        global $SESSION,$CONFIG,$DB;
 
         if ($SESSION != null && $forceNewInstance == false) {
             return $SESSION;

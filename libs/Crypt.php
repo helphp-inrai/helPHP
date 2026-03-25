@@ -108,7 +108,8 @@ class Crypt
         if (strlen($password) > 72) {
             Utils::error_log('Crypt.create_password_hash : Password "'.$password.'" is too long !');
         }
-        return password_hash($password, PASSWORD_BCRYPT, array('cost' => $this->bcrypt_cost));
+        return password_hash($password, PASSWORD_DEFAULT);
+        // return password_hash($password, PASSWORD_BCRYPT, array('cost' => $this->bcrypt_cost));
     }
 
     public function verify_password_hash($password, $hash)
