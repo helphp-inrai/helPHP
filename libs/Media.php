@@ -1138,7 +1138,7 @@ class Media {
         $db_use = $DB->table('media_use');
         $q = 'SELECT d.id as id_media, u.id as id_use, d.type, d.path, d.big_view, d.width, d.height, u.use_key, u.process_key, u.field_identifier as media_id';
         $q.=' FROM '.$db_data.' d, '.$db_use.' u WHERE u.id_media=d.id AND (u.field_identifier=? OR (u.field_identifier=?';
-        $q.=' AND NOT EXISTS (SELECT 1 FROM hphp_media_use WHERE field_identifier=?)))';
+        $q.=' AND NOT EXISTS (SELECT 1 FROM '.$db_use.' WHERE field_identifier=?)))';
         if ($use_key !== false){
             $q.=' AND u.use_key=?';
         }
