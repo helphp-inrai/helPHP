@@ -102,7 +102,7 @@ class Core extends HelPHP_module {
             }
         }
         //a module is requested for display in main
-        if (isset($this->MODULE_LIST[array_key_first($_GET)])) {
+        if (isset($_GET[0]) && isset($this->MODULE_LIST[array_key_first($_GET)])) {
             // we load the module that is indicated by the url (after the ?)
             $module_name=array_key_first($_GET);
             $indexable = array();
