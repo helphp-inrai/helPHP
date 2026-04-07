@@ -135,12 +135,12 @@ function install_db_and_modules($target, $root_username, $root_password, $root_u
         $CONFIG_DB = new \fake_DB();
         
         //master slave init
-        $MARIA_MASTER = ['host'=>Config_db::DB_HOST, 'user'=>$root_username, 'password'=>$root_password];
-        $MARIA_SLAVE = ['host'=>Config_db::DB_SLAVE_HOST, 'user'=>$root_username_slave, 'password'=>$root_password_slave];
+        $MARIA_MASTER = ['host'=>Config_db::DB_HOST, 'user'=>$root_username, 'password'=>$root_password,'table_prefix'=>Config_db::DB_TABLE_PREFIX];
+        $MARIA_SLAVE = ['host'=>Config_db::DB_SLAVE_HOST, 'user'=>$root_username_slave, 'password'=>$root_password_slave,'table_prefix'=>Config_db::DB_TABLE_PREFIX];
         
         $passtemp0 = str_split(Config_db::DB_PASS, 10);
         $passtemp1 = str_split(Config_db::DB_SLAVE_PASS, 10);
-        $replication_user_password = $passtemp0[0].$passtemp1[1];
+        $replication_user_password = $passtemp0[0].$passtemp1[0];
 
         $DB_A = new DB($MARIA_MASTER);
         $DB_A->connect();
@@ -167,7 +167,7 @@ function install_db_and_modules($target, $root_username, $root_password, $root_u
         $res = $DB_B->query($q);
 
         // give time to sql to process
-        usleep(50000);
+        sleep(10);
 
         if(isset($row['Slave_IO_Running']) && $row['Slave_IO_Running'] == 'No') {
             exit;
@@ -179,9 +179,8 @@ function install_db_and_modules($target, $root_username, $root_password, $root_u
         // reset to it's true values
         $CONFIG_DB = new \Config_db();
     }
-
     //install main db 
-    $MARIA = ['host'=>Config_db::DB_HOST, 'user'=>$root_username, 'password'=>$root_password];
+    $MARIA = ['host'=>Config_db::DB_HOST, 'user'=>$root_username, 'password'=>$root_password,'table_prefix'=>Config_db::DB_TABLE_PREFIX];
     $DB = new DB($MARIA);
     $DB->connect();
     $tt=$DB->test_connection($DB);
@@ -195,6 +194,9 @@ function install_db_and_modules($target, $root_username, $root_password, $root_u
     $DB->query($q);
     $DB->set_data_base(Config_db::DB_BASE);
 
+    sleep(5);
+    set_time_limit(300);
+
     //group is partially splitted from content table in master db, but all other table in central
     // $q = group_content_db(Config_db::DB_TABLE_PREFIX);
     // $DB->query($q);
@@ -203,7 +205,7 @@ function install_db_and_modules($target, $root_username, $root_password, $root_u
     // test if we mus switch to db central to install central user/grp db 
     if (Config_db::DB_CENTRAL === true) {
 
-        $MARIA = ['host'=>Config_db::DB_CENTRAL_HOST, 'user'=>$root_username_central, 'password'=>$root_password_central];
+        $MARIA = ['host'=>Config_db::DB_CENTRAL_HOST, 'user'=>$root_username_central, 'password'=>$root_password_central,'table_prefix'=>Config_db::DB_TABLE_PREFIX];
         $DB_C = new DB($MARIA);
         $DB_C->connect();
         $q = 'CREATE DATABASE IF NOT EXISTS `'.Config_db::DB_CENTRAL_BASE.'` CHARACTER SET "utf8mb4"';
@@ -224,16 +226,19 @@ function install_db_and_modules($target, $root_username, $root_password, $root_u
 
     include_once(Config::HELPHP_FOLDER.'utils/install_module.php');
     foreach(Config::MODULES_LIST as $name => $module){
-        set_time_limit(20);
+        sleep(2);
+        set_time_limit(100);
         install_module(Config::HOME_FOLDER, $name);
     }
 
     include_once(Config::HELPHP_FOLDER.'utils/install_blocks.php');
     install_blocks(Config::HOME_FOLDER);
+    sleep(2);
+    set_time_limit(100);
 
     //test if we must switch to db jobs to install jobs db 
     if (Config_db::DB_JOBS === true){
-        $MARIA = ['host'=>Config_db::DB_JOBS_HOST, 'user'=>$root_username, 'password'=>$root_password];
+        $MARIA = ['host'=>Config_db::DB_JOBS_HOST, 'user'=>$root_username, 'password'=>$root_password,'table_prefix'=>Config_db::DB_TABLE_PREFIX];
         $DB = new DB($MARIA);
         $DB->connect();
         $q = 'CREATE DATABASE IF NOT EXISTS `'.Config_db::DB_JOBS_BASE.'` CHARACTER SET "utf8mb4"';
@@ -540,8 +545,7 @@ function get_central_db_json(){
                     "type": "varchar",
                     "limit": 300,
                     "null": false,
-                    "default": "",
-                    "index": "index"
+                    "default": ""
                 },
                 {
                     "name": "useragent_hash",

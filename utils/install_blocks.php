@@ -89,36 +89,41 @@ function install_blocks($instance_path) {
         $ucfirst = ucfirst($folder['name']);
         if (!file_exists($block_path.$ucfirst.'.json')) continue;
 
-        // insert in db
-        try{
-            @$DB->sql_from_json(file_get_contents($block_path.$ucfirst.'.json'));
-        } catch (Exception $e){
-            Utils::error_log('ERROR sql from json ');
-            Utils::error_log($e);
-            // skip block
-            continue;
-        }
-        
-
+        //check if block is not already inserted 
         $q = 'SELECT id FROM '.$DB->table('block_data').' WHERE name=?';
         $id_block = $DB->prepared_query_value($q, 's', [$folder['name']]);
+        if($id_block != false && $id_block !=''){
+            // insert in db
+            try{
+                @$DB->sql_from_json(file_get_contents($block_path.$ucfirst.'.json'));
+            } catch (Exception $e){
+                Utils::error_log('ERROR sql from json ');
+                Utils::error_log($e);
+                // skip block
+                continue;
+            }
+            
 
-        $css_file_public = $block_path.'public/'.$ucfirst.'.css';
-        if (\file_exists($css_file_public)) {
-            $md5 = \md5_file($css_file_public);
-            $q = 'INSERT INTO '.$DB->table('csseditor_source').' SET type="block¤'.$id_block.'", path=?, md5=?, admin=0';
-            $DB->prepared_query($q, 'ss', [$css_file_public, $md5]);
-            $id_source = $DB->last_insert_id();
-            \helPHP\modules\csseditor\admin\Csseditor::import_css_source($css_file_public, $id_source);
-        }
+            $q = 'SELECT id FROM '.$DB->table('block_data').' WHERE name=?';
+            $id_block = $DB->prepared_query_value($q, 's', [$folder['name']]);
 
-        $css_file_admin = $block_path.'admin/'.$ucfirst.'.css';
-        if (\file_exists($css_file_admin)) {
-            $md5 = \md5_file($css_file_admin);
-            $q = 'INSERT INTO '.$DB->table('csseditor_source').' SET type="block¤'.$id_block.'", path=?, md5=?, admin=1';
-            $DB->prepared_query($q, 'ss', [$css_file_admin, $md5]);
-            $id_source = $DB->last_insert_id();
-            \helPHP\modules\csseditor\admin\Csseditor::import_css_source($css_file_admin, $id_source);
+            $css_file_public = $block_path.'public/'.$ucfirst.'.css';
+            if (\file_exists($css_file_public)) {
+                $md5 = \md5_file($css_file_public);
+                $q = 'INSERT INTO '.$DB->table('csseditor_source').' SET type="block¤'.$id_block.'", path=?, md5=?, admin=0';
+                $DB->prepared_query($q, 'ss', [$css_file_public, $md5]);
+                $id_source = $DB->last_insert_id();
+                \helPHP\modules\csseditor\admin\Csseditor::import_css_source($css_file_public, $id_source);
+            }
+
+            $css_file_admin = $block_path.'admin/'.$ucfirst.'.css';
+            if (\file_exists($css_file_admin)) {
+                $md5 = \md5_file($css_file_admin);
+                $q = 'INSERT INTO '.$DB->table('csseditor_source').' SET type="block¤'.$id_block.'", path=?, md5=?, admin=1';
+                $DB->prepared_query($q, 'ss', [$css_file_admin, $md5]);
+                $id_source = $DB->last_insert_id();
+                \helPHP\modules\csseditor\admin\Csseditor::import_css_source($css_file_admin, $id_source);
+            }
         }
     }
 }
