@@ -640,10 +640,11 @@ class Media {
                 return 'output path error '.$process['output'];
             }
         }
+        //depracated !
         //memory cleaning
-        if (!$this->is_svg) {
-            imagedestroy($this->current_media);
-        }
+        // if (!$this->is_svg) {
+        //     imagedestroy($this->current_media);
+        // }
         if (!$process['original']) {
             unlink($process['input']);
         }
@@ -715,7 +716,8 @@ class Media {
                 $outputBuffer = ob_get_clean(); // do ob_get_contents and ob_end_contents
                 $base64 = base64_encode($outputBuffer);
                 $dataim='data:image/'.$format.';base64,'.$base64;
-                imagedestroy($image);
+                //deprecated
+                // imagedestroy($image);
             }else{
                 $format = $FS->get_file_ext($file);
                 $format = ($format=='jpg')?'jpeg':$format;
@@ -992,7 +994,8 @@ class Media {
             }
 
             imagejpeg($image, $filename, 90);
-            imagedestroy($image);
+            //deprecated
+            // imagedestroy($image);
         }
     }
     /**
