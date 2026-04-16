@@ -33,7 +33,7 @@ if(!isset($argv)){
 use helPHP\libs\Utils;
 /**
  * launch process in background and store their progress in redis,
- * it's a subprocess script for helPHP\libs\utils\system_process_to_redis
+ * it's a subprocess script for helPHP\libs\utils\system_process_with_tracking
  * 
  * must be launch from cli with arguments
  * 
@@ -48,7 +48,7 @@ use helPHP\libs\Utils;
  *          -l , list of files that need to be locked during the process
  *          -i , path to the instance
  * 
- * @see helPHP\libs\utils\system_process_to_redis
+ * @see helPHP\libs\utils\system_process_with_tracking
  * 
  * @package helPHP\utils
  */
@@ -196,7 +196,7 @@ function process_launcher($argv){
                                     }
                                 break;
                                 case 'job':
-
+                                    // \helPHP\libs\Utils::error_log($str);
                                 break;
                                 default:
                                     $nbFile = $type_param;
@@ -205,9 +205,10 @@ function process_launcher($argv){
                                     $percent = (100*$nbLine)/$nbFile;
                                 break;
                             }
+
                             if ($percent !== false){
                                 $percent = round(floatval($percent) * 100) / 100;
-                                if ($redis) $redisproc->set($CONFIG::SITE_NAME.'-processes-'.$key,$percent);
+                                if ($redis) $redisproc->set($CONFIG::SITE_NAME.'-processes-'.$key, $percent);
                             }
                             
                             // UPDATE THE LOCK
@@ -290,9 +291,10 @@ function process_launcher($argv){
     proc_close($process);
 
     if ($type == 'job'){
-        $t = explode('¤', $real_key);
-        $from = $t[0];
-        $keyid = $t[1];
-        shell_exec('php '.$CONFIG::HELPHP_FOLDER.'utils/job_manager.php -a"set_status" -f"'.$from.'" -k"'.$keyid.'" -s"2"');
+        $shu_pos = strpos($real_key, '¤');
+        $target = substr($real_key, 0, $shu_pos);
+        $key_id = substr($real_key, $shu_pos + 2); // add 2 to not select the ¤ char (¤ is 2 char length)
+        $cmd = 'php '.$CONFIG::HELPHP_FOLDER.'utils/job_manager.php -a"set_status" -t"'.$target.'" -k"'.$key_id.'" -s"2"';
+        shell_exec($cmd);
     }
 }

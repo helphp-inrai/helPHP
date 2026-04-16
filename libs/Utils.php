@@ -68,32 +68,31 @@ class Utils
 //---------------------------------SYSTEM SECTION-----------------------------
     /**
      * Launches a system process and pushes its output to a session variable, which can be followed by a key.
-     * Used a lot by Filesystem class
+     * Uses proc_open to execute the command
      * 
      * @param string $cmd The command to execute.
-     * @param string $key The key to indentify the process output in session.
+     * @param string $key The key to identify the process output in session.
      * @return void
      */
     public static function system_process($cmd, $key) {
-        $descriptorspec = array(
-           0 => array("pipe", "r"),
-           1 => array("pipe", "w"),
-           2 => array("pipe", "w")
+        $descriptor_spec = array(
+            0 => array("pipe", "r"),
+            1 => array("pipe", "w"),
+            2 => array("pipe", "w")
         );
-        \helPHP\libs\Utils::error_log($cmd);
-        $process = proc_open($cmd, $descriptorspec, $pipes, realpath('./'), array());
+        $process = proc_open($cmd, $descriptor_spec, $pipes, realpath('./'), array());
         if ($key == '') {
             $key = time().'_'.floor(rand()*10000);
         }
         if (is_resource($process)) {
             while ($s = fgets($pipes[1], 256)) {
-                $_SESSION['processes'][$key]=nl2br(addslashes(trim($s)));
+                $_SESSION['processes'][$key] = nl2br(addslashes(trim($s)));
                 session_force_update();
                 usleep(10);
                 set_time_limit(5);
             }
         }
-        $_SESSION['processes'][$key]='ok!';
+        $_SESSION['processes'][$key] = 'ok!';
         session_force_update();
         fclose($pipes[1]);
         proc_close($process);
@@ -101,6 +100,7 @@ class Utils
 
     /**
      * Launches a system process and returns its output as a string (without session tracking).
+     * Uses proc_open to execute the command
      *
      * @param string $cmd The command to execute.
      * @return string The output of the command.
@@ -108,26 +108,27 @@ class Utils
     public static function system_process_no_session($cmd)
     {
         //same thing that system process but only return a text variable
-        $descriptorspec = array(
+        $descriptor_spec = array(
             0 => array('pipe', 'r'),   // stdin is a pipe that the child will read from
             1 => array('pipe', 'w'),   // stdout is a pipe that the child will write to
             2 => array('pipe', 'w')    // stderr is a pipe that the child will write to
         );
-        $toreturn='';
-        $process = proc_open($cmd, $descriptorspec, $pipes, realpath('./'), array());
+        $to_return = '';
+        $process = proc_open($cmd, $descriptor_spec, $pipes, realpath('./'), array());
 
         if (is_resource($process)) {
             while ($s = fgets($pipes[1], 256)) {
-                $toreturn.=$s;
+                $to_return.= $s;
             }
         }
+        
         fclose($pipes[1]);
         proc_close($process);
-        return $toreturn;
+        return $to_return;
     }
 
     /**
-     * Launches one or more system processes with no tracking
+     * Launches one or more system processes with no tracking. The script wait for the end of the command to continue.
      *
      * @param array|string $cmds The command(s) to execute.
      * @param string $key The key to reference the process in Redis.
@@ -136,7 +137,7 @@ class Utils
      * @param array|false $to_unlocked Optional. Paths to lock/unlock during the process.
      * @return void
      */
-    public static function system_process_no_redis($cmds, $key, $type = false, $arg = false, $to_unlocked = false) {
+    public static function system_process_no_tracking($cmds, $key, $type = false, $arg = false, $to_unlocked = false) {
         global $CONFIG;
         if (!is_array($cmds)){
             $cmds = [$cmds];
@@ -165,7 +166,8 @@ class Utils
     }
 
     /**
-     * Launches one or more system processes and tracks their output/progress in Redis.
+     * Launches one or more system processes and tracks their output/progress. The command is executed in parallel and the script directly continue.
+     * Will try to store the progress of the command in Redis.
      *
      * @param array|string $cmds The command(s) to execute.
      * @param string $key The key to reference the process in Redis.
@@ -174,7 +176,7 @@ class Utils
      * @param array|false $to_unlocked Optional. Paths to lock/unlock during the process.
      * @return void
      */
-    public static function system_process_to_redis($cmds, $key, $type = false, $arg = false, $to_unlocked = false) {
+    public static function system_process_with_tracking($cmds, $key, $type = false, $arg = false, $to_unlocked = false) {
         global $redisproc, $CONFIG;
         if ($redisproc == null ) {
             $redisproc = new \Redis();
@@ -183,7 +185,7 @@ class Utils
         if (!is_array($cmds)){
             $cmds = [$cmds];
         }
-        $redisproc->set($CONFIG::SITE_NAME.'-processes-nbr_cmd-'.$key,count($cmds));
+        $redisproc->set($CONFIG::SITE_NAME.'-processes-nbr_cmd-'.$key, count($cmds));
         foreach($cmds as $i => $cmd){
             $cmd_to_exec = 'php '.$CONFIG::HELPHP_FOLDER.'utils/process_launcher.php "'.$cmd.'" -k"'.$key.'¤'.$i.'"';
             $cmd_to_exec.= ' -i"'.$CONFIG::HOME_FOLDER.'"';

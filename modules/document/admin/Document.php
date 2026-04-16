@@ -691,6 +691,7 @@ class Document extends HelPHP_module {
             // $main = H::DIV(['id'=>'lemain'.$this->dom_id, 'class'=>'le_main']);
 
                 $form = H::DIV(['id'=>'form_canvas'.$this->dom_id, 'class'=>'document_canvas_form document_container']);
+                // $form = H::DIV(['id'=>'form_canvas'.$this->dom_id, 'class'=>'document_canvas_form document_container document_'.$post[$this->ifld_data_id]]);
                 
                 $q = 'SELECT doc.*, blo.id as id_block_data FROM '.$DB->table('document_blocks').' doc';
                 $q.=' LEFT JOIN '.$DB->table('block_data').' blo ON (blo.name=doc.blockname) WHERE doc.id_document_data=? ORDER BY doc.sort_order';

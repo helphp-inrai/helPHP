@@ -237,7 +237,7 @@ class Ajax
     /**
      * Description for process_tinymce_upload
      *
-     * @param null $destinationDir
+     * @param null $destination_dir
      * 
      * @return json JSON encoded string with the location of the uploaded file
      * This function processes file uploads specifically for TinyMCE editor.
@@ -246,9 +246,9 @@ class Ajax
      * @see helPHP\libs\Tinymce\get_init_javascript() for details on TyniMCE integration.
      * 
      */
-    public static function process_tinymce_upload($destinationDir = null)
+    public static function process_tinymce_upload($destination_dir = null)
     {
-        $files = Ajax::process_files($destinationDir, array("gif", "jpg", "png", "jpeg", "svg"));
+        $files = Ajax::process_files($destination_dir, array("gif", "jpg", "png", "jpeg", "svg"));
 
         if (is_array($files) && sizeof($files) > 0) {
             $file = current($files);
@@ -280,7 +280,7 @@ class Ajax
      * It handles both single and multiple file uploads, checks for valid file names and extensions
      * and the rights to upload to the destination directory.
      *
-     * @param mixed $destinationDir=null (must be specified, otherwise the default uploads directory will be used)
+     * @param mixed $destination_dir=null (must be specified, otherwise the default uploads directory will be used)
      * @param null $extensions array with all authorized files extensions
      * @param null $chunk
      * 
@@ -292,93 +292,106 @@ class Ajax
      *      );
      * 
      */
-    public static function process_files($destinationDir=null, $extensions = null, $chunk = null)
+    public static function process_files($destination_dir = null, $extensions = null, $chunk = null)
     {
-        global $FS,$CONFIG;
+        global $FS, $CONFIG;
         $files = array();
+        $errors = array();
+        if (!isset($_FILES)) return $files;
 
-        if (isset($_FILES)) {
-            if ($destinationDir === null) {
-                $destinationDir = Ajax::$uploads_dir;
+        if ($destination_dir === null) {
+            $destination_dir = Ajax::$uploads_dir;
+        }
+
+        $delete_all = false;
+
+        $destination_dir = trim($destination_dir);
+        if (strpos($destination_dir, '../')!==false) {
+            Utils::error_log('FORBIDDEN PATH all files removed ! '.$destination_dir);
+            $delete_all = true;
+        }
+        
+        if (!str_starts_with($destination_dir, $CONFIG::HOME_FOLDER) && !str_starts_with($destination_dir, $CONFIG::ROOT_FS)){
+            $destination_dir = $CONFIG::HOME_FOLDER.trim($destination_dir, '/');
+        }
+        if (!is_dir($destination_dir)) {
+            if (!$FS->mkdir($destination_dir)) {
+                Utils::error_log('ERROR while creating folder '.$destination_dir);
             }
+        }
 
-            $delete_all = false;
+        $destination_dir = str_ends_with($destination_dir,'/') ? $destination_dir : $destination_dir.'/';
 
-            $destinationDir = trim($destinationDir);
-            if (strpos($destinationDir, '../')!==false) {
-                Utils::error_log('FORBIDDEN PATH all files removed ! '.$destinationDir);
-                $delete_all = true;
-            }
-            
-            if (!str_starts_with($destinationDir,$CONFIG::HOME_FOLDER) && !str_starts_with($destinationDir,$CONFIG::ROOT_FS)){
-                $destinationDir = $CONFIG::HOME_FOLDER . trim($destinationDir, '/');
-            }
-            if (!is_dir($destinationDir)) {
-                if (!$FS->mkdir($destinationDir)) {
-                    Utils::error_log('ERROR while creating folder '.$destinationDir);
-                }
-            }
+        foreach ($_FILES as $varname => $data) {
+            if (isset($_FILES[$varname]['error']) && is_array($_FILES[$varname]['error'])) {
+                // multiples files are received from a single input
+                foreach ($_FILES[$varname]['error'] as $key => $error) {
+                    if ($_FILES[$varname]['name'][$key] !== '') {
+                        $filename = $FS->get_file_name($_FILES[$varname]['name'][$key]);
+                        $ext = strtolower($FS->get_file_ext($filename));
+                        if ($chunk !== null) $filename.='-'.$chunk;
+                        if ($error == UPLOAD_ERR_OK) {
+                            if ($delete_all) {
+                                unlink($_FILES[$varname]['tmp_name'][$key]);
+                                Utils::error_log('Delete '.$filename);
+                            } elseif (Ajax::check_filename($filename) && Ajax::check_file_extension($filename, $extensions)) {
+                                $path = $destination_dir . $filename;
+                                $res = move_uploaded_file($_FILES[$varname]['tmp_name'][$key], $path);
 
-            $destinationDir = str_ends_with($destinationDir,'/') ? $destinationDir : $destinationDir.'/';
-
-            foreach ($_FILES as $varname => $data) {
-                if (isset($_FILES[$varname]['error']) && is_array($_FILES[$varname]['error'])) {
-                    // multiples files are received from a single input
-                    foreach ($_FILES[$varname]['error'] as $key => $error) {
-                        if ($_FILES[$varname]['name'][$key] !== '') {
-                            $filename = $FS->get_file_name($_FILES[$varname]['name'][$key]);
-                            $ext = strtolower($FS->get_file_ext($filename));
-                            if ($chunk !== null) $filename.='-'.$chunk;
-                            if ($error == UPLOAD_ERR_OK) {
-                                if ($delete_all) {
-                                    unlink($_FILES[$varname]['tmp_name'][$key]);
-                                    Utils::error_log('Delete '.$filename);
-                                } elseif (Ajax::check_filename($filename) && Ajax::check_file_extension($filename, $extensions)) {
-                                    $path = $destinationDir . $filename;
-                                    $res = move_uploaded_file($_FILES[$varname]['tmp_name'][$key], $path);
-
+                                if ($res){
                                     if (!isset($files[$varname])) {
                                         $files[$varname] = array();
                                     }
 
                                     array_push($files[$varname], array('path'=>$path , 'size'=>$_FILES[$varname]['size'][$key]));
                                 } else {
-                                    unlink($_FILES[$varname]['tmp_name'][$key]);
-                                    Utils::error_log('Invalid name on file upload :'.$filename);
+                                    \helPHP\libs\Utils::error_log('Can\'t write to '.$destination_dir.' folder see write right');
+                                    return 'write_access';
                                 }
+                                
                             } else {
-                                Utils::error_log('an error occured during upload, error code is '.$error);
-                                Utils::error_log('Error on file upload ' . $filename);
+                                unlink($_FILES[$varname]['tmp_name'][$key]);
+                                Utils::error_log('Invalid name on file upload :'.$filename);
+                                
                             }
+                        } else {
+                            Utils::error_log('an error occured during upload, error code is '.$error);
+                            Utils::error_log('Error on file upload ' . $filename);
                         }
                     }
-                } else {
-                    if ($data['name'] !== '') {
-                        $name = $FS->get_file_name($data['name']);
-                        $ext = strtolower($FS->get_file_ext($data['name']));
-                        if ($chunk !== null) $name.='-'.$chunk;
-                        
-                        if ($delete_all) {
-                            unlink($data['tmp_name']);
-                        } elseif (Ajax::check_filename($name) && Ajax::check_file_extension($name, $extensions)) {
-                            if ($data['error'] == UPLOAD_ERR_OK) {
-                                $path = $destinationDir . $name;
-                                $res = move_uploaded_file($data['tmp_name'], $path);
-
+                }
+            } else {
+                if ($data['name'] !== '') {
+                    $name = $FS->get_file_name($data['name']);
+                    $ext = strtolower($FS->get_file_ext($data['name']));
+                    if ($chunk !== null) $name.='-'.$chunk;
+                    
+                    if ($delete_all) {
+                        unlink($data['tmp_name']);
+                    } elseif (Ajax::check_filename($name) && Ajax::check_file_extension($name, $extensions)) {
+                        if ($data['error'] == UPLOAD_ERR_OK) {
+                            $path = $destination_dir.$name;
+                            $res = move_uploaded_file($data['tmp_name'], $path);
+                            if ($res === true) {
                                 if (!isset($files[$varname])) {
                                     $files[$varname] = array();
                                 }
 
                                 array_push($files[$varname], array('path'=>$path , 'size'=>$data['size']));
                             } else {
-                                Utils::error_log('an error occured during upload, error code is '.$data['error']);
-                                if (file_exists($data['tmp_name'])){
-                                    unlink($data['tmp_name']);
-                                }
+                                
+                                \helPHP\libs\Utils::error_log('Can\'t write to '.$destination_dir.' folder see write access');
+                                return 'write_access';
                             }
                         } else {
-                            Utils::error_log('Invalid name on file upload :'.$name);
+                            Utils::error_log('an error occured during upload, error code is '.$data['error']);
+                            if (file_exists($data['tmp_name'])){
+                                unlink($data['tmp_name']);
+                            }
                         }
+                    } else {
+                        Utils::error_log('Invalid name on file upload :'.$name);
+                        return 'invalid_name';
                     }
                 }
             }
@@ -425,10 +438,10 @@ class Ajax
                     }
                     if (rename($tempPath, $path)){
                         exec('chmod 775 \''.$path.'\'');
+                        array_push($result, $path);
                     } else {
                         Utils::error_log('RENAME FAILED FOR '.$tempPath.' to '.$path);
                     }
-                    array_push($result, $path);
                 } else {
                     Utils::error_log('ERROR! wrong file extension for '.$name);
                     return false;

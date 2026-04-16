@@ -79,6 +79,8 @@ $tl_data = array(
         'edit_preview'=>'Prévisualisation',
         'activate_lang'=>'Activer les médias par langues',
         'default'=>'Défaut',
-        'delete_languages_media'=>'Êtes-vous sûr ? Cela va supprimer tout les médias liés aux langues. Seulement le média par défaut sera conservé.'
+        'delete_languages_media'=>'Êtes-vous sûr ? Cela va supprimer tout les médias liés aux langues. Seulement le média par défaut sera conservé.',
+        'process_waiting'=>'Vidéo en attente de traitement.',
+        'process_working'=>'Vidéo en cours de traitement.'
     )
 );

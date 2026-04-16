@@ -81,7 +81,7 @@ class Preview extends HelPHP_module {
         global $DB, $MEDIA, $LANG, $CONFIG;
 
         $modal = (isset($post['module']) && isset($post['id'])) ? true : false;
-        $admin = (isset($post['prevmode']) && $post['prevmode'] == 'admin') ? true : false;
+        $admin = (($post['prevmode'] ?? '') === 'admin') ? true : false;
 
         if ($modal) {
             $this->dom_container = '';
@@ -192,7 +192,7 @@ class Preview extends HelPHP_module {
     public function display_title($post){
 
         $css_source = (isset($post['css_source']) && $post['css_source']) ? $post['css_source'] : false;
-        $admin = (isset($post['prevmode']) && $post['prevmode'] == 'admin') ? true : false;
+        $admin = (($post['prevmode'] ?? '') === 'admin') ? true : false;
 
         $title = H::SPAN(['class'=>$this->css.'previewing_title']);
 

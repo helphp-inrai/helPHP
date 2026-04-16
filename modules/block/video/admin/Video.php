@@ -96,9 +96,6 @@ class Video extends HelPHP_module {
         global $DB, $CONFIG;
         
         $output = H::div(['class'=>'block_container_a video_a','data-block_type'=>'video','data-block_id'=>$post[$this->ifld_video_id],'id'=>'block_admin_video_'.$post[$this->ifld_video_id].$this->dom_id ]);
-            
-
-
 
             $form = H::form(['action'=>$CONFIG::BASE_URL.$CONFIG::ADMIN_FOLDER.'block/index.php', 'dom_target'=>'.parent', 'class'=>$this->css.'form_edit form_edit', 'dom_id'=>$this->dom_id]);
 
@@ -122,7 +119,7 @@ class Video extends HelPHP_module {
                 $checked=($post[$this->ifld_video_nodonwload]==1)?true:false;
                 $nodonwload = H::input_checkbox(['name'=>$this->ifld_video_nodonwload,'id'=>$this->ifld_video_nodonwload, 'label'=>$this->get_tl('nodonwload'), 'value'=>1, 'class'=>' inp_check' , 'checked'=>$checked]);
                 $label_video = H::SPAN(['class'=>$this->css.'label'], $this->get_tl('video'));
-                $params = ['accept'=>'video/*'];
+                $params = ['accept'=>'video/*', 'on_process_end'=>'h.modules.document_a["'.$post['dom_id'].'"].load_block("'.$post['block_name'].'", '.$post['block_id'].', false);'];
                 $video = Media_UI::display('uploader', $params, $this->ifld_video_video, $post[$this->ifld_video_id], ['process'=>[['type'=>'recomp']]]);
                 $youtubesrc = H::input_text(['name'=>$this->ifld_video_youtubesrc,'id'=>$this->ifld_video_youtubesrc, 'label'=>$this->get_tl('youtubesrc'), 'value'=>$post[$this->ifld_video_youtubesrc], 'class'=>'inp_short_text']);
                 $form->add_child([$autoplay->label_tag(),$autoplay,$control->label_tag(),$control,$vloop->label_tag(),$vloop,$nodonwload->label_tag(),$nodonwload,$label_video,$video,$youtubesrc->label_tag(),$youtubesrc]);

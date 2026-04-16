@@ -334,7 +334,7 @@ class Media_a extends H_module {
 
     switch_language_mode(evt){
         if (this.params.lang) {
-            H_ui.confirm_popup(evt.target.dataset.confirm, ()=>{this.delete_language_media();});
+            H_ui.confirm_popup(evt.target.dataset.confirm, ()=>{this.delete_language_media(evt);});
         } else {
             H_dom.remove_class(this.dom_elems.lang_list, 'hidden');
             H_dom.add_class(evt.target, 'active');
@@ -358,7 +358,7 @@ class Media_a extends H_module {
         });
         this.params.lang_iso = iso;
     }
-    delete_language_media(){
+    delete_language_media(evt){
         let settings = this.ajax_settings();
         settings.data = {
             ...settings.data,
@@ -371,6 +371,21 @@ class Media_a extends H_module {
             this.params.lang = false;
             this.toggle_language('');
             
+        };
+        h.a.send(settings);
+    }
+
+    get_video_progress(use_key){
+        if (!this.exist()) return;
+
+        let settings = this.ajax_settings();
+        settings.dom_target = 'media_video_progress' + this.dom_id;
+        settings.replace_dom_target = true;
+        settings.data = {
+            ...settings.data,
+            media_action: 'media_progress_video_process',
+            media_id: this.media_id,
+            use_key
         };
         h.a.send(settings);
     }

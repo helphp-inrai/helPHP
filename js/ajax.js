@@ -1491,7 +1491,7 @@ class H_ajax_file{
         // for tracking time, used for this.debug
         // var startTime,endTime;
         
-        this.uniqueid = Date.now();
+        this.unique_id = Date.now();
 
         this.init(fileLst);
     }
@@ -1535,10 +1535,10 @@ class H_ajax_file{
         
         let formData = new FormData();
         formData.append('filename', this.file.data.name);
-        formData.append('uniqueid', this.uniqueid);
+        formData.append('unique_id', this.unique_id);
         if (this.current.small){
             formData.append('filesize', this.file.data.size);
-            formData.append('file', this.file.data, this.file.data.name + '!h!e!l!P!H!P!' + this.uniqueid);
+            formData.append('file', this.file.data, this.file.data.name + '!h!e!l!P!H!P!' + this.unique_id);
             // formData.append('file', file, file.name);
             formData.append('full', 1);
             let last = this.file_count == (this.file_sended + 1);
@@ -1564,8 +1564,7 @@ class H_ajax_file{
      */
     on_load_chunk(evt){
         let result = this.xhr.responseText;
-        let sendNextChunk = true;
-        // console.log(result);
+        let send_next_chunk = true;
         if (result != 'ok'){
             if (!this.current.small){
                 this.errors.push({'path': this.file.data.name,'chunk': this.chunk_index});
@@ -1573,7 +1572,7 @@ class H_ajax_file{
                 this.errors.push({'path': this.file.data.name,'chunk': false});
             }
 
-            H_ui.message_popup(H_constants.get_text('upload_error_filename'));
+            H_ui.message_popup(H_constants.get_text('upload_error_' + result));
 
             this.cancel_file(this.original_sender._current_error_callback);
             return;
@@ -1601,7 +1600,7 @@ class H_ajax_file{
             return;
         }
         
-        if (sendNextChunk){
+        if (send_next_chunk){
             if (this.chunk_end < this.file.data.size){
                 // there is still some byte to send, prepare next chunk
                 
@@ -1708,7 +1707,7 @@ class H_ajax_file{
             'type': this.file.data.type,
             'size': this.file.data.size,
             'index': this.slices_total,
-            'uniqueid': this.uniqueid
+            'unique_id': this.unique_id
         };
         let last = this.file_count == (this.file_sended + 1);
         if (last) settings.data.last = 1;
@@ -1741,7 +1740,7 @@ class H_ajax_file{
         settings.data = {
             'cancel': 1,
             'name': this.file.data.name,
-            'uniqueid': this.uniqueid
+            'unique_id': this.unique_id
         };
         if (this.original_time) settings.data.time = this.original_time;
         settings.success = callback;
@@ -1815,7 +1814,7 @@ class H_ajax_file{
             // }
             
             this.current.name = filename;
-            this.original_sender._data.append('lstFilePath[]', filename + '!h!e!l!P!H!P!' + this.uniqueid);
+            this.original_sender._data.append('lstFilePath[]', filename + '!h!e!l!P!H!P!' + this.unique_id);
             // original_request.data.append('lstFilePath[]', filename);
             
             // send the first chunk

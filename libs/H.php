@@ -195,8 +195,8 @@ class H extends Html {
         $head->add_child(H::SCRIPT('', array('src'=>$pre.'js/constants_texts-'.$LANG->current_language.'.js'.$refresher , 'language'=>'Javascript')));
         // load the storage status for js
         $head->add_child(H::SCRIPT('', array('src'=>$pre.'js/storages.js'.$refresher , 'language'=>'Javascript')));
-        
-        if ($CONFIG::DEVMODE) {
+        //are we in devmode or in preview ?
+        if ($CONFIG::DEVMODE || (isset($_REQUEST['h_context']) && $_REQUEST['h_context'] == 'preview')) {
             $head->add_child(H::SCRIPT('',array('src'=>$pre.'js/externals/tinymce/tinymce.min.js.gz', 'language'=>'Javascript')));
             $head->add_child(H::SCRIPT('',array('src'=>$pre.'js/externals/alwan/alwan.min.js', 'language'=>'Javascript')));
             $head->add_child(H::LINK(array('rel'=>'stylesheet' , 'type'=>'text/css', 'href'=>$pre.'js/externals/alwan/alwan.min.css')));

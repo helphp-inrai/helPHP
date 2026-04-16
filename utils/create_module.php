@@ -93,13 +93,13 @@ class ¤ucfirst_module_name¤ extends HelPHP_module {
             case $this->ACTION_NEW_¤module_name¤:
                 if ($this->user_can_edit){ // needed for security
                     unset($post[$this->ifld_data_id]);
-                    $this->reset_fields($post, \'¤module_name¤\');
+                    $this->reset_fields($post, \'¤module_name¤_data\');
                     $master_output->add_child( $this->edit_¤module_name¤($post) );
                 }
             break;
             case $this->ACTION_EDIT_¤module_name¤:
                 if ($this->user_can_edit){
-                    $this->prepare_fields($post, \'¤module_name¤\');
+                    $this->prepare_fields($post, \'¤module_name¤_data\');
                     //if you have a translation block in your form uncoment next line
                     //Language::load_translation_data($post, self::module_name, \'data\');
                     $master_output->add_child( $this->edit_¤module_name¤($post) );
@@ -107,7 +107,7 @@ class ¤ucfirst_module_name¤ extends HelPHP_module {
             break;
             case $this->ACTION_SAVE_¤module_name¤:
                 if ($this->user_can_edit){
-                    $this->check_posted_data($post, \'¤module_name¤\');
+                    $this->check_posted_data($post, \'¤module_name¤_data\');
                     $this->save_¤module_name¤($post);
                     //if you have a translation block in your form uncoment next line
                     //Language::save_translation_data($post, $post[$this->ifld_data_id]);
@@ -117,7 +117,7 @@ class ¤ucfirst_module_name¤ extends HelPHP_module {
             
             case $this->ACTION_DELETE_¤module_name¤:
                 if ($this->user_can_edit){
-                    $this->check_posted_data($post, \'¤module_name¤\');
+                    $this->check_posted_data($post, \'¤module_name¤_data\');
                     $this->delete_¤module_name¤($post);
                     //if you have a translation block in your form uncoment next line
                     //Language::delete_translation_data($post, self::module_name, \'data\', $post[$this->ifld_data_id]);
@@ -126,7 +126,7 @@ class ¤ucfirst_module_name¤ extends HelPHP_module {
             break;
             
             default:
-                $this->check_posted_data($post, \'¤module_name¤\');
+                $this->check_posted_data($post, \'¤module_name¤_data\');
                 $master_output->add_child( $this->edit_¤module_name¤($post) );
             break;
         }
@@ -172,13 +172,13 @@ class ¤ucfirst_module_name¤ extends HelPHP_module {
         if($post[$this->ifld_data_id] == 0 || !isset($post[$this->ifld_data_id])){
             // create
             // HERE YOU NEED TO SET ¤fields¤ ¤fields_type¤ and  ¤fields_values¤
-            $q = \'INSERT INTO \'.$DB->table(\'¤module_name¤\_data\').\' SET ¤fields¤\';
+            $q = \'INSERT INTO \'.$DB->table(\'¤module_name¤_data\').\' SET ¤fields¤\';
             $success = $DB->prepared_query($q,\'¤fields_type¤\',[¤fields_values¤]);
             $post[$this->ifld_data_id] = $DB->last_insert_id();
             
         }else{
             // HERE YOU NEED TO SET ¤fields¤ ¤fields_type¤ and  ¤fields_values¤
-            $q = \'UPDATE \'.$DB->table(\'¤module_name¤\').\' SET ¤fields¤ where id=?\';
+            $q = \'UPDATE \'.$DB->table(\'¤module_name¤_data\').\' SET ¤fields¤ where id=?\';
             $success = $DB->prepared_query($q,\'¤fields_type¤i\',[¤fields_values¤,$post[$this->ifld_data_id]]);
         }
         if (isset($post[\'need_id\'])) {
@@ -195,7 +195,7 @@ class ¤ucfirst_module_name¤ extends HelPHP_module {
     public function delete_¤module_name¤(&$post) {
         global $DB;
 
-        $q = \'DELETE FROM \'.$DB->table(\'¤module_name¤\').\' WHERE id=?\';
+        $q = \'DELETE FROM \'.$DB->table(\'¤module_name¤_data\').\' WHERE id=?\';
         $res = $DB->prepared_query($q, \'i\', [$post[$this->ifld_data_id]]);
         
         //if you have some media input fields :    
@@ -237,7 +237,7 @@ class ¤ucfirst_module_name¤ extends HelPHP_module {
         $master_output = H::group($this->module_name.\'_display\');
         switch($post[$this->input_action_identifier]){
             default:
-                $this->prepare_fields($post, \'¤module_name¤\');
+                $this->prepare_fields($post, \'¤module_name¤_data\');
                 if (!$post[$this->ifld_data_id]) $this->reset_fields($post, \'¤module_name¤\');
                 //if you have a translation block in your form uncoment next line
                 //Language::load_translation_data($post, self::module_name, \'data\');

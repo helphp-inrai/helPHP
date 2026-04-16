@@ -18,16 +18,16 @@ if (isset($_POST['cancel']) && $_POST['cancel'] == 1){
         global $FS;
         
         $name = $FS->get_file_name($_POST['name']);
-        $name.= $_POST['uniqueid'];
+        $name.= $_POST['unique_id'];
         
-        $destinationDir = $folder.$name.'/';
-        if (is_dir($destinationDir)){
-            $res = $FS->recurse_ls($destinationDir);
+        $destination_dir = $folder.$name.'/';
+        if (is_dir($destination_dir)){
+            $res = $FS->recurse_ls($destination_dir);
             if ($res){
                 foreach($res['files'] as $fileName){
-                    unlink($destinationDir.$fileName);
+                    unlink($destination_dir.$fileName);
                 }
-                rmdir($destinationDir);
+                rmdir($destination_dir);
             }
         } else if (is_file($folder.$name)){
             unlink($folder.$name);
@@ -53,7 +53,7 @@ if (isset($_POST['cancel']) && $_POST['cancel'] == 1){
     $name = $FS->get_file_name($_POST['name']);
     
     $last = isset($_POST['last']) && $_POST['last'];
-    $res = Ajax::merge_chunks($name, $_POST['index'], $_POST['uniqueid'], $last);
+    $res = Ajax::merge_chunks($name, $_POST['index'], $_POST['unique_id'], $last);
 
     if (isset($_POST['time'])){
         $time = $_POST['time'];
@@ -76,12 +76,12 @@ if (isset($_POST['cancel']) && $_POST['cancel'] == 1){
     $name = $FS->get_file_name($_POST['filename']);
     
     if (!isset($_POST['full'])){
-        $name.= $_POST['uniqueid'];
+        $name.= $_POST['unique_id'];
         $index = $_POST['chunk_index'];
         
-        $destinationDir = $folder.'chunk_'.$name;
+        $destination_dir = $folder.'chunk_'.$name;
     } else {
-        $destinationDir = $CONFIG::HOME_FOLDER.'temp/';
+        $destination_dir = $CONFIG::HOME_FOLDER.'temp/';
         $index = null;
     }
 
@@ -96,13 +96,8 @@ if (isset($_POST['cancel']) && $_POST['cancel'] == 1){
         }
     }
 
-    $res = Ajax::process_files($destinationDir,null,$index);
-    if (!$res){
-        echo 'no';
-        return;
-    }
-    $chron->step_chrono('end process file');
-    if (count($res) > 0){
+    $res = Ajax::process_files($destination_dir, null, $index);
+    if (is_array($res) && count($res) > 0) {
         echo 'ok';
 
         // update storage status at the end of an upload if not a chunk and if it's the last uploaded element, in case of multiple upload we 
@@ -110,7 +105,5 @@ if (isset($_POST['cancel']) && $_POST['cancel'] == 1){
         if (isset($_POST['full']) && $_POST['full'] && isset($_POST['last']) && $_POST['last']){
             Ajax::update_storage_status();
         }
-    } else {
-        echo 'no';
-    }
+    } else echo $res;
 }

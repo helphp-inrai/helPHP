@@ -383,10 +383,10 @@ class Filesystem
                 }
                 $key = $key ? $key : 'copy-'.time();
 
-                if ($this->redis && $this->follow_redis) {
-                    Utils::system_process_to_redis($cmds, $key, 'copy', $args, $toLock);
+                if ($this->follow_redis) {
+                    Utils::system_process_with_tracking($cmds, $key, 'copy', $args, $toLock);
                 } else {
-                    Utils::system_process_no_redis($cmds, $key, 'copy', $args, $toLock);
+                    Utils::system_process_no_tracking($cmds, $key, 'copy', $args, $toLock);
                 }
                 
 
@@ -672,10 +672,10 @@ class Filesystem
                     $toLock[$i] = array_merge($toLock[$i], [$destination]);
                 }
                 
-                if ($this->redis && $this->follow_redis) {
-                    Utils::system_process_to_redis($cmds, $key, 'lineCount', $total, $toLock);
+                if ($this->follow_redis) {
+                    Utils::system_process_with_tracking($cmds, $key, 'lineCount', $total, $toLock);
                 } else {
-                    Utils::system_process_no_redis($cmds, $key, 'lineCount', $total, $toLock);
+                    Utils::system_process_no_tracking($cmds, $key, 'lineCount', $total, $toLock);
                 }
                 
                 if ($this->save_history && $q_def != ''){
@@ -895,10 +895,10 @@ class Filesystem
             array_push($toLock, $chunk);
         }
 
-        if ($this->redis && $this->follow_redis) {
-            Utils::system_process_to_redis($cmds, $key, 'lineCount', $count, $toLock);
+        if ($this->follow_redis) {
+            Utils::system_process_with_tracking($cmds, $key, 'lineCount', $count, $toLock);
         } else {
-            Utils::system_process_no_redis($cmds, $key, 'lineCount', $count, $toLock);
+            Utils::system_process_no_tracking($cmds, $key, 'lineCount', $count, $toLock);
         }
         
         return ['success'=>$suc, 'error'=>$err];
@@ -2085,10 +2085,10 @@ class Filesystem
         
         $key = ($key == '') ? 'pack-'.time() : $key;
         
-        if ($this->redis && $this->follow_redis) {
-            Utils::system_process_to_redis($cmd, $key, 'pack', $tempFile, $to_lock);
+        if ($this->follow_redis) {
+            Utils::system_process_with_tracking($cmd, $key, 'pack', $tempFile, $to_lock);
         } else {
-            Utils::system_process_no_redis($cmd, $key, 'pack', $tempFile, $to_lock);
+            Utils::system_process_no_tracking($cmd, $key, 'pack', $tempFile, $to_lock);
         }
     
         return ['success'=>$to_lock, 'error'=>$err_path];
@@ -2138,10 +2138,10 @@ class Filesystem
             
             $key = ($key == '') ? 'unpack-'.time() : $key;
             
-            if ($this->redis && $this->follow_redis) {
-                Utils::system_process_to_redis($cmd, $key, 'pack', false, [$path]);
+            if ($this->follow_redis) {
+                Utils::system_process_with_tracking($cmd, $key, 'pack', false, [$path]);
             } else {
-                Utils::system_process_no_redis($cmd, $key, 'pack', false, [$path]);
+                Utils::system_process_no_tracking($cmd, $key, 'pack', false, [$path]);
             }
             
             return 'ok';
@@ -2334,10 +2334,10 @@ class Filesystem
             array_push($cmds, $cmd);
         }
 
-        if ($this->redis && $this->follow_redis) {
-            Utils::system_process_to_redis($cmds, $key, 'lineCount', count($chunk), $toLock);
+        if ($this->follow_redis) {
+            Utils::system_process_with_tracking($cmds, $key, 'lineCount', count($chunk), $toLock);
         } else {
-            Utils::system_process_no_redis($cmds, $key, 'lineCount', count($chunk), $toLock);
+            Utils::system_process_no_tracking($cmds, $key, 'lineCount', count($chunk), $toLock);
         }
         
         if ($this->save_history && $q_h_def != ''){
@@ -2454,10 +2454,10 @@ class Filesystem
                 array_push($cmds, $cmd);
             }
 
-            if ($this->redis && $this->follow_redis) {
-                Utils::system_process_to_redis($cmds, $key, 'lineCount', $count, $toLock);
+            if ($this->follow_redis) {
+                Utils::system_process_with_tracking($cmds, $key, 'lineCount', $count, $toLock);
             } else {
-                Utils::system_process_no_redis($cmds, $key, 'lineCount', $count, $toLock);
+                Utils::system_process_no_tracking($cmds, $key, 'lineCount', $count, $toLock);
             }
             
             

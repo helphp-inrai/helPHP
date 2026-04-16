@@ -47,6 +47,8 @@ class Media extends HelPHP_module
     protected $ACTION_SAVE_NAME = self::module_name.'_save_name';
     protected $ACTION_DELETE_LANG = self::module_name.'_delete_languages';
     
+    protected $ACTION_PROCESS_VIDEO_PROGRESS = self::module_name.'_progress_video_process';
+    
     public $mode = false;
     
     public $params = [
@@ -66,6 +68,7 @@ class Media extends HelPHP_module
         // callbacks
         // 'on_save'=>false,                // fonction js appelé après le save de l'image
         'on_delete'=>false,                 // callback on media delete
+        'on_process_end'=>false,            // callback on end of processing (for video and others)
         
         // about final process on file
         'original'=>false,                  // keep original or not
@@ -139,6 +142,7 @@ class Media extends HelPHP_module
         $post = [];
         $media = new Media(null, $field_identifier, $field_id, $process, $params, $post);
         $media->get_dom_id();
+        $media->inst_js = 'h.modules.'.$media->module_name.'_a["'.$media->dom_id.'"]';
         if ($mode == 'uploader') {
             return $media->process_display($post, 'uploader');
             // $post[$media->input_action_identifier] = $media->ACTION_UPLOADER;
@@ -217,6 +221,10 @@ class Media extends HelPHP_module
             case $this->ACTION_DELETE_LANG:
                 $master_output->add_child( $this->delete_languages($post) );
             break;
+
+            case $this->ACTION_PROCESS_VIDEO_PROGRESS:
+                $master_output->add_child( $this->process_video_progress($post) );
+            break;
             
             case $this->ACTION_UPLOADER:
             default:
@@ -261,7 +269,11 @@ class Media extends HelPHP_module
     public function display_uploader($post) {
         global $FS, $CONFIG, $LANG, $DB;
         
-        $js = '';
+        $settings = [
+            'media_id'=>$this->media_id,
+            'params'=>$this->params
+        ];
+        $js = 'helphp_timeout(\'Media_a.create_instance("'.$this->dom_id.'", '.addslashes(json_encode($settings)).');';
 
         $output = H::group('uploader'.$this->params['lang_iso']);
 
@@ -410,14 +422,27 @@ class Media extends HelPHP_module
                         }
 
                     } else if (in_array(strtolower($FS->get_file_ext($media['path'])), MEDIA_Class::video_ext)){
-                        // Utils::error_log($media);
-                        // video
-                        $img = H::IMG(['class'=>$this->css.'current_img', 'id'=>self::module_name.'_current_img'.$this->dom_id]);
-                        $video_src = 'public/media/media.php?';
-                        $video_src .= 'f='.$this->media_id;
-                        $video_src .= '&i='.$media['use_key'];
-                        $script = H::script('Media_a.get_video_image("'.$video_src.'", 2, "'.self::module_name.'_current_img'.$this->dom_id.'");', ['autoremove'=>true]);
-                        $elem->add_child([$img,$script]);
+                        // check if the video has been processed
+                        
+                        $state = shell_exec('php '.$CONFIG::HELPHP_FOLDER.'utils/job_manager.php -a"progress" -k"'.$this->media_id.'" -t"'.$CONFIG::HOME_FOLDER.'" 2>&1');
+                        if ($state == 'ok!'){
+                            // video
+                            $img = H::IMG(['class'=>$this->css.'current_img', 'id'=>self::module_name.'_current_img'.$this->dom_id]);
+                            $video_src = 'public/media/media.php?';
+                            $video_src .= 'f='.$this->media_id;
+                            $video_src .= '&i='.$media['use_key'];
+                            $js.= 'Media_a.get_video_image("'.$video_src.'", 2, "'.self::module_name.'_current_img'.$this->dom_id.'");';
+                            $elem->add_child( $img );
+                        } else {
+                            $process = H::DIV(['class'=>$this->css.'progress', 'id'=>self::module_name.'_video_progress'.$this->dom_id]);
+                            if ($state == 'wait') {
+                                $process->add_child( H::SPAN(['class'=>$this->css.'video_progress_state'], $this->get_tl('process_waiting')) );
+                            } else {
+                                $process->add_child( H::SPAN(['class'=>$this->css.'video_progress_state'], $this->get_tl('process_working')) );
+                            }
+                            $js.= 'setTimeout(()=>{'.$this->inst_js.'.get_video_progress('.$media['use_key'].');}, 3000);';
+                            $elem->add_child( $process );
+                        }
                     } else {
                         // others
                         $ext = $FS->get_file_ext($media['path']);
@@ -465,16 +490,40 @@ class Media extends HelPHP_module
             }
         }
 
-        $settings = [
-            'media_id'=>$this->media_id,
-            'params'=>$this->params
-        ];
-        $js.= 'helphp_timeout(\'Media_a.create_instance("'.$this->dom_id.'", '.addslashes(json_encode($settings)).');\');';
+        $js .= '\');';
         $script = H::script($js, ['autoremove'=>true]);
-
         $output->add_child($script);
 
         return $output;
+    }
+
+    public function process_video_progress($post) {
+        global $CONFIG;
+        $state = shell_exec('php '.$CONFIG::HELPHP_FOLDER.'utils/job_manager.php -a"progress" -k"'.$this->media_id.'" -t"'.$CONFIG::HOME_FOLDER.'" 2>&1');
+        $html = H::group('process_video_display');
+        if ($state == 'ok!'){
+            // video
+            $img = H::IMG(['class'=>$this->css.'current_img', 'id'=>self::module_name.'_current_img'.$this->dom_id]);
+            $video_src = 'public/media/media.php?';
+            $video_src .= 'f='.$this->media_id;
+            $video_src .= '&i='.$post['use_key'];
+            $js = 'Media_a.get_video_image("'.$video_src.'", 2, "'.self::module_name.'_current_img'.$this->dom_id.'");';
+            if ($this->params['on_process_end']) $js.= $this->params['on_process_end'];
+            $script = H::script($js, ['autoremove'=>true]);
+            $html->add_child( [$img, $script] );
+        } else {
+            $process = H::DIV(['class'=>$this->css.'progress', 'id'=>self::module_name.'_video_progress'.$this->dom_id]);
+            if ($state == 'wait') {
+                $process->add_child( H::SPAN(['class'=>$this->css.'video_progress_state'], $this->get_tl('process_waiting')) );
+            } else {
+                $process->add_child( H::SPAN(['class'=>$this->css.'video_progress_state'], $this->get_tl('process_working')) );
+            }
+
+            $script = H::script('setTimeout(()=>{'.$this->inst_js.'.get_video_progress('.$post['use_key'].');}, 3000);', ['autoremove'=>true]);
+            $html->add_child( [$process, $script] );
+        }
+
+        return $html;
     }
     
     //MEDIA UPLOAD

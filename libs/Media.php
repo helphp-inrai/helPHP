@@ -244,7 +244,6 @@ class Media {
                                 $process['use_key'] = $use_key;
                                 $process['pid'] = 'video'.$media_id;
                                 $process['media_id'] = $media_id;
-                                \helPHP\libs\Utils::error_log($process);
                                 $this->video_process($process);
                                 $media_processed = true;
                             }
@@ -1484,7 +1483,7 @@ class Media {
      * @return string|null Returns 'done' on success, or an error message string on failure.
      */
     public function video_process($process,$no_bdd = false){
-        global $DB,$FS;
+        global $CONFIG,$FS;
         if (isset($process['input'])) {
 
             $this->process_video = true;
@@ -1663,16 +1662,17 @@ class Media {
                         //we must recompress
                         //FFMPEG PROCESS HERE !
                         $ff_options.=' \''.$process['output'].'\' 2>&1';
-                        if (!$no_bdd){
-                            Utils::system_process('/usr/bin/ffmpeg'.$ff_options, $process['pid']);
-                        } else {
-                            Utils::system_process_no_session('/usr/bin/ffmpeg'.$ff_options, $process['pid']);
-                        }
+                        $process_cmd = '/usr/bin/ffmpeg'.$ff_options;
+                        $job_manager_call='php '.$CONFIG::HELPHP_FOLDER.'utils/job_manager.php -a"new" -t"'.$CONFIG::HOME_FOLDER.'" -c"'.$process_cmd.'" -k"'.$process['media_id'].'"';
                         
-                        //delete original if needed.
+                        // Add a callback to delete original if needed.
                         if (isset($process['original']) && !$process['original']) {
-                            unlink($process['input']);
+                            // unlink($process['input']);
+                            $job_manager_call.= ' -C"rm -f '.$process['input'].'"';
                         }
+
+                        $res = shell_exec($job_manager_call);
+
                     } else {
                         //no recompress
                         if (isset($process['original']) && !$process['original']) {
